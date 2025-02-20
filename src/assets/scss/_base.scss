@@ -1,3 +1,23 @@
+// [嚼勁]網線排版用
+*,*::before,*::after{
+  // outline: 1px solid gray;
+}
+
+// [嚼勁]字體
+body {
+  font-family: "Poppins", //設計稿的英文字體
+    "Noto Sans TC", //設計稿的中文字體
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Microsoft JhengHei",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  line-height: 1.5;
+}
+
+
 picture {
   max-width: 100%;
   height: auto;
@@ -29,4 +49,29 @@ input:focus {
 }
 ::placeholder {
   color: $grey-400;
+}
+
+//[嚼勁]bootstrap內建icon系統
+i {
+  display: inline-block;
+  line-height: 0;
+}
+
+//[嚼勁]清除bootstrap的奇怪margin-bottom格式
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+p {
+  margin-bottom: 0;
+}
+
+//[嚼勁]span預設inline不太好排版，所以改成inline-block比較好用
+span {
+  display: inline-block;
 }
