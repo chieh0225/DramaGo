@@ -1,0 +1,32 @@
+picture {
+  max-width: 100%;
+  height: auto;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  // text-decoration: none; //已設定 $link-decoration: none
+  color: inherit;
+  display: inline-block;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.object-fit {
+  object-fit: cover;
+}
+
+input:focus {
+  caret-color: $brand-500;
+}
+::placeholder {
+  color: $grey-400;
+}
