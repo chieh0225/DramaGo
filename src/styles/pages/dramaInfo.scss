@@ -84,6 +84,40 @@
   border-radius: 20px;
 }
 
+.message {
+  .message-header {
+    font-weight: 600;
+    font-size: 14px;
+    color: #460902;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .message-content {
+    padding-top: 8px;
+    padding-right: 20px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    border-radius: 100px;
+    background-color: #fff6eb;
+    margin-left: 12px;
+  }
+}
+
+.reply {
+  margin-left: 48px;
+  color: #666;
+
+  .message-header {
+    font-weight: bold;
+  }
+
+  .message-content {
+    margin-left: 1rem;
+  }
+}
+
 .fs-12 {
   font-size: 12px;
 }

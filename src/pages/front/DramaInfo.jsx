@@ -109,21 +109,55 @@ const DramaInfo = () => {
                   <p className="fw-semibold ">留言(8)</p>
                   <p className="text-brand-core">查看全部</p>
                 </div>
-                <div className="comment-board">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi
-                  maiores porro ab fugiat cupiditate eaque placeat veritatis
-                  labore adipisci voluptatum architecto suscipit sunt ipsum
-                  doloribus aspernatur consequatur consectetur tempore illo
-                  repudiandae, assumenda quaerat omnis! Magni laudantium
-                  cupiditate vitae, optio, ipsam ratione distinctio, vel porro
-                  aliquam provident dolores voluptates quos inventore quasi eius
-                  mollitia veniam officiis tempora. Vitae, sapiente.
-                  Reprehenderit amet nesciunt placeat natus quaerat voluptatem
-                  distinctio expedita minus eos consequatur. Excepturi
-                  veritatis, facere cupiditate enim atque quaerat iste officia,
-                  dolore, velit amet quia fuga. Dolor fugit consequuntur quaerat
-                  corrupti aliquam, omnis libero magni error quae temporibus
-                  iure sed aut dolore.
+                <div className="comment-board p-8">
+                  <div className="commment-content ">
+                    <div className="message d-flex">
+                      <div className="message-header">
+                        <img
+                          src={avatarImage}
+                          alt="留言人"
+                          width="40"
+                          height="40"
+                        />
+                        <p>Willson</p>
+                      </div>
+                      <div className="message-content">
+                        想問各位餐點有素食的嗎??
+                      </div>
+                    </div>
+
+                    <div className="reply">
+                      <div className="message-header">Kim</div>
+                      <div className="message-content">
+                        有兩道餐點是素的唷！
+                      </div>
+                    </div>
+
+                    <div className="reply">
+                      <div className="message-header">Resa</div>
+                      <div
+                        className="message-content d-flex justify-content-between
+                      "
+                      >
+                        推薦他的素菜拼盤很不錯
+                        <div className="d-flex">
+                          2025/01/03<p>回覆</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="commment-textarea">
+                    <div className="form-floating">
+                      <textarea
+                        className="form-control"
+                        placeholder="Leave a comment here"
+                        id="floatingTextarea2"
+                        style={{ height: "100px" }}
+                      ></textarea>
+                      <div className="text-end mt-2">0/1000</div>
+                      <label htmlFor="floatingTextarea2">請輸入內容</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
