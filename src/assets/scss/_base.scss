@@ -1,8 +1,9 @@
 // [嚼勁]網線排版用
-*,*::before,*::after{
+*,
+*::before,
+*::after {
   // outline: 1px solid gray;
 }
-
 
 picture {
   max-width: 100%;
@@ -42,7 +43,6 @@ i {
   display: inline-block;
   line-height: 0;
 }
-
 
 //[嚼勁]span預設inline不太好排版，所以改成inline-block比較好用
 span {

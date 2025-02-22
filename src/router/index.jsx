@@ -1,4 +1,4 @@
-import { createHashRouter,Navigate} from "react-router-dom";
+import { createHashRouter, Navigate } from "react-router-dom";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -14,57 +14,55 @@ import Chart from "../pages/admin/Chart";
 // 全域
 import NotFound from "../components/NotFound";
 
-
 const router = createHashRouter([
-    {                                        //前台主版
-        element:<FrontLayout/>,
-        children:[
-            {
-                index:true,                  //首頁
-                element:<FrontHome/>,
-            },
-            {
-                path:'dramaList',            //劇會總覽頁
-                element:<DramaList/>,
-            },
-            {
-                path:'dramaInfo',            //劇會內頁
-                element:<DramaInfo/>,
-            },
-            {
-                path:'profile',              //個人主頁
-                element:<Profile/>,
-            },
-        ]    
-    },
-    {
-        path:'/adminSystem',                 //後台主版
-        element:<AdminLayout/>,
-        children:[
-            {
-                index:true,
-                element:<Navigate to="admin" replace />,
-            },
-            {
-                path:'admin',                //後台首頁
-                element:<AdminHome/>,
-            },
-            {
-                path:'tag-manage',           //標籤管理頁
-                element:<TagManage/>,
-            },
-            {
-                path:'chart',                //圖表分析頁
-                element:<Chart/>,
-            },
-        ]    
-    },
-    {
-        path:'*',                            //404錯誤頁
-        element:<NotFound/>     
-    }
-
-
+  {
+    //前台主版
+    element: <FrontLayout />,
+    children: [
+      {
+        index: true, //首頁
+        element: <FrontHome />,
+      },
+      {
+        path: "dramaList", //劇會總覽頁
+        element: <DramaList />,
+      },
+      {
+        path: "dramaInfo", //劇會內頁
+        element: <DramaInfo />,
+      },
+      {
+        path: "profile", //個人主頁
+        element: <Profile />,
+      },
+    ],
+  },
+  {
+    path: "/adminSystem", //後台主版
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="admin" replace />,
+      },
+      {
+        path: "admin", //後台首頁
+        element: <AdminHome />,
+      },
+      {
+        path: "tag-manage", //標籤管理頁
+        element: <TagManage />,
+      },
+      {
+        path: "chart", //圖表分析頁
+        element: <Chart />,
+      },
+    ],
+  },
+  {
+    path: "*", //404錯誤頁
+    element: <NotFound />,
+  },
 ]);
 
 export default router;
