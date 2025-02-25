@@ -26,7 +26,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
 
         try {
             const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
-            console.log(res);  //API回拋 imageUrl
+            console.log(res); 
         } catch (err) {
             console.log(err);
         }
@@ -34,7 +34,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
 
     return(<>
         <div className="modal" tabIndex="-1" ref={dramaFormRef}>
-            <div className="modal-dialog modal-lg modal-fullscreen-md-down">
+            <div className="modal-dialog modal-md modal-fullscreen-md-down">
                 <div className="modal-content">
                 <div className="modal-header bg-brand-600 text-white">
                     <h5 className="modal-title">發起劇會</h5>
@@ -62,7 +62,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                             onChange={handleImgInput}
                         />
                         <br />
-                        <img src="https://images.unsplash.com/photo-1739047855450-27615bc98bc5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="劇會主圖" className="w-50 my-3"/>
+                        <img src="https://images.unsplash.com/photo-1739047855450-27615bc98bc5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="劇會主圖" className="my-3"/>
                     </div>
                     <div className="mb-10">
                         <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會類型</span>
@@ -79,7 +79,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                     <div className="mb-10">
                         <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會人數</span>
                         <br />
-                        <select className="form-select w-50 mt-1" aria-label="Default select example">
+                        <select className="form-select mt-1" aria-label="Default select example">
                             <option defaultValue disabled>人數包含自己</option>
                             {
                                 Array.from({length:9}).map((option,index)=>
@@ -97,7 +97,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                                 <label className="form-check-label" htmlFor="flexRadioDefault1">
                                     一天以內
                                 </label>
-                                <div className="input-group mb-3 w-50">
+                                <div className="input-group mb-3">
                                     <input type="text" className="form-control" placeholder="開始時間" aria-label="Username"/>
                                     <span className="input-group-text">~</span>
                                     <input type="text" className="form-control" placeholder="結束時間" aria-label="Server"/>
@@ -108,7 +108,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                                 <label className="form-check-label" htmlFor="flexRadioDefault2">
                                     兩天以上
                                 </label>
-                                <div className="input-group mb-3 w-50">
+                                <div className="input-group mb-3">
                                     <input type="text" className="form-control" placeholder="開始日期" aria-label="Username"/>
                                     <span className="input-group-text">~</span>
                                     <input type="text" className="form-control" placeholder="結束日期" aria-label="Server"/>
@@ -119,11 +119,11 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                     <div className="mb-10">
                         <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會地點</span>
                         <br />
-                        <div className="input-group mb-3 w-50 mt-1">
+                        <div className="input-group mb-3 mt-1">
                             <input type="text" className="form-control" placeholder="輸入地址" aria-label="Recipient's username" aria-describedby="basic-addon2"/>
                             <span className="input-group-text bg-brand-600 text-white" id="basic-addon2" style={{cursor:'pointer'}}>搜地圖</span>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1586449480558-33ae22ffc60d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="地圖" className="w-50 d-block"/>
+                        <img src="https://images.unsplash.com/photo-1586449480558-33ae22ffc60d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="地圖" className=" d-block"/>
                         <div className="d-flex mt-3">
                             <i className="bi bi-geo-alt-fill text-brand-600 fs-4 me-1"></i>
                             <div>
@@ -170,7 +170,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                                 <label className="form-check-label mb-1" htmlFor="ageNeed">
                                     限年齡
                                 </label>
-                                <div className="input-group mb-3 w-50">
+                                <div className="input-group mb-3 ">
                                     <input type="text" className="form-control" placeholder="輸入年齡" aria-label="Username"/>
                                     <span className="input-group-text">~</span>
                                     <input type="text" className="form-control" placeholder="輸入年齡" aria-label="Server"/>
@@ -191,7 +191,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                                 <label className="form-check-label mb-1" htmlFor="areaNeed">
                                     限居住地
                                 </label>
-                                <select className="form-select w-50 mt-1" aria-label="Default select example">
+                                <select className="form-select mt-1" aria-label="Default select example">
                                     <option defaultValue disabled>縣市地區</option>
                                     {
                                         areaTags.map((tag,index)=>
