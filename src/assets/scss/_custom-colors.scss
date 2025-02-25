@@ -76,4 +76,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   .bg-#{$color} {
     background-color: $value !important;
   }
-}
+  .btn-#{$color} {
+    background-color: $value !important;
+  }
+};
+

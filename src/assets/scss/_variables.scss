@@ -380,7 +380,7 @@ $enable-cssgrid: false !default;
 $enable-button-pointers: true !default;
 $enable-rfs: true !default;
 $enable-validation-icons: true !default;
-$enable-negative-margins: false !default;
+$enable-negative-margins: true !default;
 $enable-deprecation-messages: true !default;
 $enable-important-utilities: true !default;
 
@@ -437,7 +437,10 @@ $spacers: (
   15: $spacer * 5,
   16: $spacer * 6,
   17: $spacer * 6.25,
-  18: $spacer * 8
+  18: $spacer * 8,
+  19x: $spacer * 3.75,
+  20x: $spacer * 5.5,
+  21x: $spacer * 3.25,
 ) !default;
 // scss-docs-end spacer-variables-maps
 

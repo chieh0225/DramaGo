@@ -1,0 +1,14 @@
+.img-s {
+  width: 24px;
+  height: 24px;
+}
+.img-m {
+  width: 32px;
+  height: 32px;
+}
+
+.bg-footer {
+  @media (min-width: 992px) {
+    background: linear-gradient(to right, #b72706 50%, #ffffff 50%);
+  }
+}
