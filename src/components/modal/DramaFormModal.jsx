@@ -1,48 +1,38 @@
-import { useEffect } from "react";
-import { useRef } from "react";
-import { Modal } from "bootstrap";
+import axios from "axios";
+
 
 console.clear();
 
-const DramaFormModal = () => {
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
+
+
+const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
 
     const categoryTags = ['看電影','看表演','逛劇展','買劇品','上劇課','劇本殺','接劇龍','聽劇透','遊劇旅','追影星'];
     const costTags = ['免費','AA制','團主請客','男生請客','女生請客'];
     const genderTags = ['不限男女','限男生','限女生'];
     const areaTags = ['台北','台中','高雄'];
     const noteTags = ['我不遲到','友善攜寵','I人話少'];
-    const dramaFormRef = useRef(null);
-    const dramaFormInstance = useRef(null);
-    const openButtonRef = useRef(null);
 
-    const openDramaForm = ()=>{
-        dramaFormInstance.current.show();
-    };
-
-    const closeDramaForm = ()=>{
-        dramaFormInstance.current.hide();
-    };
-
-    useEffect(()=>{
-        if (dramaFormRef.current) {
-            dramaFormInstance.current = new Modal(dramaFormRef.current);
-        };
-        dramaFormRef.current.addEventListener("hidden.bs.modal", () => {
-            if (openButtonRef.current) {
-                openButtonRef.current.focus();
-            }
+    const handleImgInput = async(e) => {
+        const file = e.target.files[0]; 
+        console.log(file);
+        const formData = new FormData(); 
+        formData.append('file-to-upload',file); 
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);  
         });
-    },[]);
+
+        try {
+            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
+            console.log(res);  //API回拋 imageUrl
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return(<>
-    
-        <button 
-        type="button" 
-        className="brandBtn-1-lg"
-        onClick={openDramaForm}
-        ref={openButtonRef}
-        >劇會發起頁</button>
-        
         <div className="modal" tabIndex="-1" ref={dramaFormRef}>
             <div className="modal-dialog modal-lg modal-fullscreen-md-down">
                 <div className="modal-content">
@@ -58,8 +48,19 @@ const DramaFormModal = () => {
                 <div className="modal-body">
                     <div className="mb-10">
                         <span className="text-brand-400">* &nbsp;</span>
-                        <label htmlFor="imgUrl" className="h5 form-label">劇會主圖</label>
-                        <i className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4" style={{cursor:'pointer'}}></i>
+                        <span className="h5">劇會主圖</span>
+                        <label htmlFor="fileInput" className="form-label">
+                            <i className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4"
+                            style={{cursor:'pointer'}}></i>
+                        </label>
+                        <input
+                            type="file"
+                            accept=".jpg,.jpeg,.png"
+                            className="form-control"
+                            id="fileInput"
+                            style={{display:'none'}}
+                            onChange={handleImgInput}
+                        />
                         <br />
                         <img src="https://images.unsplash.com/photo-1739047855450-27615bc98bc5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="劇會主圖" className="w-50 my-3"/>
                     </div>
@@ -247,16 +248,9 @@ const DramaFormModal = () => {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button
-                    type="button"
-                    className="brandBtn-2"
-                    onClick={closeDramaForm}
-                    >取消</button>
-
                     <button 
                     type="button" 
                     className="brandBtn-1"
-                    
                     >發佈</button>
                 </div>
                 </div>

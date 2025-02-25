@@ -4,7 +4,7 @@ const Design = () => {
 
     return(<>
         <div className="container pb-5">
-            <h1 className="h2 mt-5">DramaGO設計樣式表哈哈</h1>
+            <h1 className="h2 mt-5">DramaGO設計樣式表</h1>
             <h2 className="h5 my-6">按鈕</h2>
             <div className="row mb-3">
                 <div className="col-3 text-center">
@@ -104,12 +104,31 @@ const Design = () => {
                     className="brandBtn-2"
                     >按鈕文字</button>
                     <br />
-                    <span className="my-2">brandBtn-sm</span>
+                    <span className="my-2">brandBtn-2-sm</span>
                 </div>
                 <div className="col-3 text-center">
                     <button 
                     type="button" 
                     className="brandBtn-2 disable"
+                    >按鈕文字</button>
+                    <br />
+                    <span className="my-2">disable</span>
+                </div>
+                
+            </div>
+            <div className="row mb-3">
+                <div className="col-3 text-center">
+                    <button 
+                    type="button" 
+                    className="brandBtn-3"
+                    >按鈕文字</button>
+                    <br />
+                    <span className="my-2">brandBtn-3</span>
+                </div>
+                <div className="col-3 text-center">
+                    <button 
+                    type="button" 
+                    className="brandBtn-3 disable"
                     >按鈕文字</button>
                     <br />
                     <span className="my-2">disable</span>

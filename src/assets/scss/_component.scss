@@ -142,3 +142,33 @@
         border: 1px solid $grey-200;
     }
 }
+
+.brandBtn-3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: $brand-400;
+    background-color: white;
+    padding: 8px 16px;
+    border: 1px solid $brand-400;
+    border-radius: 100px;
+
+    &:hover {
+        color: white;
+        background-color: $brand-500;
+    }
+
+    &:active {
+        color: $brand-400;
+        background-color: $brand-100;
+    }
+
+    &.active {
+        background-color: $brand-100;
+    }
+
+    &.disable {
+        color: $grey-200;
+        background-color: white;
+        border: 1px solid $grey-200;
+    }
+}
