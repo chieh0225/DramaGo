@@ -79,6 +79,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   .btn-#{$color} {
     background-color: $value !important;
   }
+};
 
   .btn-outline-#{$color} {
     color: $value !important;
@@ -93,4 +94,5 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     }
   }
 }
+
 
