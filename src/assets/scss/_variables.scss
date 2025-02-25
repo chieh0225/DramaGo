@@ -590,7 +590,7 @@ $component-active-bg: $primary !default;
 // scss-docs-start focus-ring-variables
 $focus-ring-width: 0.25rem !default;
 $focus-ring-opacity: 0.1 !default; //0.25 !default;
-$focus-ring-color: rgba($primary, $focus-ring-opacity) !default;
+$focus-ring-color: #FFCA88;//rgba($primary, $focus-ring-opacity) !default; //james
 $focus-ring-blur: 0 !default;
 $focus-ring-box-shadow: 0 0 $focus-ring-blur $focus-ring-width $focus-ring-color !default;
 // scss-docs-end focus-ring-variables
@@ -949,7 +949,7 @@ $input-disabled-bg: var(--#{$prefix}secondary-bg) !default;
 $input-disabled-border-color: null !default;
 
 $input-color: var(--#{$prefix}body-color) !default;
-$input-border-color: var(--#{$prefix}border-color) !default;
+$input-border-color: #FFA13C;//var(--#{$prefix}border-color) !default;//custom
 $input-border-width: $input-btn-border-width !default;
 $input-box-shadow: var(--#{$prefix}box-shadow-inset) !default;
 
@@ -957,13 +957,13 @@ $input-border-radius: var(--#{$prefix}border-radius) !default;
 $input-border-radius-sm: var(--#{$prefix}border-radius-sm) !default;
 $input-border-radius-lg: var(--#{$prefix}border-radius-lg) !default;
 
-$input-focus-bg: $input-bg !default;
-$input-focus-border-color: tint-color($component-active-bg, 50%) !default;
+$input-focus-bg:  $input-bg !default;
+$input-focus-border-color: #DD4102;//tint-color($component-active-bg, 50%) !default;//custom
 $input-focus-color: $input-color !default;
 $input-focus-width: $input-btn-focus-width !default;
-$input-focus-box-shadow: $input-btn-focus-box-shadow !default;
+$input-focus-box-shadow:  #FFA13C; //$input-btn-focus-box-shadow !default;//custom
 
-$input-placeholder-color: var(--#{$prefix}secondary-color) !default;
+$input-placeholder-color: #989898;//var(--#{$prefix}secondary-color) !default;//custom
 $input-plaintext-color: var(--#{$prefix}body-color) !default;
 
 $input-height-border: calc(
@@ -1230,10 +1230,10 @@ $zindex-levels: (
 
 // scss-docs-start nav-variables
 $nav-link-padding-y: 0.5rem !default;
-$nav-link-padding-x: 1rem !default;
+$nav-link-padding-x: 4px;//1rem !default;
 $nav-link-font-size: null !default;
 $nav-link-font-weight: null !default;
-$nav-link-color: var(--#{$prefix}link-color) !default;
+$nav-link-color: #525252;//var(--#{$prefix}link-color) !default;
 $nav-link-hover-color: var(--#{$prefix}link-hover-color) !default;
 $nav-link-transition: color 0.15s ease-in-out,
   background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !default;
@@ -1343,7 +1343,7 @@ $dropdown-link-hover-color: $dropdown-link-color !default;
 $dropdown-link-hover-bg: var(--#{$prefix}tertiary-bg) !default;
 
 $dropdown-link-active-color: $component-active-color !default;
-$dropdown-link-active-bg: $component-active-bg !default;
+$dropdown-link-active-bg: #FF8A20;//$component-active-bg !default;
 
 $dropdown-link-disabled-color: var(--#{$prefix}tertiary-color) !default;
 
@@ -1734,9 +1734,9 @@ $breadcrumb-padding-x: 0 !default;
 $breadcrumb-item-padding-x: 0.5rem !default;
 $breadcrumb-margin-bottom: 1rem !default;
 $breadcrumb-bg: null !default;
-$breadcrumb-divider-color: var(--#{$prefix}secondary-color) !default;
-$breadcrumb-active-color: var(--#{$prefix}secondary-color) !default;
-$breadcrumb-divider: quote("/") !default;
+$breadcrumb-divider-color: #989898;//var(--#{$prefix}secondary-color) !default;
+$breadcrumb-active-color: #FFA13C;//var(--#{$prefix}secondary-color) !default;
+$breadcrumb-divider: quote("〉") !default;
 $breadcrumb-divider-flipped: $breadcrumb-divider !default;
 $breadcrumb-border-radius: null !default;
 // scss-docs-end breadcrumb-variables
@@ -1802,7 +1802,7 @@ $btn-close-padding-x: 0.25em !default;
 $btn-close-padding-y: $btn-close-padding-x !default;
 $btn-close-color: $black !default;
 $btn-close-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$btn-close-color}'><path d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/></svg>") !default;
-$btn-close-focus-shadow: $focus-ring-box-shadow !default;
+$btn-close-focus-shadow: none;//$focus-ring-box-shadow !default;
 $btn-close-opacity: 0.5 !default;
 $btn-close-hover-opacity: 0.75 !default;
 $btn-close-focus-opacity: 1 !default;
