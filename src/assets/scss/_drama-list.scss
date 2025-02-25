@@ -1,9 +1,22 @@
 .dramaList{
+    .breadcrumb{
+        @include rwd-lg-max {
+            display: none;
+        }
+}
 
     .addDrama-bg{
-        width: 306px;
         height: 115px;
         background-image: url(./images/inner/Frame%201000005422.svg);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .sortBoard{
+        @include rwd-lg-max {
+            display: none;
+        }
     }
 
     .nav-enable .nav-link{
@@ -13,6 +26,13 @@
         }
     }
     
+    .badge-group{
+        margin-top: 24px;
+    }
+
+    .badge{
+        border-radius: 0;
+    }
     .avatar{
         width: 40px;
         height: 40px;
@@ -21,5 +41,13 @@
     .img-scale:hover{
         transform: scale(1.1);
         transition: 1s;
+    }
+
+    .offcanvas.offcanvas-filter{
+        height: 85vh;
+    }
+
+    .offcanvas.offcanvas-sort {
+        height: 40vh;
     }
 }

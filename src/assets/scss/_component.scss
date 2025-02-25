@@ -144,11 +144,11 @@
 }
 
 .brandBtn-3 {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: $brand-400;
     background-color: white;
-    padding: 8px 16px;
+    padding: 6px 14px;
     border: 1px solid $brand-400;
     border-radius: 100px;
 
@@ -164,6 +164,27 @@
 
     &.active {
         background-color: $brand-100;
+    }
+
+    &.disable {
+        color: $grey-200;
+        background-color: white;
+        border: 1px solid $grey-200;
+    }
+}
+
+.brandBtn-4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: $brand-400;
+    background-color: $brand-100;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 100px;
+
+    &:hover {
+        color: $brand-100;
+        background-color: $brand-400;
     }
 
     &.disable {
