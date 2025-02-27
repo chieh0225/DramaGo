@@ -486,6 +486,7 @@ const DramaList = () => {
             <DramaFormModal
                 dramaFormRef={dramaFormRef}
                 closeDramaForm={closeDramaForm}
+                openDramaForm={openDramaForm}
             />
 
             
