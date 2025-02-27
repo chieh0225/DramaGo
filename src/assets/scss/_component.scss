@@ -122,18 +122,12 @@
     border-radius: 100px;
 
     &:hover {
-        color: white;
-        background-color: $brand-500;
+        background-color: $brand-100;
     }
 
-    &:active {
-        color: white;
-        background-color: $brand-200;
-    }
 
     &.active {
-        color: white;
-        background-color: $brand-500;
+        background-color: $brand-100;
     }
 
     &.disable {
