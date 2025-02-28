@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState,useEffect, useRef } from "react";
 import NoteTagsModal from "./NoteTagsModal";
 import { Modal } from "bootstrap";
+import { useForm,useFieldArray,useWatch } from "react-hook-form";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -12,6 +13,25 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
     const noteModalRef = useRef(null);
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal,setIsOpenNoteModal] = useState(false);
+
+    // 功能：表單
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState:{ errors },
+        watch,
+    } = useForm({
+        defaultValues:{
+            genderTerm:'不限男女',
+            ageTerm:'不限年齡',
+            areaTerm:'不限居住地',
+        },
+        mode:'onBlur',
+    });
+
+    const formSubmitRef = useRef(null);
+
     // 系統預設標籤
     const categoryTags = ['看電影','看表演','逛劇展','買劇品','上劇課','劇本殺','接劇龍','聽劇透','遊劇旅','追影星'];
     const costTags = ['免費','AA制','團主請客','男生請客','女生請客'];
@@ -22,32 +42,27 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
 
     // 用戶自輸入值
     const [imageUrl,setImageUrl] = useState('');
-    const [selectedCategoryTag,setSelectedCategoryTag] = useState('');
-    const [selectedCostTag,setSelectedCostTag] = useState('');
-    const [selectedGenderTag,setSelectedGenderTag] = useState('不限男女');
-    const [selectedAgeTag,setSelectedAgeTag] = useState('不限年齡');
-    const [selectedAreaTag,setSelectedAreaTag] = useState('不限居住地');
+    const categoryTag = watch('category');
+    const costTag = watch('cost');
+    const genderTag = watch('genderTerm');
+    const ageTag = watch('ageTerm');
+    const areaTag = watch('areaTerm');
+    const location = watch('location');
     const [selectedNoteTag,setSelectedNoteTag] = useState([]);
-    const [address,setAddress] = useState('');
     const [imgStorage,setImgStorage] = useState('');
     const [imagesUrl,setImagesUrl] = useState([]);
 
     // 功能：更多圖片
     const handleImgInput = async(e) => {
         const file = e.target.files[0]; 
-        console.log(file);
         const formData = new FormData(); 
         formData.append('file-to-upload',file); 
-        formData.forEach((value, key) => {
-            console.log(`${key}:`, value);  
-        });
-
-        try {
-            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
-            console.log(res); 
-        } catch (err) {
-            console.log(err);
-        }
+        // try {
+        //     const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
+        //     console.log(res); 
+        // } catch (err) {
+        //     console.log(err);
+        // }
     };
     const addImg = () => {
         const newImagesUrl = [...imagesUrl];
@@ -61,6 +76,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
         setImagesUrl(newImagesUrl);
     };
 
+    // 功能：標籤modal
     const openNoteModal = () => {
         setIsOpenNoteModal(true);
         noteModalInstance.current.show();
@@ -77,6 +93,63 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
             return newNoteTags;
         });
     };
+
+    const onSubmitForm = (data) => {
+        const {title,category,description,content,imageUrl,location,people,cost,genderTerm,ageTerm,areaTerm,ageMax,ageMin,city,startDate,endDate} = data; 
+        console.log(data);
+        
+        const newStartDate = new Date(startDate).toLocaleString("zh-TW", { 
+            year: "numeric", 
+            month: "2-digit", 
+            day: "2-digit", 
+            hour: "2-digit", 
+            minute: "2-digit", 
+            hour12: false,
+        }).replace(/\//g, "/");
+        const newEndDate = new Date(endDate).toLocaleString("zh-TW", { 
+            year: "numeric", 
+            month: "2-digit", 
+            day: "2-digit", 
+            hour: "2-digit", 
+            minute: "2-digit", 
+            hour12: false,
+        }).replace(/\//g, "/");
+
+        const updateData = {
+            data: {
+                title, //劇會名稱
+                category, //劇會類型
+                origin_price: 200, //參加劇會原價(支付給平台)
+                price: 100, //參加劇會特價(支付給平台)
+                unit: "次", //劇會單位
+                description, //劇會連結註記
+                content, //劇會詳情
+                is_enabled: 1, //是否上架
+                imageUrl, //劇會主圖
+                imagesUrl:imagesUrl, //劇會副圖
+
+                uid:'',      
+                date:{start:newStartDate,end:newEndDate,},   //劇會時間
+                location, //劇會地點
+                people,   //劇會人數
+                cost,     //劇會預估費用
+                term:{  //劇會門檻
+                        gender:genderTerm,
+                        age:{condition:ageTerm,range:`${(ageMin&&ageMax)?`${ageMin}~${ageMax}`:''}`},
+                        area:{condition:areaTerm,range:city||''},
+                },
+                noteTag:selectedNoteTag,      //劇會標籤
+                isFinish:false, 
+                isHot:false, 
+            }
+        };
+        console.log(updateData);
+        reset();
+        setSelectedNoteTag([]);
+        setImagesUrl([]);
+        
+    };
+
     // useEffect
     useEffect(()=>{
         if (noteModalRef.current) {
@@ -84,12 +157,8 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
         }
     },[]);
 
-    // useEffect(()=>{
-    //     console.log(imagesUrl);
-    // },[imagesUrl]);
-
     return(<>
-        <div className="modal"
+        <div className="modal fade"
         style={{...(isOpenNoteModal && {filter:" brightness(30%)"})}}
         tabIndex="-1" ref={dramaFormRef}>
             <div className="modal-dialog modal-md modal-fullscreen-md-down">
@@ -104,292 +173,460 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm}) => {
                         ></button>
                     </div>
                     <div className="modal-body">
+                        <form 
+                        onSubmit={handleSubmit(onSubmitForm)}
+                        ref={formSubmitRef}
+                        >
+                            {/* 劇會主圖 */}
+                            <div className="mb-10">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會主圖</span>
+                                        <label htmlFor="fileInput" className="form-label">
+                                            <i className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4"
+                                            style={{cursor:'pointer'}}></i>
+                                        </label>
+                                    </div>
+                                    <p className={errors.imageUrl?'text-danger':''}>
+                                    {errors.imageUrl&&('⛔'+`${errors.imageUrl.message}`)}
+                                    </p>
+                                </div>
+                                <input
+                                    {...register('imageUrl',{
+                                        required:'請上傳主圖',
+                                    })}
+                                    type="file"
+                                    accept=".jpg,.jpeg,.png"
+                                    className="form-control"
+                                    id="fileInput"
+                                    style={{display:'none'}}
+                                    onChange={handleImgInput}
+                                />
+                                <img src="https://images.unsplash.com/photo-1739047855450-27615bc98bc5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="劇會主圖" className="my-3 object-fit" style={{height:'250px'}}/>
+                            </div>
 
-                        {/* 劇會主圖 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span>
-                            <span className="h5">劇會主圖</span>
-                            <label htmlFor="fileInput" className="form-label">
-                                <i className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4"
-                                style={{cursor:'pointer'}}></i>
-                            </label>
-                            <input
-                                type="file"
-                                accept=".jpg,.jpeg,.png"
-                                className="form-control"
-                                id="fileInput"
-                                style={{display:'none'}}
-                                onChange={handleImgInput}
-                            />
-                            <br />
-                            <img src="https://images.unsplash.com/photo-1739047855450-27615bc98bc5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="劇會主圖" className="my-3 object-fit" style={{height:'250px'}}/>
-                        </div>
+                            {/* 劇會名稱 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <label htmlFor="title" className="form-label h5">劇會名稱</label>
+                                    </div>
+                                    <p className={errors.title?'text-danger':''}>
+                                    {errors.title&&('⛔'+`${errors.title.message}`)}
+                                    </p>
+                                </div>
+                                    <input
+                                    {...register('title',{
+                                        required:'請輸入名稱',
+                                        maxLength:{
+                                            value:20,
+                                            message:'請勿超過20字',
+                                        },
+                                    })}
+                                    type="text"
+                                    className="form-control"
+                                    id="title"
+                                    placeholder="最多20字"
+                                    />
+                            </div>
 
-                        {/* 劇會類型 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會類型</span>
-                            <br />
-                            {
-                                categoryTags.map((tag,index)=>
-                                    <span className="my-1 mx-1" key={index}>
-                                        <input 
-                                        type="radio"
-                                        name="category" 
-                                        className="btn-check"
-                                        id={`categoryTag-${tag}`}
-                                        onChange={()=>setSelectedCategoryTag(tag)}
-                                        checked={selectedCategoryTag===tag}
-                                        />
-                                        <label
-                                        className={`brandBtn-2-sm ${selectedCategoryTag===tag&&'active'}`} 
-                                        htmlFor={`categoryTag-${tag}`}
-                                        style={{cursor:'pointer'}
-                                        }>{tag}</label>
-                                    </span>
-                                )
-                            }
-                        </div>
-
-                        {/* 劇會人數 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會人數</span>
-                            <br />
-                            <select className="form-select mt-1" aria-label="Default select example" defaultValue=''>
-                                <option value='' disabled>人數包含自己</option>
+                            {/* 劇會類型 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會類型</span>
+                                    </div>
+                                    <p className={errors.category?'text-danger':''}>
+                                    {errors.category&&('⛔'+`${errors.category.message}`)}
+                                    </p>
+                                </div>
                                 {
-                                    Array.from({length:9}).map((option,index)=>
-                                        <option value={index+2} key={index}>{index+2}人</option>
+                                    categoryTags.map((tag,index)=>
+                                        <span className="my-1 mx-1" key={index}>
+                                            <input
+                                            {...register('category',{
+                                                required:'請選擇一個類型',
+                                            })}
+                                            type="radio"
+                                            name="category" 
+                                            className="btn-check"
+                                            value={tag}
+                                            id={`categoryTag-${tag}`}
+                                            checked={categoryTag===tag}
+                                            />
+                                            <label
+                                            className={`brandBtn-2-sm ${categoryTag===tag&&'active'}`} 
+                                            htmlFor={`categoryTag-${tag}`}
+                                            style={{cursor:'pointer'}
+                                            }>{tag}</label>
+                                        </span>
                                     )
                                 }
-                            </select>
-                        </div>
-
-                        {/* 劇會時間 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會時間</span>
-                            <br />
-                            <div className="mt-1">
-                                <div className="input-group mb-3">
-                                    <input type="datetime-local" className="form-control" placeholder="開始時間"/>
-                                    <span className="input-group-text">~</span>
-                                    <input type="datetime-local" className="form-control" placeholder="結束時間"/>
-                                </div>
                             </div>
-                        </div>
 
-                        {/* 劇會地點 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會地點</span>
-                            <br />
-                            <div className="input-group mb-3 mt-1">
-                                <input
-                                type="text"
-                                className="form-control"
-                                placeholder="輸入地址"
-                                onChange={e=>setAddress(e.target.value)}
-                                value={address}
-                                />
-                                <span className="input-group-text bg-brand-600 text-white" id="basic-addon2" style={{cursor:'pointer'}}>搜地圖</span>
-                            </div>
-                            <img src="https://images.unsplash.com/photo-1586449480558-33ae22ffc60d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="地圖" className=" d-block object-fit" style={{height:'200px'}}/>
-                            <div className="d-flex mt-3">
-                                <i className="bi bi-geo-alt-fill text-brand-600 fs-4 me-1"></i>
-                                <div>
-                                    <p className="h6 text-brand-600">衛武營 國家藝術文化中心</p>
-                                    <p className="text-grey-500">{address}</p>
+                            {/* 劇會人數 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會人數</span>
+                                    </div>
+                                    <p className={errors.people?'text-danger':''}>
+                                    {errors.people&&('⛔'+`${errors.people.message}`)}
+                                    </p>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* 劇會費用 */}
-                        <div className="mb-10">
-                            <span className="text-brand-400">* &nbsp;</span><span className="h5">劇會費用</span>
-                            <br />
-                            {
-                                costTags.map((tag,index)=>
-                                    <span className="my-1 mx-1" key={index}>
-                                        <input
-                                        type="radio"
-                                        className="btn-check"
-                                        name="cost"
-                                        id={`costTag-${tag}`}
-                                        onChange={()=>setSelectedCostTag(tag)}
-                                        checked={selectedCostTag===tag}
-                                        />
-                                        <label
-                                        className={`brandBtn-2-sm ${selectedCostTag===tag&&'active'}`}
-                                        htmlFor={`costTag-${tag}`}
-                                        style={{cursor:'pointer'}}
-                                        >{tag}</label>
-                                    </span>
-                                )
-                            }
-                        </div>
-
-                        {/* 劇會條件 */}
-                        <div className="mb-10">
-                            <span className="h5 mb-2">設定跟團條件</span>
-                            <br />
-                            <span className="h6 text-brand-600 me-3">性別</span>
-                            {
-                                genderTags.map((tag,index)=>
-                                    <span className="my-1 mx-1" key={index}>
-                                        <input 
-                                        type="radio"
-                                        className="btn-check"
-                                        name="gender"
-                                        id={`genderTag-${tag}`}
-                                        onChange={()=>setSelectedGenderTag(tag)}
-                                        checked={selectedGenderTag===tag}
-                                        />
-                                        <label
-                                        className={`brandBtn-2-sm ${selectedGenderTag===tag&&'active'}`}
-                                        htmlFor={`genderTag-${tag}`}
-                                        style={{cursor:'pointer'}}
-                                        >{tag}</label>
-                                    </span>
-                                )
-                            }
-                            <br />
-                            <span className="h6 text-brand-600 me-3">年齡</span>
-                            {
-                                ageTags.map(tag=>
-                                    <span className="my-1 mx-1" key={tag}>
-                                        <input 
-                                        type="radio"
-                                        className="btn-check"
-                                        name="age"
-                                        id={`ageTag-${tag}`}
-                                        onChange={()=>setSelectedAgeTag(tag)}
-                                        checked={selectedAgeTag===tag}
-                                        />
-                                        <label
-                                        className={`brandBtn-2-sm ${selectedAgeTag===tag&&'active'}`}
-                                        htmlFor={`ageTag-${tag}`}
-                                        style={{cursor:'pointer'}}
-                                        >{tag}</label>
-                                    </span>
-                                )
-                            }
-                            {
-                                selectedAgeTag==='限年齡'&&
-                                <div className="input-group mt-2 w-75 mx-auto">
-                                    <input type="text" className="form-control" placeholder="輸入年齡"/>
-                                    <span className="input-group-text">~</span>
-                                    <input type="text" className="form-control" placeholder="輸入年齡"/>
-                                </div>
-                            }
-                            <br />
-                            <span className="h6 text-brand-600 me-3">居住</span>
-                            {
-                                areaTags.map(tag=>
-                                    <span className="my-1 mx-1" key={tag}>
-                                        <input 
-                                        type="radio"
-                                        className="btn-check"
-                                        name="area"
-                                        id={`areaTag-${tag}`}
-                                        onChange={()=>setSelectedAreaTag(tag)}
-                                        checked={selectedAreaTag===tag}
-                                        />
-                                        <label
-                                        className={`brandBtn-2-sm ${selectedAreaTag===tag&&'active'}`}
-                                        htmlFor={`areaTag-${tag}`}
-                                        style={{cursor:'pointer'}}
-                                        >{tag}</label>
-                                    </span>
-                                )
-                            }
-                            {
-                                selectedAreaTag==='限居住地'&&
-                                <select className="form-select mt-2 w-75 mx-auto" defaultValue=''>
-                                    <option value='' disabled>縣市地區</option>
+                                <select 
+                                {...register('people',{
+                                    required:'請選擇人數',
+                                    valueAsNumber:true,
+                                })}
+                                className="form-select"
+                                defaultValue=''>
+                                    <option value='' disabled>人數包含自己</option>
                                     {
-                                        city.map((tag,index)=>
-                                            <option value={tag} key={index}>{tag}</option>
+                                        Array.from({length:9}).map((option,index)=>
+                                            <option value={index+2} key={index}>{index+2}人</option>
                                         )
                                     }
                                 </select>
-                            }
-                        </div>
-
-                        {/* 劇會詳情 */}
-                        <div className="mb-10">
-                            <div className="h5 mb-3">
-                                <label htmlFor="detail" className="form-label">劇會詳情</label>
-                                <textarea className="form-control" id="detail" rows="3"></textarea>
                             </div>
-                        </div>
 
-                        {/* 更多圖片 */}
-                        <div className="mb-10">
-                            <div className="h5 mb-3 w-100">
-                                <label htmlFor="detail" className="form-label">劇會照片分享</label>
-                                <div className="input-group mb-5">
-                                    <input 
-                                    type="text" 
+                            {/* 劇會時間 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會時間</span>
+                                    </div>
+                                    <p className={(errors.startDate||errors.endDate)?'text-danger':''}>
+                                    {(errors.startDate||errors.endDate)&&'⛔請選擇時間'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <div className="input-group mb-3">
+                                        <input
+                                        {...register('startDate',{
+                                            required:true,
+                                        })}
+                                        type="datetime-local"
+                                        className="form-control"
+                                        placeholder="開始時間"/>
+                                        <span className="input-group-text">~</span>
+                                        <input
+                                        {...register('endDate',{
+                                            required:true,
+                                        })}
+                                        type="datetime-local"
+                                        className="form-control"
+                                        placeholder="結束時間"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 劇會地點 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會地點</span>
+                                    </div>
+                                    <p className={errors.location?'text-danger':''}>
+                                    {errors.location&&('⛔'+`${errors.location.message}`)}
+                                    </p>
+                                </div>
+                                <div className="input-group mb-3">
+                                    <input
+                                    {...register('location',{
+                                        required:'請輸入地址',
+                                    })}
+                                    name="location"
+                                    type="text"
                                     className="form-control"
-                                    placeholder="貼入圖片網址" aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                    value={imgStorage||''}
-                                    onChange={e=>setImgStorage(e.target.value)}
+                                    placeholder="輸入地址"
                                     />
-                                    <span
-                                    className="input-group-text bg-brand-600 text-white"
-                                    id="addImg"
-                                    style={{cursor:'pointer'}}
-                                    onClick={addImg}
-                                    >新增</span>
+                                    <span className="input-group-text bg-brand-600 text-white" id="basic-addon2" style={{cursor:'pointer'}}>搜地圖</span>
                                 </div>
-                                <div className="row row-cols-3 g-3">
-                                    {
-                                        imagesUrl.map((img,index)=>
-                                            <div className="col" key={img}>
-                                                <div className="position-relative w-100 mx-2" style={{height:'150px'}}>
-                                                    <img src={img} alt={`附圖${index+1}`} 
-                                                    className="object-fit"
+                                <img src="https://images.unsplash.com/photo-1586449480558-33ae22ffc60d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="地圖" className=" d-block object-fit" style={{height:'200px'}}/>
+                                <div className="d-flex mt-3">
+                                    <i className="bi bi-geo-alt-fill text-brand-600 fs-4 me-1"></i>
+                                    <div>
+                                        <p className="h6 text-brand-600">衛武營 國家藝術文化中心</p>
+                                        <p className="text-grey-500">{location}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 劇會費用 */}
+                            <div className="mb-10">
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="text-brand-400">* &nbsp;</span>
+                                        <span className="h5">劇會費用</span>
+                                    </div>
+                                    <p className={errors.cost?'text-danger':''}>
+                                    {errors.cost&&('⛔'+`${errors.cost.message}`)}
+                                    </p>
+                                </div>
+                                {
+                                    costTags.map((tag,index)=>
+                                        <span className="my-1 mx-1" key={index}>
+                                            <input
+                                            {...register('cost',{
+                                                required:'請選擇費用',
+                                            })}
+                                            type="radio"
+                                            className="btn-check"
+                                            name="cost"
+                                            id={`costTag-${tag}`}
+                                            value={tag}
+                                            checked={costTag===tag}
+                                            />
+                                            <label
+                                            className={`brandBtn-2-sm ${costTag===tag&&'active'}`}
+                                            htmlFor={`costTag-${tag}`}
+                                            style={{cursor:'pointer'}}
+                                            >{tag}</label>
+                                        </span>
+                                    )
+                                }
+                            </div>
+
+                            {/* 劇會條件 */}
+                            <div className="mb-10">
+                                <span className="h5 mb-2">設定跟團條件</span>
+                                {/* 性別 */}
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="h6 text-brand-600 me-3">性別</span>
+                                        {
+                                            genderTags.map((tag,index)=>
+                                                <span className="my-1 mx-1" key={index}>
+                                                    <input
+                                                    {...register('genderTerm')}
+                                                    type="radio"
+                                                    className="btn-check"
+                                                    name="genderTerm"
+                                                    id={`genderTag-${tag}`}
+                                                    value={tag}
+                                                    checked={genderTag===tag}
                                                     />
-                                                    <i className="fs-4 bi bi-x-square-fill text-brand-600 position-absolute top-0 end-0" 
+                                                    <label
+                                                    className={`brandBtn-2-sm ${genderTag===tag&&'active'}`}
+                                                    htmlFor={`genderTag-${tag}`}
                                                     style={{cursor:'pointer'}}
-                                                    onClick={()=>deleteImg(index)}
-                                                    ></i>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-
+                                                    >{tag}</label>
+                                                </span>
+                                            )
+                                        }
+                                    </div>
                                 </div>
-                                
-                            </div>
-                        </div>
 
-                        {/* 劇會標籤 */}
-                        <div className="mb-10">
-                            <div className="mb-2">
-                                <span className="h5">劇會標籤</span>
-                                <i 
-                                className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4"
-                                style={{cursor:'pointer'}}
-                                onClick={openNoteModal}
-                                ></i>
+                                {/* 年齡 */}
+                                <div className="mb-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="h6 text-brand-600 me-3">年齡</span>
+                                        {
+                                            ageTags.map(tag=>
+                                                <span className="my-1 mx-1" key={tag}>
+                                                    <input
+                                                    {...register('ageTerm')}
+                                                    type="radio"
+                                                    className="btn-check"
+                                                    name="ageTerm"
+                                                    id={`ageTag-${tag}`}
+                                                    value={tag}
+                                                    checked={ageTag===tag}
+                                                    />
+                                                    <label
+                                                    className={`brandBtn-2-sm ${ageTag===tag&&'active'}`}
+                                                    htmlFor={`ageTag-${tag}`}
+                                                    style={{cursor:'pointer'}}
+                                                    >{tag}</label>
+                                                </span>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                                {
+                                    ageTag==='限年齡'&&(<>
+                                    
+                                        <div className="input-group mt-2 w-75 mx-auto">
+                                            <input
+                                            {...register('ageMin',{
+                                                required:'請輸入最低年齡',
+                                                valueAsNumber:true,
+                                                min:{
+                                                    value:18,
+                                                    message:'最低年齡不得低於18歲',
+                                                }
+                                            })}
+                                            type="number"
+                                            className="form-control" placeholder="輸入最低年齡"/>
+                                            <span className="input-group-text">~</span>
+                                            <input
+                                            {...register('ageMax',{
+                                                required:'請輸入最高年齡',
+                                                valueAsNumber:true,
+                                                min:{
+                                                    value:18,
+                                                    message:'最高年齡不得低於18歲',
+                                                }
+                                            })}
+                                            type="number" className="form-control" placeholder="輸入最高年齡"/>
+                                        </div>
+                                        <div className="w-75 mx-auto my-2">
+                                            <span className={`mx-1 ${(errors.ageMin)?'text-danger':''}`}>
+                                            {(errors.ageMin)&&('⛔'+`${errors.ageMin.message}`)}
+                                            </span>
+                                            <span className={`mx-1 ${(errors.ageMax)?'text-danger':''}`}>
+                                            {(errors.ageMax)&&('⛔'+`${errors.ageMax.message}`)}
+                                            </span>
+                                        </div>
+                                    </>)
+                                }
+                                
+                                {/* 居住 */}
+                                <div className="my-1 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span className="h6 text-brand-600 me-3">居住</span>
+                                        {
+                                    areaTags.map(tag=>
+                                        <span className="my-1 mx-1" key={tag}>
+                                            <input
+                                            {...register('areaTerm')}
+                                            type="radio"
+                                            className="btn-check"
+                                            name="areaTerm"
+                                            id={`areaTag-${tag}`}
+                                            value={tag}
+                                            checked={areaTag===tag}
+                                            />
+                                            <label
+                                            className={`brandBtn-2-sm ${areaTag===tag&&'active'}`}
+                                            htmlFor={`areaTag-${tag}`}
+                                            style={{cursor:'pointer'}}
+                                            >{tag}</label>
+                                        </span>
+                                    )
+                                }
+                                    </div>
+                                    <p className={(errors.city)?'text-danger':''}>
+                                    {(errors.city)&&('⛔'+`${errors.city.message}`)}
+                                    </p>
+                                </div>
+                                {
+                                    areaTag==='限居住地'&&
+                                    <select
+                                    {...register('city',{
+                                        required:'請選擇地區',
+                                    })}
+                                    className="form-select mt-2 w-75 mx-auto" 
+                                    defaultValue=''>
+                                        <option value='' disabled>縣市地區</option>
+                                        {
+                                            city.map((tag,index)=>
+                                                <option value={tag} key={index}>{tag}</option>
+                                            )
+                                        }
+                                    </select>
+                                }
                             </div>
-                            {
-                                selectedNoteTag.map((tag,index)=>
-                                    <span className="my-1 mx-1 brandBtn-2-sm" key={tag}>
-                                    {tag}
-                                    <i
-                                    className="bi bi-x-circle-fill ms-2"
-                                    onClick={()=>deleteNoteTags(index)}
+
+                            {/* 劇會詳情 */}
+                            <div className="mb-10">
+                                <div className="h5 mb-3">
+                                    <label htmlFor="content" className="form-label">劇會詳情</label>
+                                    <textarea 
+                                    {...register('content')}
+                                    className="form-control" id="content" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            {/* 更多圖片 */}
+                            <div className="mb-10">
+                                <div className="h5 mb-3 w-100">
+                                    <label  className="form-label">劇會照片分享</label>
+                                    <div className="input-group mb-5">
+                                        <input 
+                                        type="text" 
+                                        className="form-control"
+                                        placeholder="貼入圖片網址"
+                                        value={imgStorage||''}
+                                        onChange={e=>setImgStorage(e.target.value)}
+                                        />
+                                        {
+                                            imgStorage&&
+                                            <span
+                                            className="input-group-text bg-brand-600 text-white"
+                                            id="addImg"
+                                            style={{cursor:'pointer'}}
+                                            onClick={addImg}
+                                            >新增</span>
+                                        }
+                                    </div>
+                                    <div className="row row-cols-3 g-3">
+                                        {
+                                            imagesUrl.map((img,index)=>
+                                                <div className="col" key={img}>
+                                                    <div className="position-relative w-100 mx-2" style={{height:'150px'}}>
+                                                        <img src={img} alt={`附圖${index+1}`} 
+                                                        className="object-fit"
+                                                        />
+                                                        <i className="fs-4 bi bi-x-square-fill text-brand-600 position-absolute top-0 end-0" 
+                                                        style={{cursor:'pointer'}}
+                                                        onClick={()=>deleteImg(index)}
+                                                        ></i>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 相關連結 */}
+                            <div className="mb-10">
+                                <div className="h5 mb-3">
+                                    <label htmlFor="description" className="form-label">相關連結</label>
+                                    <input 
+                                    {...register('description')}
+                                    className="form-control" id="description"></input>
+                                </div>
+                            </div>
+
+                            {/* 劇會標籤 */}
+                            <div className="mb-10">
+                                <div className="mb-2">
+                                    <span className="h5">劇會標籤</span>
+                                    <i 
+                                    className="bi bi-plus-circle-fill ms-2 text-brand-600 fs-4"
                                     style={{cursor:'pointer'}}
+                                    onClick={openNoteModal}
                                     ></i>
-                                    </span>
-                                )
-                            }
-                        </div>
+                                </div>
+                                {
+                                    selectedNoteTag.map((tag,index)=>
+                                        <span className="my-1 mx-1 brandBtn-2-sm" key={tag}>
+                                        {tag}
+                                        <i
+                                        className="bi bi-x-circle-fill ms-2"
+                                        onClick={()=>deleteNoteTags(index)}
+                                        style={{cursor:'pointer'}}
+                                        ></i>
+                                        </span>
+                                    )
+                                }
+                            </div>
+                        </form>
                     </div>
                     <div className="modal-footer">
                         <button 
                         type="button" 
                         className="brandBtn-1 w-100"
+                        onClick={()=>formSubmitRef.current.requestSubmit()}
                         >發佈</button>
                     </div>
                 </div>
