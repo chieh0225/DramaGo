@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import LoginModal from "../../components/modal/LoginModal";
 
 const FrontHeader = () => {
     return (<>
         <header>
-
             {/* 手機板nav */}
             <div className="w-100 d-lg-none">
                 <nav className="navbar">
-                    <Link className="ms-3 navbar-brand" to="/">我是logo</Link>
+                    <Link className="ms-3 navbar-brand" to="/"><img style={{width:"140px"}} src="../DramaGo/src/assets/images/Variant7.svg" alt="" /></Link>
                     <button className="navbar-toggler border-0 me-3" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img className="nav-icon-1" src="../DramaGo/src/assets/images/icon/24px/solid/memember.svg" alt="" />
                     </button>
@@ -31,13 +29,12 @@ const FrontHeader = () => {
                         </div>
                     </div>
                 </nav>
-            </div>
-
+            </div> 
             {/* PC版nav */}
             <div className="container d-none d-lg-block">
                 <nav className="navbar">
                     <div className="d-flex align-items-center">
-                        <Link className="ms-3 me-13" to="/">我是logo</Link>
+                        <Link className="ms-3 me-13" to="/"><img src="../DramaGo/src/assets/images/Variant7.svg" alt="" /></Link>
                         <form style={{ width: "400px" }} className="d-flex position-relative">
                             <input className="form-control py-3 ps-6 rounded-pill border border-brand-300" type="search" placeholder="搜尋劇會" aria-label="Search" />
                             <img className="position-absolute end-0 me-5 mt-3 nav-icon-2" src="../DramaGo/src/assets/images/icon/24px/line/search.svg" alt="" />
@@ -54,7 +51,6 @@ const FrontHeader = () => {
                     </div>
                 </nav>
             </div>
-
             {/* login modal */}
             <LoginModal />
         </header>
@@ -62,3 +58,4 @@ const FrontHeader = () => {
 };
 
 export default FrontHeader;
+

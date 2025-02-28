@@ -4,8 +4,6 @@ import NoteTagsModal from "./NoteTagsModal";
 import { Modal } from "bootstrap";
 
 
-console.clear();
-
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
