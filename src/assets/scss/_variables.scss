@@ -420,27 +420,31 @@ $spacers: (
   // 4: $spacer * 1.5,
   // 5: $spacer * 3,
   0: 0,
-  1: $spacer * 0.25,
-  2: $spacer * 0.5,
-  3: $spacer * 0.75,
+  1: $spacer * 0.25, //4px
+  2: $spacer * 0.5,  //8px
+  3: $spacer * 0.75, //12px
   4: $spacer * 1,
   5: $spacer * 1.25,
-  6: $spacer * 1.5,
+  6: $spacer * 1.5,  //24px
   7: $spacer * 1.75,
-  8: $spacer * 2,
+  8: $spacer * 2,    //32px
   9: $spacer * 2.25,
-  10: $spacer * 2.5,
+  10: $spacer * 2.5, //40px
   11: $spacer * 3,
   12: $spacer * 3.5,
   13: $spacer * 4,
   14: $spacer * 4.5,
-  15: $spacer * 5,
+  15: $spacer * 5,   //80px
   16: $spacer * 6,
-  17: $spacer * 6.25,
+  17: $spacer * 6.25, //100px
   18: $spacer * 8,
   19x: $spacer * 3.75,
   20x: $spacer * 5.5,
   21x: $spacer * 3.25,
+  22x: $spacer * 1.25,
+  23x: $spacer * 4.75, //76px
+  24x: $spacer * 4.25, //68px
+  25x: 264px ,
 ) !default;
 // scss-docs-end spacer-variables-maps
 
@@ -661,7 +665,7 @@ $h1m-font-size: $font-size-base * 2.5 !default; //custom
 $h2-font-size: $font-size-base * 2 !default;
 $h3-font-size: $font-size-base * 1.75 !default;
 $h4-font-size: $font-size-base * 1.5 !default;
-$h5-font-size: $font-size-base * 1.25 !default;
+$h5-font-size: $font-size-base * 1.25 !default; //20px
 $h6-font-size: $font-size-base !default;
 
 // 自定義段落字體大小
@@ -678,9 +682,9 @@ $font-sizes: (
   2: $h2-font-size,
   3: $h3-font-size,
   4: $h4-font-size,
-  5: $h5-font-size,
+  5: $h5-font-size, //20px
   6: $h6-font-size,
-  b1: $b1-font-size,
+  b1: $b1-font-size, //18px
   b2: $b2-font-size,
   b3: $b3-font-size,
   c: $c-font-size,

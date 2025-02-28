@@ -1,8 +1,6 @@
 import axios from "axios";
 
 
-console.clear();
-
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 

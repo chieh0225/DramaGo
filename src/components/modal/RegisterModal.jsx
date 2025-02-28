@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const RegisterModal = () => {
     return (
         <>
-            {/* <!-- Modal 123--> */}
+            {/* <!-- Modal --> */}
             <div className="modal fade" id="Register" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="Register" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content bg-brand-50">
