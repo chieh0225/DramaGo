@@ -1,5 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 
+import avatar from "/images/avatar-3.png";
+
 const routes = [
   {
     path: "profileInfo",
@@ -80,7 +82,7 @@ const Profile = () => {
                 <div className="profile-info">
                   <div class="flex-shrink-0">
                     <img
-                      src="./src/assets/images/avatar-3.png"
+                      src={avatar}
                       alt="正在COS的角色"
                       width="200"
                       height="200"
