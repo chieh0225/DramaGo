@@ -1,5 +1,6 @@
 import "../../styles/pages/dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
+import avatarImage2 from "../../assets/images/Frame 1000005392.png";
 import mainImage from "../../assets/images/Frame 1000005356.png";
 import photo from "../../assets/images/Frame 1000005390.png";
 
@@ -34,7 +35,7 @@ const DramaInfo = () => {
                 <span className="fw-semibold poppins-font">樂樂</span>
               </p>
             </div>
-            <div className="col-md-8 col-12">
+            <div className="col-md-8 col-12 order-md-1 order-2 ">
               <img
                 src={mainImage}
                 alt="主圖"
@@ -73,7 +74,9 @@ const DramaInfo = () => {
               >
                 <div className="justify-content-between d-flex mb-8">
                   <p className="fw-semibold">與會者(9)</p>
-                  <p className="text-brand-core">查看全部</p>
+                  <a href="#" className="text-brand-core">
+                    查看全部
+                  </a>
                 </div>
                 <div className="d-flex gap-2">
                   <div className="attendent-card ">
@@ -83,7 +86,7 @@ const DramaInfo = () => {
                     <p className="card-text fs-12 text-brand-500">揪團主</p>
                   </div>
                   <div className="attendent-card ">
-                    <img src={avatarImage} alt="頭像" className="card-img" />
+                    <img src={avatarImage2} alt="頭像" className="card-img" />
                     <p className="card-text text-grey-950 fw-semibold">Kayne</p>
                     <p className="card-text fs-12 text-brand-500">參加者</p>
                   </div>
@@ -96,7 +99,9 @@ const DramaInfo = () => {
               >
                 <div className="justify-content-between d-flex mb-4">
                   <p className="fw-semibold ">照片(3)</p>
-                  <p className="text-brand-core">查看全部</p>
+                  <a href="#" className="text-brand-core">
+                    查看全部
+                  </a>
                 </div>
                 <div className="d-flex gap-2">
                   <img src={photo} alt="聚會照片" />
@@ -107,11 +112,16 @@ const DramaInfo = () => {
               <div className="comment  mt-12">
                 <div className="justify-content-between d-flex mb-4">
                   <p className="fw-semibold ">留言(8)</p>
-                  <p className="text-brand-core">查看全部</p>
+                  <a href="#" className="text-brand-core">
+                    查看全部
+                  </a>
                 </div>
-                <div className="comment-board p-8">
-                  <div className="commment-content ">
-                    <div className="message d-flex">
+                <div className="comment-board px-8">
+                  <div
+                    className="commment-content py-8"
+                    style={{ borderBottom: "1px solid white" }}
+                  >
+                    <div className="message d-flex flex-column flex-md-row ">
                       <div className="message-header">
                         <img
                           src={avatarImage}
@@ -121,48 +131,141 @@ const DramaInfo = () => {
                         />
                         <p>Willson</p>
                       </div>
-                      <div className="message-content">
-                        想問各位餐點有素食的嗎??
+                      <div className="d-flex flex-column flex-md-row justify-content-between w-100">
+                        <div className="message-content">
+                          想問各位餐點有素食的嗎??
+                        </div>
+                        <div className="time d-flex align-items-center gap-6 mt-2">
+                          <p>2025/01/03</p>
+                          <a href="#">回覆</a>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="reply">
-                      <div className="message-header">Kim</div>
-                      <div className="message-content">
-                        有兩道餐點是素的唷！
+                    <div className="replies pt-5 d-flex flex-column">
+                      <div className="message d-flex flex-column flex-md-row gap-3">
+                        <div className="message-header">
+                          <img
+                            src={avatarImage}
+                            alt="留言人"
+                            width="40"
+                            height="40"
+                          />
+                          <p>Kim</p>
+                        </div>
+                        <div className="d-flex flex-column flex-md-row justify-content-between w-100">
+                          <div className="message-content">
+                            有兩道餐點是素的唷！
+                          </div>
+                          <div className="time d-flex align-items-center gap-6 mt-2">
+                            <p>2025/01/03</p>
+                            <a href="#">回覆</a>
+                          </div>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="reply">
-                      <div className="message-header">Resa</div>
-                      <div
-                        className="message-content d-flex justify-content-between
+                      <div className="message d-flex d-flex flex-column flex-md-row gap-3">
+                        <div className="message-header">
+                          <img
+                            src={avatarImage}
+                            alt="留言人"
+                            width="40"
+                            height="40"
+                          />
+                          <p>Resa</p>
+                        </div>
+                        <div className="d-flex flex-column flex-md-row justify-content-between w-100">
+                          <div
+                            className="message-content
                       "
-                      >
-                        推薦他的素菜拼盤很不錯
-                        <div className="d-flex">
-                          2025/01/03<p>回覆</p>
+                          >
+                            推薦他的素菜拼盤很不錯
+                          </div>
+                          <div className="time d-flex align-items-center gap-6 mt-2">
+                            <p>2025/01/03</p>
+                            <a href="#">回覆</a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="commment-textarea">
-                    <div className="form-floating">
+                  <div className="message d-flex flex-column flex-md-row ">
+                    <div className="message-header">
+                      <img
+                        src={avatarImage}
+                        alt="留言人"
+                        width="40"
+                        height="40"
+                      />
+                      <p>Willson</p>
+                    </div>
+                    <div className="d-flex flex-column flex-md-row justify-content-between w-100">
+                      <div className="message-content">
+                        想問各位餐點有素食的嗎??
+                      </div>
+                      <div className="time d-flex align-items-center gap-6 mt-2">
+                        <p>2025/01/03</p>
+                        <a href="#">回覆</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="commment-textarea pt-8 d-flex ">
+                    <div className="message-header">
+                      <img
+                        src={avatarImage}
+                        alt="留言人"
+                        width="40"
+                        height="40"
+                      />
+                    </div>
+                    <div className="form-floating flex-grow-1 ms-4 mb-2">
                       <textarea
                         className="form-control"
                         placeholder="Leave a comment here"
-                        id="floatingTextarea2"
-                        style={{ height: "100px" }}
+                        id="floatingTextarea"
                       ></textarea>
-                      <div className="text-end mt-2">0/1000</div>
+
                       <label htmlFor="floatingTextarea2">請輸入內容</label>
                     </div>
                   </div>
+                  <button>發布</button>
                 </div>
               </div>
             </div>
 
-            <div className="col-md-4 col-12">這是右邊</div>
+            <div className="col-md-4 col-12 order-md-2 order-1 mb-6">
+              <div className="event-info d-flex flex-column gap-4">
+                <div className="d-flex gap-4">
+                  <i className="bi bi-clock text-brand-core fs-4"></i>
+                  <p className="fw-semibold fs-14 text-grey-700">
+                    2025年1月27日(六) 下午3:00-6:30
+                  </p>
+                </div>
+                <div className="d-flex gap-4">
+                  <i className="bi bi-globe2 text-brand-core fs-4"></i>
+                  <p className="fw-semibold fs-14 text-grey-700">
+                    www.1231321.com.tw
+                  </p>
+                </div>
+                <div className="d-flex gap-4">
+                  <i className="bi bi-geo-alt text-brand-core fs-4"></i>
+                  <p className="fw-semibold fs-14 text-grey-700">
+                    100台北市中正區忠孝東路二段39巷2弄18號1樓
+                  </p>
+                </div>
+                <div className="map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7229.221743762492!2d121.51065854951867!3d25.04727647962303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9c0ac903e35%3A0x99603698998bee1f!2zQUJPVVQgSCBDb2ZmZWUg5be35a2Q5piv56eB5Lq656S-5Y2A6KuL5Yu_5YGc6LuK!5e0!3m2!1szh-TW!2stw!4v1740828063327!5m2!1szh-TW!2stw"
+                    width="100%"
+                    height="300"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                  ></iframe>
+                </div>
+                <i className="bi bi-bookmark-fill text-brand-core fs-4"></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
