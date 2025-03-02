@@ -1,0 +1,93 @@
+.profile-container {
+  // background: $brand-50;
+}
+
+.profile {
+  padding: 48px 48px 72px 48px;
+  border-radius: 20px;
+  border: 1px solid $brand-400;
+  height: 100%;
+  .avatar-image {
+    border: 1px solid $brand-400;
+  }
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-nav {
+  .nav-link {
+    font-weight: bold;
+    // color: $grey-950;
+    // background-color: #fff;
+    color: $brand-400;
+    padding: 16px 32px 16px 32px;
+    border-radius: 16px;
+    border: 1px solid $brand-400;
+  }
+  .nav-link.active,
+  .nav-link:hover {
+    color: $brand-400;
+    background-color: $brand-100;
+  }
+}
+
+.my-info {
+  padding: 48px 48px 72px 48px;
+  height: 100%;
+  .my-info-section {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid $brand-400;
+  }
+  .invalid-feedback {
+    position: absolute;
+    left: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    margin-top: 0;
+    @include rwd-md-max {
+      left: auto;
+      top: auto;
+      transform: none;
+      white-space: normal;
+    }
+  }
+}
+
+.my-records {
+  label {
+    white-space: nowrap;
+  }
+  select {
+    min-width: 200px !important;
+  }
+}
+
+.my-records,
+.my-collections {
+  background-color: #ffffff;
+  padding: 48px 48px 72px 48px;
+  border-radius: 20px;
+  border: 1px solid $brand-400;
+  height: 100%;
+  svg {
+    margin: 6px;
+    // :hover circle {
+    //   fill: $brand-950;
+    // }
+  }
+
+  .date {
+    font-weight: 400;
+    color: $grey-400;
+  }
+  .table th,
+  .table td {
+    overflow: hidden; /* 隱藏溢出的內容 */
+    text-overflow: ellipsis; /* 顯示省略號 */
+    white-space: nowrap; /* 不換行 */
+  }
+}
