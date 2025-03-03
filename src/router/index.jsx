@@ -39,6 +39,20 @@ const router = createHashRouter([
             {
                 path:'profile',              //個人主頁
                 element:<Profile/>,
+                children: [
+                {
+                    path: "profileInfo", //個人主頁個人資訊頁
+                    element: <ProfileInfo />,
+                },
+                {
+                    path: "profileRecord", //個人主頁劇會記錄頁
+                    element: <ProfileRecord />,
+                },
+                {
+                    path: "profileCollection", //個人主頁收藏頁
+                    element: <ProfileCollection />,
+                },
+                ],
             },
         ]    
     },
