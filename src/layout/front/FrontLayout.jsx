@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-
 import FrontHeader from "./FrontHeader";
 import FrontFooter from "./FrontFooter";
 
-const FrontLayout = () => {
 
+
+const FrontLayout = () => {
     return(<>
-        <FrontHeader/>
-        <Outlet/>
-        <FrontFooter/>
+            <FrontHeader/>
+            <Outlet/>
+            <FrontFooter/>
     </>)
 };
 

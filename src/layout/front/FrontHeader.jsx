@@ -52,7 +52,7 @@ const FrontHeader = () => {
                 </nav>
             </div>
             {/* login modal */}
-            <LoginModal />
+            <LoginModal/>
         </header>
     </>)
 };
