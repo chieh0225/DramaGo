@@ -1,4 +1,4 @@
-import { createHashRouter,Navigate} from "react-router-dom";
+import { createHashRouter, Navigate } from "react-router-dom";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -6,6 +6,9 @@ import FrontHome from "../pages/front/FrontHome";
 import DramaList from "../pages/front/DramaList";
 import DramaInfo from "../pages/front/DramaInfo";
 import Profile from "../pages/front/Profile";
+import ProfileInfo from "../pages/front/ProfileInfo";
+import ProfileRecord from "../pages/front/ProfileRecord";
+import ProfileCollection from "../pages/front/ProfileCollection";
 // 後台
 import AdminLayout from "../layout/admin/AdminLayout";
 import AdminHome from "../pages/admin/AdminHome";
@@ -17,7 +20,6 @@ import NotFound from "../components/NotFound";
 // 套件
 import Design from "../plugin/Design";
 import ComponentsView from "../plugin/ComponentsView";
-
 
 
 const router = createHashRouter([
@@ -94,6 +96,7 @@ const router = createHashRouter([
         path:'compView',
         element:<ComponentsView/>
     }
+
 ]);
 
 export default router;
