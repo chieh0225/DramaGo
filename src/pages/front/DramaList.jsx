@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useRef } from "react";
+import { useEffect,useRef,useState } from "react";
 import { Modal } from "bootstrap";
 
 import Breadcrumb from "../../components/Breadcrumb";
@@ -19,9 +18,10 @@ const DramaList = () => {
     const dramaTags = ['追影星','晚上','AA制','台北'];
     const dramaFormRef = useRef(null);
     const dramaFormInstance = useRef(null);
+    const openButtonRef = useRef(null);
+    const [modalMode,setModalMode] = useState('');
 
-    const openDramaForm = (e)=>{
-        e.preventDefault();
+    const openDramaForm = ()=>{
         dramaFormInstance.current.show();
     };
 
@@ -49,10 +49,18 @@ const DramaList = () => {
                 <div className="row d-none d-lg-flex">
                     <div className="filterBoard col-3">
                         <div className="addDrama-bg rounded-5 rounded-bottom-0 d-flex align-items-center">
-                            <a href="#" className="fs-5 text-white ms-9" onClick={openDramaForm}>
+                            <button 
+                            type="button"
+                            className="btn fs-5 text-white ms-9"
+                            style={{ "--bs-btn-border-color": "none" }}
+                            onClick={()=>{
+                                setModalMode('add');
+                                openDramaForm();
+                            }}
+                            >
                                 <i className="bi bi-plus-circle-fill"></i>
                                 <span className="ms-1">我要發起劇會</span>
-                            </a>
+                            </button>
                         </div>
                         <div  className="d-flex flex-column align-items-start bg-white p-5">
                             <SearchBar/>
@@ -318,10 +326,15 @@ const DramaList = () => {
                 {/* 平板/手機版 */}
 
                 <div className="d-flex d-lg-none align-items-center justify-content-between mb-4">
-                    <a href="#" className="btn btn-brand-400 rounded-pill fs-5 text-white" onClick={openDramaForm}>
+                    <button type="button" className="btn btn-brand-400 rounded-pill fs-5 text-white" 
+                    onClick={()=>{
+                        setModalMode('add');
+                        openDramaForm();
+                    }}
+                    >
                         <i className="bi bi-plus-circle-fill"></i>
-                        <span className="ms-1">我要發起劇會</span>
-                    </a>
+                        <span className="ms-1 fs-6">我要發起劇會</span>
+                    </button>
                     <div className="h4" >
                         <span  type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"><i className="bi bi-funnel"></i></span>
                         <span  type="button" data-bs-toggle="offcanvas" data-bs-target="#sortOffcanvas" aria-controls="sortOffcanvas"><i className="bi bi-sort-down ms-4"></i></span>
@@ -486,7 +499,7 @@ const DramaList = () => {
             <DramaFormModal
                 dramaFormRef={dramaFormRef}
                 closeDramaForm={closeDramaForm}
-                openDramaForm={openDramaForm}
+                modalMode={modalMode}
             />
 
             

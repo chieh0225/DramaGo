@@ -1,9 +1,48 @@
 import RegisterModal from "./RegisterModal";
 import LostPasswordModal from "./LostPasswordModal";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 
 //未註冊->個人頁面
 //已註冊->當前頁面
+
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
+
 const LoginModal = () => {
+    
+    // 嚼勁測試打api用
+    const [userInfo,setUserInfo] = useState({
+            username: '',
+            password: '',
+    });
+    const handleLogin = (e) => {
+        const {name,value} = e.target;
+        setUserInfo(prev=>({
+            ...prev,
+            [name]:value,
+        }));
+    };
+    const postLogin = async(e) => {
+        e.preventDefault();
+        const {username,password} = userInfo;
+        const updateData = {
+            username,
+            password,
+        };
+        try {
+            const res = await axios.post(`${baseUrl}/admin/signin`,updateData);
+            console.log(res);
+            const {expired,token,uid} = res.data;
+            document.cookie =`myToken=${token}; expires=${new Date(expired)};`;
+            axios.defaults.headers.common['Authorization'] =token;
+            localStorage.setItem('uid',uid);
+        } catch (err) {
+            console.log(err.response.data.message); 
+        }
+    };
+
     return (
         <>
             {/* <!-- Modal --> */}
@@ -226,18 +265,47 @@ const LoginModal = () => {
                             </button>
 
                             <form>
-                                <div className="mb-3">
+                                {/* <div className="mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
                                     <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="信箱" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                                     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="密碼" />
+                                </div> */}
+                                <div className="mb-3">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
+                                    <input 
+                                    type="email" 
+                                    className="form-control" 
+                                    id="exampleInputEmail1" 
+                                    aria-describedby="emailHelp" 
+                                    placeholder="信箱"
+                                    name="username"
+                                    value={userInfo.username}
+                                    onChange={handleLogin}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                                    <input 
+                                    type="password" 
+                                    className="form-control" 
+                                    id="exampleInputPassword1" 
+                                    placeholder="密碼" 
+                                    name="password"
+                                    value={userInfo.password}
+                                    onChange={handleLogin}
+                                    />
                                 </div>
                                 <div className="d-flex justify-content-end">
                                     <a href="#Lost" data-bs-toggle="modal" className="text-danger mb-4">忘記密碼</a>
                                 </div>
-                                <button type="submit" className="btn w-100 rounded-pill btn-brand-400 mb-4">登入</button>
+                                <button 
+                                type="submit" 
+                                className="btn w-100 rounded-pill btn-brand-400 mb-4"
+                                onClick={postLogin}
+                                >登入</button>
                             </form>
                             <div className="d-flex justify-content-center">
                                 <p>沒有帳號 , <a className="text-brand-600" href="Register" data-bs-toggle="modal" data-bs-target="#Register">快速註冊</a></p>

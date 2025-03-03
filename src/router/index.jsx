@@ -9,6 +9,7 @@ import Profile from "../pages/front/Profile";
 // 後台
 import AdminLayout from "../layout/admin/AdminLayout";
 import AdminHome from "../pages/admin/AdminHome";
+import DramaManage from "../pages/admin/DramaManage";
 import TagManage from "../pages/admin/TagManage";
 import Chart from "../pages/admin/Chart";
 // 全域
@@ -16,6 +17,7 @@ import NotFound from "../components/NotFound";
 // 套件
 import Design from "../plugin/Design";
 import ComponentsView from "../plugin/ComponentsView";
+
 
 
 const router = createHashRouter([
@@ -45,12 +47,16 @@ const router = createHashRouter([
         element:<AdminLayout/>,
         children:[
             {
-                index:true,
+                path:'', 
                 element:<Navigate to="admin" replace />,
             },
             {
                 path:'admin',                //後台首頁
                 element:<AdminHome/>,
+            },
+            {
+                path:'drama-manage',         //劇會管理頁
+                element:<DramaManage/>,
             },
             {
                 path:'tag-manage',           //標籤管理頁
