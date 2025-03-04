@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "../../assets/scss/pages/dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
 import avatarImage2 from "../../assets/images/Frame 1000005392.png";
@@ -11,6 +12,15 @@ import "swiper/css";
 import "swiper/css/free-mode";
 
 const DramaInfo = () => {
+  const [commentText, setCommentText] = useState("");
+  const maxLength = 1000;
+
+  const handleCommentChange = (e) => {
+    const text = e.target.value;
+    if (text.length <= maxLength) {
+      setCommentText(text);
+    }
+  };
   return (
     <>
       <div className="bg-brand-50">
@@ -52,14 +62,7 @@ const DramaInfo = () => {
                 exercitationem eaque accusantium. Sint molestiae nostrum rerum
                 ea iure, corrupti porro error eum. Nesciunt dolorum quod soluta
                 possimus, molestias eius tenetur quo repellat, sunt architecto
-                quidem non eos. Optio earum vero facere libero vel atque vitae
-                officia minus dolores nostrum fugiat neque suscipit temporibus
-                magni a eligendi ea doloribus, eaque exercitationem consectetur
-                eos rerum facilis! Veniam consequatur ullam soluta libero
-                commodi, vero fugit optio minus? Obcaecati, distinctio repellat
-                recusandae, aut minima dolorem incidunt ab unde deserunt,
-                molestiae architecto ipsam vitae iste repellendus quis eos sequi
-                dicta at! Vero laboriosam tempore doloribus.
+                quide
               </p>
               <div className="d-inline-flex gap-2 mb-md-12 mb-8">
                 <button type="button" className="btn tag">
@@ -193,9 +196,9 @@ const DramaInfo = () => {
                     查看全部
                   </a>
                 </div>
-                <div className="comment-board px-8">
+                <div className="comment-board px-md-8 px-4">
                   <div
-                    className="comment-content py-8 drama-info__comment-content"
+                    className="comment-content py-md-8 py-4 drama-info__comment-content"
                     style={{ borderBottom: "1px solid white" }}
                   >
                     <div className="message d-flex flex-column flex-md-row">
@@ -267,7 +270,7 @@ const DramaInfo = () => {
                     </div>
                   </div>
                   <div
-                    className="comment-content py-8"
+                    className="comment-content py-md-8 py-4"
                     style={{ borderBottom: "1px solid white" }}
                   >
                     <div className="message d-flex flex-column flex-md-row">
@@ -291,7 +294,7 @@ const DramaInfo = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="comment-textarea">
+                  <div className="comment-textarea py-md-8 py-4">
                     <div className="input-area">
                       <div className="message-header">
                         <img
@@ -301,18 +304,24 @@ const DramaInfo = () => {
                           height="40"
                         />
                       </div>
-                      <div className="form-floating">
+                      <div className="form-floating ">
                         <textarea
                           className="form-control"
                           placeholder="Leave a comment here"
-                          id="floatingTextarea"
+                          id="floatingTextarea2"
+                          value={commentText}
+                          onChange={handleCommentChange}
+                          maxLength={maxLength}
                         ></textarea>
                         <label htmlFor="floatingTextarea2">請輸入內容</label>
+                        <div className="character-count">
+                          {commentText.length}/{maxLength}
+                        </div>
                       </div>
                     </div>
                     <button className="publish-btn d-flex ms-auto">
                       發布
-                      <i className="bi bi-send-fill"></i>
+                      <i className="bi bi-send ms-2"></i>
                     </button>
                   </div>
                 </div>
@@ -339,7 +348,7 @@ const DramaInfo = () => {
                     100台北市中正區忠孝東路二段39巷2弄18號1樓
                   </p>
                 </div>
-                <div className="map drama-info__map">
+                <div className="drama-info__map d-none d-md-block">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7229.221743762492!2d121.51065854951867!3d25.04727647962303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9c0ac903e35%3A0x99603698998bee1f!2zQUJPVVQgSCBDb2ZmZWUg5be35a2Q5piv56eB5Lq656S-5Y2A6KuL5Yu_5YGc6LuK!5e0!3m2!1szh-TW!2stw!4v1740828063327!5m2!1szh-TW!2stw"
                     width="100%"

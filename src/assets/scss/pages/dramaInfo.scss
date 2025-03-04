@@ -99,8 +99,6 @@
   .comment-textarea {
     display: flex;
     flex-direction: column;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
 
     .input-area {
       display: flex;
@@ -113,9 +111,23 @@
 
     .form-floating {
       flex-grow: 1;
+      position: relative;
 
       .form-control {
         border-radius: 20px;
+        min-height: 96px;
+        resize: vertical;
+        @media (max-width: 768px) {
+          min-height: 136px;
+        }
+      }
+      .character-count {
+        position: absolute;
+        bottom: 12px;
+        right: 20px;
+        font-family: Poppins;
+        color: $grey-400;
+        font-size: 12px;
       }
     }
   }
