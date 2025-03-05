@@ -146,11 +146,6 @@
     border: 1px solid $brand-400;
     border-radius: 100px;
 
-    &:hover {
-        color: white;
-        background-color: $brand-500;
-    }
-
     &:active {
         color: $brand-400;
         background-color: $brand-100;
