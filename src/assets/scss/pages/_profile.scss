@@ -34,16 +34,22 @@
 }
 
 .my-info {
-  padding: 48px 48px 72px 48px;
-  height: 100%;
+  padding: 0px 48px 0px 48px;
   .my-info-section {
-    padding: 20px;
+    padding: 32px;
     border-radius: 20px;
     border: 1px solid $brand-400;
   }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="tel"] {
+    min-width: 250px;
+  }
   .invalid-feedback {
     position: absolute;
-    left: 110%;
+    left: 103%;
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
@@ -54,6 +60,39 @@
       transform: none;
       white-space: normal;
     }
+  }
+  @include rwd-md-max {
+    padding: 48px 0px 72px 0px;
+  }
+}
+
+.login-method {
+  padding: 48px 48px 0px 48px;
+  .login-method-section {
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid $brand-400;
+  }
+  input[type="password"] {
+    max-width: 250px !important;
+  }
+  @include rwd-md-max {
+    padding: 48px 0px 72px 0px;
+  }
+}
+
+.reset-password {
+  padding: 48px 48px 0px 48px;
+  .reset-password-section {
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid $brand-400;
+  }
+  input[type="password"] {
+    min-width: 250px;
+  }
+  @include rwd-md-max {
+    padding: 48px 0px 72px 0px;
   }
 }
 

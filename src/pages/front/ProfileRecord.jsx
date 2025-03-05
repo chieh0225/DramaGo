@@ -65,7 +65,7 @@ const ProfileRecord = () => {
       <div className="col-lg-8">
         <div className="my-records">
           <h2 className="fs-md-1m fs-5 mb-8">我的劇會記錄</h2>
-          <div className="d-flex justify-content-between mb-8">
+          <div className="d-md-flex flex-md-row flex-column mb-8">
             <div className="d-flex align-items-center">
               <label className="fs-md-4 fs-6 me-3" for="party-status">
                 揪團狀態
