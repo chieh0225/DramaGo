@@ -61,7 +61,7 @@ const ProfileInfo = () => {
             </div>
 
             <form onSubmit={onSubmit}>
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="nickname"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
@@ -81,7 +81,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="real-name"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
@@ -99,7 +99,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="birthday"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
@@ -112,7 +112,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="gender"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
@@ -121,7 +121,7 @@ const ProfileInfo = () => {
                 </label>
 
                 <div className="col-auto">
-                  <div classNameName="form-check form-check-inline">
+                  <div className="form-check form-check-inline">
                     <input
                       className="form-check-input"
                       type="radio"
@@ -148,7 +148,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="email"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
@@ -167,7 +167,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div classNameName="row align-items-center mb-5">
+              <div className="row align-items-center mb-5">
                 <label
                   htmlFor="tel"
                   className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
