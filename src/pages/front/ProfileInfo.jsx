@@ -34,7 +34,7 @@ const ProfileInfo = () => {
             </div>
 
             <form onSubmit={onSubmit}>
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label
                     htmlFor="nike-name"
@@ -58,7 +58,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label
                     htmlFor="real-name"
@@ -72,7 +72,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label
                     htmlFor="birthday"
@@ -86,7 +86,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label
                     htmlFor="gender"
@@ -96,7 +96,7 @@ const ProfileInfo = () => {
                   </label>
                 </div>
                 <div className="col-auto">
-                  <div class="form-check form-check-inline">
+                  <div className="form-check form-check-inline">
                     <input
                       className="form-check-input"
                       type="radio"
@@ -123,7 +123,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label
                     htmlFor="email"
@@ -142,7 +142,7 @@ const ProfileInfo = () => {
                 </div>
               </div>
 
-              <div class="row g-5 align-items-center mb-5">
+              <div className="row g-5 align-items-center mb-5">
                 <div className="col-auto">
                   <label htmlFor="tel" className="col-form-label fs-md-5 fs-6">
                     手機號碼<span className="fs-5 text-danger">*</span>

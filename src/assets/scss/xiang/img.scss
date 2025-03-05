@@ -1,3 +1,6 @@
+
+
+
 .img-s {
   width: 24px;
   height: 24px;
@@ -47,7 +50,18 @@
     width: 1824px;
     height: 936px;
     background-size: cover;
-    transform: translate(-264px, 0);
     background-image: url("../DramaGo/src/assets/images/heroSection.svg");
+  }
+}
+
+.bg-center1{
+  @media (min-width: 992px) {
+    background: #FFF6EB;
+    border-bottom-left-radius: 240px;
+    border-top-left-radius: 100px ;
+    border-top-right-radius:100px  ;
+    height: 1196px;
+    width: 100%;
+    z-index: -1;
   }
 }
