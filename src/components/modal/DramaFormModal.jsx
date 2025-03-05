@@ -3,6 +3,7 @@ import { useState,useEffect, useRef } from "react";
 import NoteTagsModal from "./NoteTagsModal";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
+import dayjs from "dayjs";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -62,7 +63,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
             const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
             setImageUrl(res.data.imageUrl);
         } catch (err) {
-            console.log(err);
+            console.log(err.response?.data?.message);
         }
     };
     // 功能：更多圖片
@@ -97,8 +98,6 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     };
 
     const onSubmitForm = async(data) => {
-        console.log(data);
-        
         const {title,category,description,content,location,people,cost,genderTerm,ageTerm,areaTerm,ageMax,ageMin,city,startDate,endDate} = data; 
         const newStartDate = new Date(startDate).toLocaleString("zh-TW", { 
             year: "numeric", 
@@ -145,29 +144,28 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 isHot:false, 
             }
         };
-        console.log(updateData);
         
             if (modalMode==='add') {
                 try {
-                    const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/product`,updateData);
-                    console.log(res.data);
+                    await axios.post(`${baseUrl}/api/${apiPath}/admin/product`,updateData);
                     reset();
                     setImageUrl('');
                     setSelectedNoteTag([]);
                     setImagesUrl([]);
                     alert('新增成功');
-                    getDramas();
                     closeDramaForm();
+                    getDramas();
+                    
                 } catch (err) {
                     console.log(err.response?.data?.message);
                 };
             }else if (modalMode==='edit') {
                 try {
-                    const res = await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`,updateData);
-                    console.log(res.data);
+                    await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`,updateData);
                     alert('修改成功');
-                    getDramas();
                     closeDramaForm();
+                    getDramas();
+                    
                 } catch (err) {
                     console.log(err.response.data.message);
                 };
@@ -185,7 +183,6 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     },[]);
 
     useEffect(()=>{
-        console.log(unitDrama);
         
         if (modalMode === 'edit') {
             setImageUrl(unitDrama.imageUrl||'')
@@ -318,7 +315,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                     </div>
                                     {
                                         categoryTags.map((tag,index)=>
-                                            <span className="my-1 mx-1" key={index}>
+                                            <a role="button" className="my-1 mx-1" key={index}>
                                                 <input
                                                 {...register('category',{
                                                     required:'請選擇一個類型',
@@ -335,7 +332,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                                 htmlFor={`categoryTag-${tag}`}
                                                 style={{cursor:'pointer'}
                                                 }>{tag}</label>
-                                            </span>
+                                            </a>
                                         )
                                     }
                                 </div>
@@ -445,7 +442,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                     </div>
                                     {
                                         costTags.map((tag,index)=>
-                                            <span className="my-1 mx-1" key={index}>
+                                            <a role="button" className="my-1 mx-1" key={index}>
                                                 <input
                                                 {...register('cost',{
                                                     required:'請選擇費用',
@@ -462,7 +459,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                                 htmlFor={`costTag-${tag}`}
                                                 style={{cursor:'pointer'}}
                                                 >{tag}</label>
-                                            </span>
+                                            </a>
                                         )
                                     }
                                 </div>
@@ -476,7 +473,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                             <span className="h6 text-brand-600 me-3">性別</span>
                                             {
                                                 genderTags.map((tag,index)=>
-                                                    <span className="my-1 mx-1" key={index}>
+                                                    <a role="button" className="my-1 mx-1" key={index}>
                                                         <input
                                                         {...register('genderTerm')}
                                                         type="radio"
@@ -491,7 +488,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                                         htmlFor={`genderTag-${tag}`}
                                                         style={{cursor:'pointer'}}
                                                         >{tag}</label>
-                                                    </span>
+                                                    </a>
                                                 )
                                             }
                                         </div>
@@ -503,7 +500,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                             <span className="h6 text-brand-600 me-3">年齡</span>
                                             {
                                                 ageTags.map(tag=>
-                                                    <span className="my-1 mx-1" key={tag}>
+                                                    <a role="button" className="my-1 mx-1" key={tag}>
                                                         <input
                                                         {...register('ageTerm')}
                                                         type="radio"
@@ -518,7 +515,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                                         htmlFor={`ageTag-${tag}`}
                                                         style={{cursor:'pointer'}}
                                                         >{tag}</label>
-                                                    </span>
+                                                    </a>
                                                 )
                                             }
                                         </div>
@@ -567,7 +564,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                             <span className="h6 text-brand-600 me-3">居住</span>
                                             {
                                         areaTags.map(tag=>
-                                            <span className="my-1 mx-1" key={tag}>
+                                            <a role="button" className="my-1 mx-1" key={tag}>
                                                 <input
                                                 {...register('areaTerm')}
                                                 type="radio"
@@ -582,7 +579,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                                 htmlFor={`areaTag-${tag}`}
                                                 style={{cursor:'pointer'}}
                                                 >{tag}</label>
-                                            </span>
+                                            </a>
                                         )
                                     }
                                         </div>
@@ -682,14 +679,14 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                     </div>
                                     {
                                         selectedNoteTag.map((tag,index)=>
-                                            <span className="my-1 mx-1 brandBtn-2-sm" key={tag}>
+                                            <a role="button" className="my-1 mx-1 brandBtn-2-sm" key={tag}>
                                             {tag}
                                             <i
                                             className="bi bi-x-circle-fill ms-2"
                                             onClick={()=>deleteNoteTags(index)}
                                             style={{cursor:'pointer'}}
                                             ></i>
-                                            </span>
+                                            </a>
                                         )
                                     }
                                 </div>
