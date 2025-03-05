@@ -25,7 +25,7 @@ import img2 from "../../assets/images/Frame 1000005408.svg"
 //推薦聚會API
 //保持登入
 //尚未補上驗證碼過期code
-
+//密碼錯誤的alart
 
 const SwiperModalType = () => {
 
