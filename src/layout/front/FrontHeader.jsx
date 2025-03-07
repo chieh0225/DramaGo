@@ -14,12 +14,14 @@ const FrontHeader = () => {
     const mymodal = useRef(null);
     const [state, setState] = useState(false);
     const navigate = useNavigate()
-    //Login
+
+
+    //Login modal
     const LoginOpenMadal = () => {
         mymodal.current.show();
     }
 
-    //logoutUser
+    //登出
     const logoutUser=()=>{
         setState(false)
         Cookies.remove('token');
@@ -27,8 +29,13 @@ const FrontHeader = () => {
     }
 
     useEffect(() => {
-        console.log(state)
-    }, [state])
+        const token = Cookies.get('token')
+        if(token){
+            setState(true)
+        }else{
+            setState(false)
+        }
+    }, [])
 
     
     return (<>

@@ -7,9 +7,11 @@ import Forgot from "../../assets/images/Forgot-password-cuate.png"
 const LostPasswordModal = ({ mylostMadal, mymodal }) => {
     const [state, setState] = useState(false);
     const [disable, setdisable] = useState(false)
+    const [time, setTime] = useState(false)
     const lostMadal = useRef(null);
     const randomNumRef = useRef(null)
-    const { register, handleSubmit, formState: { errors }, reset , watch } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
+    const timeIdRef =useRef(null)
 
     //表單
     const onSubmit = (data) => {
@@ -17,9 +19,21 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
             setState(true);
             setdisable(true);
             randomNumRef.current = Math.ceil(Math.random() * (999999 - 100000 + 1) + 100000)
-        } else if(state == true && watch('num') == randomNumRef.current) {
+            timeIdRef.current = setTimeout(() => {
+                setTime(true)
+            }, 60000)
+        } else if (state == true && watch('num') == randomNumRef.current && time == false) {
             LoginOpenMadal();
-        } else{
+
+            if (timeIdRef.current) {
+                clearTimeout(timeIdRef.current);
+                timeIdRef.current = null; 
+            }
+        } else if(time == true){
+            alert(`驗證碼過期請重新確認信箱`)
+            setState(false);
+            setdisable(false);
+        } else {
             alert('驗證碼錯誤')
         }
     }
@@ -58,7 +72,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
+                                        <label htmlFor="lostemail" className="form-label">Email</label>
                                         <input {...register("email", {
                                             required: "請正確填寫email",
                                             validate: {
@@ -66,25 +80,27 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                                             }
                                         })}
                                             disabled={disable}
-                                            name="email"
-                                            type="email"
+                                            autoComplete="email"
+                                            name="lostemail"
+                                            type="lostemail"
                                             className="form-control"
-                                            id="exampleInputEmail1"
+                                            id="lostemail"
                                             aria-describedby="emailHelp"
                                             placeholder="請輸入會員信箱" />
-                                        {errors.email && <span className="text-danger">{errors.email.message}</span>}
+                                        {errors.lostemail && <span className="text-danger">{errors.lostemail.message}</span>}
                                     </div>
                                     {state &&
                                         <>
                                             <p className="mb-3">驗證碼 : {randomNumRef.current}</p>
                                             <div className="mb-3">
-                                                <label htmlFor="exampleInputEmail1" className="form-label">請輸入驗證碼</label>
+                                                <label htmlFor="num" className="form-label">請輸入驗證碼</label>
                                                 <input
                                                     {...register('num')}
                                                     type="text"
                                                     name='num'
+                                                    autoComplete="text"
                                                     className="form-control"
-                                                    id="exampleInputEmail1"
+                                                    id="num"
                                                     aria-describedby="emailHelp"
                                                     placeholder="請輸入驗證碼" />
                                             </div>

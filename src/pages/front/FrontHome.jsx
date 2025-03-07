@@ -4,6 +4,7 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Love from '../../components/modal/Love';
 import 'swiper/css/navigation';
+import { motion } from "framer-motion";
 //照片
 import swiper1 from "../../assets/images/Frame 1000005334.png";
 import swiper2 from "../../assets/images/Frame 1000005334-1.png";
@@ -20,18 +21,13 @@ import component2 from "../../assets/images/Component 4.svg"
 import component3 from "../../assets/images/Component 2.svg"
 import img1 from "../../assets/images/Frame 1000005407.svg"
 import img2 from "../../assets/images/Frame 1000005408.svg"
-import decorate from "../../assets/images/Let_s have a great time together.-1.svg"
-import decorate992 from "../../assets/images/Let_s have a great time together..svg"
+import decorate from "../../assets/images/Let_s have a great time together.-1.svg" 
+import decorate992 from "../../assets/images/Let_s have a great time together..svg" 
 import banner from "../../assets/images/Frame-1000005399.svg"
 import banner992 from "../../assets/images/heroSection.svg"
 import axios from 'axios';
 
-//確認跑馬燈 5
-//保持登入 2
-//尚未補上驗證碼過期code 1
-//可以保持登入後註冊也要補上狀態更新 3
 //收藏 加入token判斷 4
-
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -227,6 +223,35 @@ const SwiperModalimg = () => {
   )
 }
 
+const Marquee = () => {
+  return (
+    <div className='d-lg-none mb-15' style={{ overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}>
+      <motion.img
+        src={decorate}
+        alt="跑馬燈圖片"
+        style={{ display: "inline-block",height: `96px` }}
+        animate={{ x: ["100%", "-100%"] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+      />
+    </div>
+  );
+};
+
+const Marquee992 = () => {
+  return (
+    <div className='d-none d-lg-block mb-17' style={{ overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}>
+      <motion.img
+        src={decorate992}
+        alt="跑馬燈圖片"
+        style={{ display: "inline-block",height: `201px` }}
+        animate={{ x: ["35%", "-100%"] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+      />
+    </div>
+  );
+};
+
+
 const FrontHome = () => {
 
 
@@ -248,6 +273,7 @@ const FrontHome = () => {
         </div>
 
         <div className="container">
+
           {/* 當我們劇在一起能做什麼 */}
           <section className="position-relative d-flex flex-column align-items-center justify-content-center pt-lg-18 pt-15 ">
             <h1 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">當我們<span className="text-brand-300">劇</span>在一起<br className="d-lg-none" />能做什麼</h1>
@@ -276,6 +302,7 @@ const FrontHome = () => {
               <img src={img2} alt="" />
             </div>
           </section>
+
         </div>
         <div className='position-relative'>
           <div className="container">
@@ -305,8 +332,13 @@ const FrontHome = () => {
         </div>
 
       </main>
-      <div style={{ backgroundImage: `url(${decorate})` }} className='bg-decorate-img d-lg-none'></div>
-      <div style={{ backgroundImage: `url(${decorate992})` }} className='bg-decorate-img-992 d-none d-lg-block '></div>
+      {/* <div style={{ backgroundImage: `url(${decorate})` ,overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}
+       className='bg-decorate-img d-lg-none'></div>
+       
+      <div style={{ backgroundImage: `url(${decorate992})` ,overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}
+       className='bg-decorate-img-992 d-none d-lg-block'></div> */}
+       <Marquee/>
+       <Marquee992/>
     </>
   )
 };
@@ -314,3 +346,5 @@ const FrontHome = () => {
 
 
 export default FrontHome;
+
+
