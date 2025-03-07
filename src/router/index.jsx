@@ -63,7 +63,7 @@ const router = createHashRouter([
         element:<AdminLayout/>,
         children:[
             {
-                path:'', 
+                index:true, 
                 element:<Navigate to="admin" replace />,
             },
             {

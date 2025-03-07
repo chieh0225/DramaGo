@@ -1,11 +1,20 @@
 
-const Breadcrumb = () => {
+import { Link } from "react-router-dom";
+
+const Breadcrumb = ({pageLink}) => {
 
     return(<>
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="#">首頁</a></li>
-                <li className="breadcrumb-item active" aria-current="page">劇會總覽</li>
+                {
+                    pageLink.map((page,index)=>
+                        <li 
+                        key={page.name}
+                        className={`breadcrumb-item ${pageLink.length === (index+1)?'active':''}`}>
+                            {pageLink.length === (index+1)?(page.name):(<Link to={page.link}>{page.name}</Link>)}
+                        </li>
+                    )
+                }
             </ol>
         </nav>
     </>)

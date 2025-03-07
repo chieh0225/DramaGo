@@ -10,8 +10,10 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const uid = localStorage.getItem('uid');
+const now = dayjs();
+const pageUrl = window.location.href;
 
-const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitDrama,getDramas}) => {
+const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitDrama,getDramas,unitShareDrama}) => {
     const noteModalRef = useRef(null);
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal,setIsOpenNoteModal] = useState(false);
@@ -97,24 +99,19 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
         });
     };
 
+    const copyWebsite = async() => {
+        try {
+            await navigator.clipboard.writeText(`${pageUrl}/${unitShareDrama.id}`);
+            alert('已複製網址');
+        } catch (err) {
+            console.log(err.response?.data?.message);
+        }
+    };
+
     const onSubmitForm = async(data) => {
         const {title,category,description,content,location,people,cost,genderTerm,ageTerm,areaTerm,ageMax,ageMin,city,startDate,endDate} = data; 
-        const newStartDate = new Date(startDate).toLocaleString("zh-TW", { 
-            year: "numeric", 
-            month: "2-digit", 
-            day: "2-digit", 
-            hour: "2-digit", 
-            minute: "2-digit", 
-            hour12: false,
-        }).replace(/\//g, "/");
-        const newEndDate = new Date(endDate).toLocaleString("zh-TW", { 
-            year: "numeric", 
-            month: "2-digit", 
-            day: "2-digit", 
-            hour: "2-digit", 
-            minute: "2-digit", 
-            hour12: false,
-        }).replace(/\//g, "/");
+        const newStartDate = dayjs(startDate).format('YYYY/MM/DD hh:mm A');
+        const newEndDate = dayjs(endDate).format('YYYY/MM/DD hh:mm A');
 
         const updateData = {
             data: {
@@ -130,7 +127,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 imagesUrl, //劇會副圖
 
                 uid,      
-                date:{start:newStartDate,end:newEndDate,},   //劇會時間
+                date:{start:startDate,end:endDate,},   //劇會時間
                 location, //劇會地點
                 people,   //劇會人數
                 cost,     //劇會預估費用
@@ -140,8 +137,10 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                         area:{condition:areaTerm,range:city||''},
                 },
                 noteTag:selectedNoteTag,      //劇會標籤
-                isFinish:false, 
-                isHot:false, 
+                isFinish:0, 
+                isHot:0, 
+                during:dayjs(newEndDate).diff(dayjs(newStartDate),'day')<1?'1天內':'2天以上',
+                buildDate:now.format('YYYY/MM/DD hh:mm A'),
             }
         };
         
@@ -177,7 +176,10 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     useEffect(()=>{
         if (noteModalRef.current) {
             noteModalInstance.current = new Modal(noteModalRef.current);
-        }
+        };
+    },[]);
+
+    useEffect(()=>{
         const getToken = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,"$1",);
         axios.defaults.headers.common['Authorization'] = getToken;
     },[]);
@@ -196,8 +198,8 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 ageMax:unitDrama.term.age.range.max,
                 areaTerm:unitDrama.term.area.condition,
                 city:unitDrama.term.area.range,
-                startDate:unitDrama.date.start.replace(/\//g, '-').replace(' ', 'T'),
-                endDate:unitDrama.date.end.replace(/\//g, '-').replace(' ', 'T'),
+                startDate:unitDrama.date.start,
+                endDate:unitDrama.date.end,
             });
         }if (modalMode === 'add') {
             setImageUrl('');
@@ -211,13 +213,27 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     
         <div className="modal fade"
         style={{...(isOpenNoteModal && {filter:" brightness(30%)"})}}
-        tabIndex="-1" ref={dramaFormRef}>
+        tabIndex="-1" ref={dramaFormRef} >
             <div className="modal-dialog modal-md modal-fullscreen-md-down">
                 <div className="modal-content">
                     <div className={` modal-header text-white 
-                        ${modalMode==='delete'?'bg-grey-600':(modalMode==='add'?'bg-brand-600':'bg-brand-800')}`}>
+                        ${modalMode==='share'?
+                        'bg-brand-core':
+                        (modalMode==='delete'?
+                        'bg-grey-600':
+                        (modalMode==='add'?
+                        'bg-brand-600':
+                        'bg-brand-800'
+                        ))}`}>
                         <h5 className="modal-title">
-                            {`${modalMode==='delete'?'刪除劇會':(modalMode==='add'?'新增劇會':'編輯劇會')}`}
+                            {`
+                            ${modalMode==='share'?
+                            '分享劇會':
+                            (modalMode==='delete'?
+                            '刪除劇會':
+                            (modalMode==='add'?
+                            '新增劇會':'編輯劇會'
+                            ))}`}
                         </h5>
                         <button
                         type="button" 
@@ -228,7 +244,20 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                     </div>
                     <div className="modal-body">
                         {
-                            modalMode==='delete'?(<>
+                            modalMode==='share'?(<>
+                            <div className="card text-bg-dark">
+                                <div className="w-100" style={{height:'360px'}}>
+                                    <img src={unitShareDrama.imageUrl} className="object-fit" alt={unitShareDrama.title} />
+                                </div>
+                                <div className="card-img-overlay p-0 d-flex align-items-end">
+                                    <div className="bg-brand-700 w-100 rounded-1">
+                                        <h5 className="card-title p-3 ">{unitShareDrama.title}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            </>    
+                            ):
+                            (modalMode==='delete'?(<>
                             <div className="card text-bg-dark">
                                 <div className="w-100" style={{height:'360px'}}>
                                     <img src={unitDrama.imageUrl} className="object-fit" alt={unitDrama.title}/>
@@ -691,18 +720,30 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                     }
                                 </div>
                             </form>
-                            )
+                            ))
                         }
                     </div>
                     <div className="modal-footer">
                         {
-                            modalMode==='delete'?(
+                            modalMode==='share'?(<>
+                                <input 
+                                type="text" 
+                                className="form-control"
+                                value={`${pageUrl}/${unitShareDrama.id}`}
+                                />
+                                <button 
+                                type="button" 
+                                className="btn bg-brand-core w-100 text-white"
+                                onClick={copyWebsite}
+                                >複製網址</button>
+                                </>
+                            ):(modalMode==='delete'?(
                                 <button 
                                 type="button" 
                                 className="btn btn-outline-grey-900 w-100 text-grey-900"
                                 onClick={()=>deleteDrama(unitDrama.id)}
                                 >刪除</button>
-                            ):modalMode==='edit'?(
+                            ):(modalMode==='edit'?(
                                 <button 
                                 type="button" 
                                 className="btn btn-brand-800 text-white rounded-pill w-100 "
@@ -714,7 +755,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                 className="brandBtn-1 w-100"
                                 onClick={()=>formSubmitRef.current.requestSubmit()}
                                 >發起</button>
-                            )
+                            )))
                         }
                     </div>
                 </div>
