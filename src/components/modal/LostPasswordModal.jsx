@@ -1,25 +1,44 @@
 import { useRef, useState, useEffect } from "react";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
+import PasswordReModal from "./PasswordReModal";
 //照片
 import Forgot from "../../assets/images/Forgot-password-cuate.png"
 
 const LostPasswordModal = ({ mylostMadal, mymodal }) => {
     const [state, setState] = useState(false);
     const [disable, setdisable] = useState(false)
+    const [time, setTime] = useState(false)
     const lostMadal = useRef(null);
     const randomNumRef = useRef(null)
-    const { register, handleSubmit, formState: { errors }, reset , watch } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
+    const timeIdRef = useRef(null)
+    const mypasswordRef = useRef(null)
 
     //表單
-    const onSubmit = (data) => {
+    const onSubmit = () => {
         if (state == false) {
             setState(true);
             setdisable(true);
             randomNumRef.current = Math.ceil(Math.random() * (999999 - 100000 + 1) + 100000)
-        } else if(state == true && watch('num') == randomNumRef.current) {
-            LoginOpenMadal();
-        } else{
+            timeIdRef.current = setTimeout(() => {
+                setTime(true)
+            }, 60000)
+        } else if (state == true && watch('num') == randomNumRef.current && time == false) {
+            mylostMadal.current.hide();
+            mypasswordRef.current.show();
+            setState(false);
+            reset();
+            setdisable(false);
+            if (timeIdRef.current) {
+                clearTimeout(timeIdRef.current);
+                timeIdRef.current = null;
+            }
+        } else if (time == true) {
+            alert(`驗證碼過期請重新確認信箱`)
+            setState(false);
+            setdisable(false);
+        } else {
             alert('驗證碼錯誤')
         }
     }
@@ -58,33 +77,35 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-                                        <input {...register("email", {
+                                        <label htmlFor="lostemail" className="form-label">Email</label>
+                                        <input {...register("lostemail", {
                                             required: "請正確填寫email",
                                             validate: {
                                                 email: value => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) || "請輸入有效的email地址"
                                             }
                                         })}
                                             disabled={disable}
-                                            name="email"
+                                            autoComplete="email"
+                                            name="lostemail"
                                             type="email"
                                             className="form-control"
-                                            id="exampleInputEmail1"
+                                            id="lostemail"
                                             aria-describedby="emailHelp"
                                             placeholder="請輸入會員信箱" />
-                                        {errors.email && <span className="text-danger">{errors.email.message}</span>}
+                                        {errors.lostemail && <span className="text-danger">{errors.lostemail.message}</span>}
                                     </div>
                                     {state &&
                                         <>
                                             <p className="mb-3">驗證碼 : {randomNumRef.current}</p>
                                             <div className="mb-3">
-                                                <label htmlFor="exampleInputEmail1" className="form-label">請輸入驗證碼</label>
+                                                <label htmlFor="num" className="form-label">請輸入驗證碼</label>
                                                 <input
                                                     {...register('num')}
                                                     type="text"
                                                     name='num'
+                                                    autoComplete="text"
                                                     className="form-control"
-                                                    id="exampleInputEmail1"
+                                                    id="num"
                                                     aria-describedby="emailHelp"
                                                     placeholder="請輸入驗證碼" />
                                             </div>
@@ -98,6 +119,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                     </div>
                 </div>
             </div>
+            <PasswordReModal mypasswordRef={mypasswordRef} mymodal={mymodal} />
         </>
     )
 }

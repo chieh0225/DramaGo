@@ -7,25 +7,35 @@ import logout from "../../assets/images/icon/24px/solid/logout.svg";
 import logo from "../../assets/images/Variant7.svg";
 import search from "../../assets/images/icon/24px/line/search.svg";
 import menber from "../../assets/images/icon/24px/solid/memember.svg"
-import ueser from"../../assets/images/icon/24px/solid/ueser.svg"
+import ueser from "../../assets/images/icon/24px/solid/ueser.svg"
 
 
-const FrontHeader = () => {
-    const mymodal = useRef(null);
-    const [state, setState] = useState(false);
+const FrontHeader = ({ state, setState ,mymodal }) => {
+    
     const navigate = useNavigate()
-    //Login
+
+
+    //Login modal
     const LoginOpenMadal = () => {
         mymodal.current.show();
     }
 
-    //logoutUser
-    const logoutUser=()=>{
+    //登出
+    const logoutUser = () => {
         setState(false)
         Cookies.remove('token');
         navigate('/')
     }
-    
+
+    useEffect(() => {
+        const token = Cookies.get('token')
+        if (token) {
+            setState(true)
+        } else {
+            setState(false)
+        }
+    }, [])
+
     return (<>
         <header>
             {/* 手機板nav */}
@@ -43,7 +53,7 @@ const FrontHeader = () => {
                                     <img className="position-absolute end-0 me-5 mt-3 nav-icon-2" src={search} alt="" />
                                 </form>
                             </div>
-                                    <Link className="text-grey-950 fs-2 w-100 pt-6 ps-4" to="/dramaList">劇會總覽</Link>
+                            <Link className="text-grey-950 fs-2 w-100 pt-6 ps-4" to="/dramaList">劇會總覽</Link>
                             {state &&
                                 <>
                                     <Link className="text-grey-950 fs-2 w-100 pt-6 ps-4" to="/profile">個人管理</Link>

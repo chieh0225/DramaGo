@@ -1,6 +1,6 @@
 import RegisterModal from "./RegisterModal";
 import LostPasswordModal from "./LostPasswordModal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const LoginModal = ({ mymodal , setState}) => {
     const modalRef = useRef(null);
@@ -286,7 +285,7 @@ const LoginModal = ({ mymodal , setState}) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
+                                        <label htmlFor="LoginEmail1" className="form-label">Email</label>
                                         <input
                                             {...register('email', {
                                                 required: "請填寫Eamil",
@@ -296,22 +295,24 @@ const LoginModal = ({ mymodal , setState}) => {
                                             })}
                                             type="email"
                                             name="email"
+                                            autoComplete="email"
                                             className="form-control"
-                                            id="exampleInputEmail1"
+                                            id="LoginEmail1"
                                             aria-describedby="emailHelp"
                                             placeholder="信箱"
                                         />
                                         {errors.email && <span className="text-danger">{errors.email.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                                        <label htmlFor="LogihPassword1" className="form-label">Password</label>
                                         <input
                                             {...register('password', {
                                                 required: "請填寫密碼"
                                             })}
+                                            autoComplete="current-password"
                                             type="password"
                                             className="form-control"
-                                            id="exampleInputPassword1"
+                                            id="LogihPassword1"
                                             placeholder="密碼"
                                         />
                                         {errors.password && <span className="text-danger">{errors.password.message}</span>}
@@ -333,8 +334,8 @@ const LoginModal = ({ mymodal , setState}) => {
                     </div>
                 </div>
             </div >
-            <RegisterModal myRegisterModal={myRegisterModal} mymodal={mymodal} />
-            <LostPasswordModal mylostMadal={mylostMadal} mymodal={mymodal} />
+            <RegisterModal myRegisterModal={myRegisterModal} mymodal={mymodal} setState={setState}/>
+            <LostPasswordModal mylostMadal={mylostMadal} mymodal={mymodal}  />
         </>
     )
 }

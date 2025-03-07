@@ -1,5 +1,4 @@
 import { createHashRouter, Navigate } from "react-router-dom";
-import { useEffect } from "react";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -21,18 +20,6 @@ import NotFound from "../components/NotFound";
 // 套件
 import Design from "../plugin/Design";
 import ComponentsView from "../plugin/ComponentsView";
-
-
-const TokenCheck=()=>{
-    useEffect(()=>{
-        const token = Cookies.get('token')
-        //避免未登入時取得token
-        if(token){
-          axios.defaults.headers.common['Authorization'] = token;
-        }
-        console.log('我有確認token我有確認token')
-    },[])
-}
 
 const router = createHashRouter(
     [

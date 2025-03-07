@@ -2,29 +2,48 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import Cookies from "js-cookie";
 //照片
 import sing from "../../assets/images/Sign-up-cuate.png"
 
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
-const RegisterModal = ({ myRegisterModal , mymodal }) => {
+const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
     const registerModal = useRef(null)
-    const { register, handleSubmit, formState: { errors } ,reset } = useForm()
-    const navigate= useNavigate();
-    
+    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const navigate = useNavigate();
+
     // 初始化模態框
     useEffect(() => {
         myRegisterModal.current = new Modal(registerModal.current);
     }, []);
 
-    //表單
+    //表單註冊
     const onSubmit = () => {
-        navigate('/profile')
-        myRegisterModal.current.hide();
+        axios.post(`${baseUrl}/admin/signin`, {
+            "username": 'dramaGo@gmail.com',
+            "password": 'dramago'
+        })
+            .then((res) => {
+                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                myRegisterModal.current.hide();
+                reset();
+                navigate('/profile')
+                setState(true)
+            })
+            .catch((err) => {
+                console.error(`登入失敗`, err)
+                if (err.response?.status == 400) {
+                    alert(`密碼錯誤`)
+                } else
+                    alert(`帳密錯誤`)
+            })
     }
 
     //登入
-    const LoginOpenMadal=()=>{
-        reset();            
+    const LoginOpenMadal = () => {
+        reset();
         myRegisterModal.current.hide();
         mymodal.current.show();
     }
@@ -73,6 +92,7 @@ const RegisterModal = ({ myRegisterModal , mymodal }) => {
                                                 required: "請填寫名稱"
                                             })}
                                             type="name"
+                                            autoComplete="username"
                                             name="registerName"
                                             className="form-control"
                                             id="registerName"
@@ -90,6 +110,7 @@ const RegisterModal = ({ myRegisterModal , mymodal }) => {
                                                 }
                                             })}
                                             type="email"
+                                            autoComplete="email"
                                             name="registerEmail"
                                             className="form-control"
                                             id="registerEmail"
@@ -109,16 +130,17 @@ const RegisterModal = ({ myRegisterModal , mymodal }) => {
                                                     smailCase: value => /[a-z]/.test(value) || '密碼必須包含至少一個小寫字母',
                                                 }
                                             })}
+                                            autoComplete="current-password"
                                             type="password"
                                             name="registerPassword"
                                             className="form-control"
-                                            id="exampleInputPassword1"
+                                            id="registerPassword"
                                             placeholder="密碼" />
                                         {errors.registerPassword && <span className="text-danger">{errors.registerPassword.message}</span>}
-                                        <ul className="fs-c text-grey-600 mt-3">
-                                            <li >密碼最少8位</li>
-                                            <li >密碼必須包含大小寫字母</li>
-                                            <li >密碼必須包含一個數字</li>
+                                        <ul className="fs-c text-grey-600 my-3">
+                                            <li className="py-1" >密碼最少8位</li>
+                                            <li className="py-1" >密碼必須包含大小寫字母</li>
+                                            <li className="py-1" >密碼必須包含一個數字</li>
                                         </ul>
                                     </div>
                                     <button type="submit" className="btn w-100 rounded-pill btn-brand-400 mb-4" >註冊</button>
