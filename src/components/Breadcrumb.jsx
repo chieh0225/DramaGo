@@ -11,6 +11,7 @@ const Breadcrumb = ({pageLink}) => {
         <nav aria-label="breadcrumb">
            <ol className="breadcrumb">
                 {
+                    pageLink&&
                     pageLink.map((page,index)=>
                         <li 
                         key={page.name}

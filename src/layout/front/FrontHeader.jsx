@@ -36,7 +36,6 @@ const FrontHeader = ({ state, setState ,mymodal }) => {
         }
     }, [])
 
-
     return (<>
         <header>
             {/* 手機板nav */}

@@ -1,11 +1,17 @@
 import { useEffect,useRef,useState } from "react";
 import { useForm,useWatch } from "react-hook-form";
 import { Modal,Offcanvas } from "bootstrap";
+
+import { useDispatch } from "react-redux";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
+
 import Breadcrumb from "../../components/Breadcrumb";
 import SearchBar from "../../components/SearchBar";
 import Dropdown from "../../components/Dropdown";
 import DramaFormModal from "../../components/modal/DramaFormModal";
 import axios from "axios";
+
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -72,6 +78,9 @@ const DramaList = () => {
     const [loveDramas,setLoveDramas] = useState([]);
     const [filterDramas,setFilterDramas]=useState([]);
     const [tagFilter,setTagFilter] = useState([]);
+    const [unitShareDrama,setUnitShareDrama] = useState({});
+    const [dramaState,setDramaState] = useState('onGoing');
+    const dispatch = useDispatch();
     
 
     // 開關劇會modal
@@ -79,6 +88,7 @@ const DramaList = () => {
         dramaFormInstance.current.show();
     };
     const closeDramaForm = ()=>{
+        setModalMode('');
         dramaFormInstance.current.hide();
     };
     // 開關offcanvas
@@ -88,12 +98,15 @@ const DramaList = () => {
 
     // 渲染劇會列表
     const getDramas = async() =>{
+        dispatch(changeLoadingState(true));
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/products`);
             setDramas(res.data.products);
             setFilterDramas(res.data.products);
         } catch (err) {
             console.log(err.response?.data?.message);
+        } finally{
+            dispatch(changeLoadingState(false));
         }
     };
 
@@ -105,27 +118,36 @@ const DramaList = () => {
                 qty: 1,
             }
         };
+        dispatch(changeLoadingState(true));
         try {
             await axios.post(`${baseUrl}/api/${apiPath}/cart`,updateData);
             getLoveDramas();
         } catch (err) {
             console.log(err.response?.data?.message);
+        } finally{
+            dispatch(changeLoadingState(false));
         }
     };
     const getLoveDramas = async() => {
+        dispatch(changeLoadingState(true));
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
             setLoveDramas(res.data.data.carts);
         } catch (err) {
             console.log(err.response?.data?.message);
+        } finally{
+            dispatch(changeLoadingState(false));
         }
     };
     const deleteLoveDrama = async(cart_id) => {
+        dispatch(changeLoadingState(true));
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/cart/${cart_id}`);
             getLoveDramas();
         } catch (err) {
             console.log(err.response?.data?.message);
+        } finally{
+            dispatch(changeLoadingState(false));
         }
     };
     const handleLoveClick = (drama_id) => {
@@ -182,7 +204,10 @@ const DramaList = () => {
         
     },[tagFilter]);
 
-    
+    useEffect(()=>{
+        getDramas();
+    },[modalMode]);
+
     return(<>
         <main className="dramaList bg-brand-50 pt-lg-13 pt-6 pb-15">
             <div className="container">
@@ -689,9 +714,7 @@ const DramaList = () => {
                 </button>
             </div>
         </main>
-        
-
-
+        <Loading/>
     </>)
 };
 

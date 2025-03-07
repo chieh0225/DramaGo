@@ -4,7 +4,9 @@ import NoteTagsModal from "./NoteTagsModal";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
-
+import { useDispatch } from "react-redux";
+import {changeLoadingState} from "../../redux/slice/loadingSlice"
+import Loading from "../Loading"
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
@@ -16,7 +18,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const noteModalRef = useRef(null);
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal,setIsOpenNoteModal] = useState(false);
-    
+    const dispatch = useDispatch();
 
     // 功能：表單
     const {
@@ -59,13 +61,16 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const handleImgInput = async(e) => {
         const file = e.target.files[0]; 
         const formData = new FormData(); 
-        formData.append('file-to-upload',file);         
+        formData.append('file-to-upload',file);
+        dispatch(changeLoadingState(true));
         try {
             const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
             setImageUrl(res.data.imageUrl);
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
     // 功能：更多圖片
     const addImg = () => {
@@ -145,28 +150,30 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
         };
         
             if (modalMode==='add') {
+                dispatch(changeLoadingState(true));
                 try {
                     await axios.post(`${baseUrl}/api/${apiPath}/admin/product`,updateData);
+                    alert('新增成功');
                     reset();
                     setImageUrl('');
                     setSelectedNoteTag([]);
                     setImagesUrl([]);
-                    alert('新增成功');
                     closeDramaForm();
-                    getDramas();
-                    
                 } catch (err) {
                     console.log(err.response?.data?.message);
+                } finally{
+                    dispatch(changeLoadingState(false));
                 };
             }else if (modalMode==='edit') {
+                dispatch(changeLoadingState(true));
                 try {
                     await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`,updateData);
                     alert('修改成功');
                     closeDramaForm();
-                    getDramas();
-                    
                 } catch (err) {
                     console.log(err.response.data.message);
+                } finally{
+                    dispatch(changeLoadingState(false));
                 };
             }
         }
@@ -729,7 +736,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                                 <input 
                                 type="text" 
                                 className="form-control"
-                                value={`${pageUrl}/${unitShareDrama.id}`}
+                                defaultValue={`${pageUrl}/${unitShareDrama.id}`}
                                 />
                                 <button 
                                 type="button" 
@@ -769,6 +776,8 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
         selectedNoteTag={selectedNoteTag}
         setSelectedNoteTag={setSelectedNoteTag}
         />
+
+        <Loading/>
     </>)
 
 };
