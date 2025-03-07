@@ -2,6 +2,9 @@ import axios from "axios";
 import { useEffect, useState,useRef } from "react";
 import { Modal } from "bootstrap";
 import DramaFormModal from "../../components/modal/DramaFormModal";
+import { useDispatch } from "react-redux";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -15,6 +18,7 @@ const DramaManage = () => {
     const openButtonRef = useRef(null);
     const [modalMode,setModalMode] = useState('');
     const [unitDrama,setUnitDrama] = useState({});
+    const dispatch = useDispatch();
     
     const openDramaForm = ()=>{
         dramaFormInstance.current.show();
@@ -25,12 +29,15 @@ const DramaManage = () => {
     };
 
     const getDramas = async() => {
+        dispatch(changeLoadingState(true));
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/products`);    
             setDramas(res.data.products);
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
     const editDrama = async(e,drama) => {
         const {name,value} = e.target
@@ -41,6 +48,7 @@ const DramaManage = () => {
                 [name]:Number(value),
             }
         }
+        dispatch(changeLoadingState(true));
         try {
             await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${drama.id}`,updateData);
             alert('修改成功');    
@@ -48,9 +56,12 @@ const DramaManage = () => {
             closeDramaForm();
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
     const deleteDrama = async(id) => {
+        dispatch(changeLoadingState(true));
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}`);    
             alert('刪除成功');
@@ -58,7 +69,9 @@ const DramaManage = () => {
             closeDramaForm();
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
 
     useEffect(()=>{
@@ -151,6 +164,7 @@ const DramaManage = () => {
         />
 
     </div>
+    <Loading/>
     </>)
 };
 

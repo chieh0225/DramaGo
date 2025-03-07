@@ -1,5 +1,8 @@
 import axios from "axios";
 import { useState,useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -9,6 +12,8 @@ const TagManage = () => {
 
     const [noteTags,setNoteTags] = useState([]);
     const [tagInput,setTagInput] = useState('');
+    const dispatch = useDispatch();
+
 
     const addTag = async(e) => {
         e.preventDefault();
@@ -21,29 +26,38 @@ const TagManage = () => {
                 code: tagInput,
             }
         };
+        dispatch(changeLoadingState(true));
         try {
             await axios.post(`${baseUrl}/api/${apiPath}/admin/coupon`,updateData);
             getTags();
             setTagInput('');
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
     const getTags = async() => {
+        dispatch(changeLoadingState(true));
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
             setNoteTags(res.data.coupons);
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
     const deleteTags = async(id) => {
+        dispatch(changeLoadingState(true));
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/admin/coupon/${id}`);
             getTags();
         } catch (err) {
             console.log(err.response?.data?.message);
-        }
+        } finally{
+            dispatch(changeLoadingState(false));
+        };
     };
 
     useEffect(()=>{
@@ -95,7 +109,7 @@ const TagManage = () => {
                 }
             </div>
         </div>
-        
+        <Loading/>
     </>)
 };
 

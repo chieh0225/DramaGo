@@ -25,11 +25,6 @@ const FrontHeader = () => {
         Cookies.remove('token');
         navigate('/')
     }
-
-    useEffect(() => {
-        console.log(state)
-    }, [state])
-
     
     return (<>
         <header>
