@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import "../../assets/scss/pages/dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
 import { useNavigate } from "react-router-dom";
@@ -81,7 +81,6 @@ const DramaInfo = () => {
 
       setUserImage(userRes.data.article.image);
       setUserName(userRes.data.article.author);
-      console.log("當前用戶名字：", userRes.data.article.author);
     } catch (error) {
       console.log(error);
     }
