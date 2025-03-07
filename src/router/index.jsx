@@ -76,8 +76,8 @@ const router = createHashRouter(
         element: <AdminLayout />,
         children: [
             {
-                path: '',
-                element: <Navigate to="admin" replace />,
+                index:true, 
+                element:<Navigate to="admin" replace />,
             },
             {
                 path: 'admin',                //後台首頁

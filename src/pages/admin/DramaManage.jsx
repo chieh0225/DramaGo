@@ -24,17 +24,6 @@ const DramaManage = () => {
         dramaFormInstance.current.hide();
     };
 
-    useEffect(()=>{
-        if (dramaFormRef.current) {
-            dramaFormInstance.current = new Modal(dramaFormRef.current);
-        };
-        dramaFormRef.current.addEventListener("hidden.bs.modal", () => {
-            if (openButtonRef.current) {
-                openButtonRef.current.focus();
-            }
-        });
-    },[]);
-
     const getDramas = async() => {
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/products`);    
@@ -43,19 +32,17 @@ const DramaManage = () => {
             console.log(err.response?.data?.message);
         }
     };
-    const editDrama = async(data,e) => {
-        const {value} = e.target
+    const editDrama = async(e,drama) => {
+        const {name,value} = e.target
+        
         const updateData = {
             data:{
-                ...data,
-                is_enabled:Number(value),
-                isHot:Number(value),
-                isFinish:Number(value),
+                ...drama,
+                [name]:Number(value),
             }
         }
-        
         try {
-            await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${data.id}`,updateData);
+            await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${drama.id}`,updateData);
             alert('修改成功');    
             getDramas();
             closeDramaForm();
@@ -65,8 +52,7 @@ const DramaManage = () => {
     };
     const deleteDrama = async(id) => {
         try {
-            const res = await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}`);    
-            console.log(res);
+            await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}`);    
             alert('刪除成功');
             getDramas();
             closeDramaForm();
@@ -80,9 +66,21 @@ const DramaManage = () => {
         axios.defaults.headers.common['Authorization'] = getToken;
         getDramas();
     },[]);
+    useEffect(()=>{
+        if (dramaFormRef.current) {
+            dramaFormInstance.current = new Modal(dramaFormRef.current);
+        };
+        const handleModalHidden = () => {
+            if (openButtonRef.current) {
+                openButtonRef.current.focus();
+            }
+        };
+        dramaFormRef.current.addEventListener("hidden.bs.modal", handleModalHidden);
+    },[]);
+
 
     return(<>
-    <div className="container">
+    <div className="container py-10">
         <h1 className="h4 my-4">劇會管理</h1>
         <table className="table table-hover table-brand-400 table-sm align-middle">
             <thead>
@@ -104,19 +102,19 @@ const DramaManage = () => {
                         </td>
                         <td>{drama.title}</td>
                         <td>
-                            <select className="form-select" defaultValue={drama.is_enabled?'1':'0'} onChange={(e)=>editDrama(drama,e)}>
+                            <select className="form-select" name="is_enabled" value={drama.is_enabled?'1':'0'} onChange={(e)=>editDrama(e,drama)}>
                                 <option value="1">顯示</option>
                                 <option value="0">隱藏</option>
                             </select>
                         </td>
                         <td>
-                            <select className="form-select" defaultValue={drama.isHot?'1':'0'} onChange={(e)=>editDrama(drama,e)}>
+                            <select className="form-select" name="isHot" value={drama.isHot?'1':'0'} onChange={(e)=>editDrama(e,drama)}>
                                 <option value="1">是</option>
                                 <option value="0">否</option>
                             </select>
                         </td>
                         <td>
-                            <select className="form-select" defaultValue={drama.isFinish?'1':'0'} onChange={(e)=>editDrama(drama,e)}>
+                            <select className="form-select" name="isFinish" value={drama.isFinish?'1':'0'} onChange={(e)=>editDrama(e,drama)}>
                                 <option value="1">已出團</option>
                                 <option value="0">未出團</option>
                             </select>
