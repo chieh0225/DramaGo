@@ -13,7 +13,7 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 const Love = ({ id }) => {
     const [state, setState] = useState(false)
 
-    //新增刪除
+    //新增&刪除
     const add_del = () => {
         (async () => {
             try {
