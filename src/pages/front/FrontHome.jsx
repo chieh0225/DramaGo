@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -21,13 +21,12 @@ import component2 from "../../assets/images/Component 4.svg"
 import component3 from "../../assets/images/Component 2.svg"
 import img1 from "../../assets/images/Frame 1000005407.svg"
 import img2 from "../../assets/images/Frame 1000005408.svg"
-import decorate from "../../assets/images/Let_s have a great time together.-1.svg" 
-import decorate992 from "../../assets/images/Let_s have a great time together..svg" 
+import decorate from "../../assets/images/Let_s have a great time together.-1.svg"
+import decorate992 from "../../assets/images/Let_s have a great time together..svg"
 import banner from "../../assets/images/Frame-1000005399.svg"
 import banner992 from "../../assets/images/heroSection.svg"
 import axios from 'axios';
-
-//收藏 加入token判斷 4
+import { useOutletContext } from 'react-router-dom';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -95,6 +94,7 @@ const SwiperModalType = () => {
 
 const Card = () => {
   const [recommend, setRecommend] = useState([]);
+  const {state , mymodal} = useOutletContext();
 
   //取得產品資訊
   useEffect(() => {
@@ -103,7 +103,7 @@ const Card = () => {
         const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
         let length = res.data.products.length;
         const product = res.data.products
-        
+
 
         for (length; length >= 5; length--) {
           const a = (Math.ceil(Math.random() * (length)));
@@ -124,7 +124,7 @@ const Card = () => {
 
           {
             recommend.map((product, index) => {
-              const { date, people, title, imageUrl , id} = product;
+              const { date, people, title, imageUrl, id } = product;
 
               return (
                 <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
@@ -144,7 +144,7 @@ const Card = () => {
                         <img className='img-l me-4' src={cardUser} alt="" />
                         <p className='fw-semibold text-grey-950'>xiang</p>
                       </div>
-                      <Love id={id}/>
+                      <Love id={id} state={state} mymodal={mymodal} />
                     </div>
                   </div>
                 </div>
@@ -229,7 +229,7 @@ const Marquee = () => {
       <motion.img
         src={decorate}
         alt="跑馬燈圖片"
-        style={{ display: "inline-block",height: `96px` }}
+        style={{ display: "inline-block", height: `96px` }}
         animate={{ x: ["100%", "-100%"] }}
         transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
       />
@@ -243,7 +243,7 @@ const Marquee992 = () => {
       <motion.img
         src={decorate992}
         alt="跑馬燈圖片"
-        style={{ display: "inline-block",height: `201px` }}
+        style={{ display: "inline-block", height: `201px` }}
         animate={{ x: ["35%", "-100%"] }}
         transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
       />
@@ -253,7 +253,6 @@ const Marquee992 = () => {
 
 
 const FrontHome = () => {
-
 
   return (
     <>
@@ -332,13 +331,8 @@ const FrontHome = () => {
         </div>
 
       </main>
-      {/* <div style={{ backgroundImage: `url(${decorate})` ,overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}
-       className='bg-decorate-img d-lg-none'></div>
-       
-      <div style={{ backgroundImage: `url(${decorate992})` ,overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}
-       className='bg-decorate-img-992 d-none d-lg-block'></div> */}
-       <Marquee/>
-       <Marquee992/>
+      <Marquee />
+      <Marquee992 />
     </>
   )
 };

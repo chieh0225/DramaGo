@@ -137,10 +137,10 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
                                             id="registerPassword"
                                             placeholder="密碼" />
                                         {errors.registerPassword && <span className="text-danger">{errors.registerPassword.message}</span>}
-                                        <ul className="fs-c text-grey-600 mt-3">
-                                            <li >密碼最少8位</li>
-                                            <li >密碼必須包含大小寫字母</li>
-                                            <li >密碼必須包含一個數字</li>
+                                        <ul className="fs-c text-grey-600 my-3">
+                                            <li className="py-1" >密碼最少8位</li>
+                                            <li className="py-1" >密碼必須包含大小寫字母</li>
+                                            <li className="py-1" >密碼必須包含一個數字</li>
                                         </ul>
                                     </div>
                                     <button type="submit" className="btn w-100 rounded-pill btn-brand-400 mb-4" >註冊</button>

@@ -1,6 +1,6 @@
 import RegisterModal from "./RegisterModal";
 import LostPasswordModal from "./LostPasswordModal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const LoginModal = ({ mymodal , setState}) => {
     const modalRef = useRef(null);

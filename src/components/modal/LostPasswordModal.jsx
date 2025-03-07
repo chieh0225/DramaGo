@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
+import PasswordReModal from "./PasswordReModal";
 //照片
 import Forgot from "../../assets/images/Forgot-password-cuate.png"
 
@@ -11,10 +12,11 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
     const lostMadal = useRef(null);
     const randomNumRef = useRef(null)
     const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
-    const timeIdRef =useRef(null)
+    const timeIdRef = useRef(null)
+    const mypasswordRef = useRef(null)
 
     //表單
-    const onSubmit = (data) => {
+    const onSubmit = () => {
         if (state == false) {
             setState(true);
             setdisable(true);
@@ -23,13 +25,16 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                 setTime(true)
             }, 60000)
         } else if (state == true && watch('num') == randomNumRef.current && time == false) {
-            LoginOpenMadal();
-
+            mylostMadal.current.hide();
+            mypasswordRef.current.show();
+            setState(false);
+            reset();
+            setdisable(false);
             if (timeIdRef.current) {
                 clearTimeout(timeIdRef.current);
-                timeIdRef.current = null; 
+                timeIdRef.current = null;
             }
-        } else if(time == true){
+        } else if (time == true) {
             alert(`驗證碼過期請重新確認信箱`)
             setState(false);
             setdisable(false);
@@ -73,7 +78,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
                                         <label htmlFor="lostemail" className="form-label">Email</label>
-                                        <input {...register("email", {
+                                        <input {...register("lostemail", {
                                             required: "請正確填寫email",
                                             validate: {
                                                 email: value => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) || "請輸入有效的email地址"
@@ -82,7 +87,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                                             disabled={disable}
                                             autoComplete="email"
                                             name="lostemail"
-                                            type="lostemail"
+                                            type="email"
                                             className="form-control"
                                             id="lostemail"
                                             aria-describedby="emailHelp"
@@ -114,6 +119,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                     </div>
                 </div>
             </div>
+            <PasswordReModal mypasswordRef={mypasswordRef} mymodal={mymodal} />
         </>
     )
 }
