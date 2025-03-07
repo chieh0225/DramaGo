@@ -1,4 +1,5 @@
 import { createHashRouter, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -22,81 +23,93 @@ import Design from "../plugin/Design";
 import ComponentsView from "../plugin/ComponentsView";
 
 
-const router = createHashRouter([
+const TokenCheck=()=>{
+    useEffect(()=>{
+        const token = Cookies.get('token')
+        //避免未登入時取得token
+        if(token){
+          axios.defaults.headers.common['Authorization'] = token;
+        }
+        console.log('我有確認token我有確認token')
+    },[])
+}
+
+const router = createHashRouter(
+    [
     {                                        //前台主版
-        element:<FrontLayout/>,
-        children:[
+        element: <FrontLayout />,
+        children: [
             {
-                index:true,                  //首頁
-                element:<FrontHome/>,
+                index: true,                  //首頁
+                element: <FrontHome />,
             },
             {
-                path:'dramaList',            //劇會總覽頁
-                element:<DramaList/>,
+                path: 'dramaList',            //劇會總覽頁
+                element: <DramaList />,
             },
             {
-                path:'dramaInfo',            //劇會內頁
-                element:<DramaInfo/>,
+                path: 'dramaInfo',            //劇會內頁
+                element: <DramaInfo />,
             },
             {
-                path:'profile',              //個人主頁
-                element:<Profile/>,
+                path: 'profile',              //個人主頁
+                element: <Profile />,
                 children: [
-                {
-                    path: "profileInfo", //個人主頁個人資訊頁
-                    element: <ProfileInfo />,
-                },
-                {
-                    path: "profileRecord", //個人主頁劇會記錄頁
-                    element: <ProfileRecord />,
-                },
-                {
-                    path: "profileCollection", //個人主頁收藏頁
-                    element: <ProfileCollection />,
-                },
+                    {
+                        path: "profileInfo", //個人主頁個人資訊頁
+                        element: <ProfileInfo />,
+                    },
+                    {
+                        path: "profileRecord", //個人主頁劇會記錄頁
+                        element: <ProfileRecord />,
+                    },
+                    {
+                        path: "profileCollection", //個人主頁收藏頁
+                        element: <ProfileCollection />,
+                    },
                 ],
             },
-        ]    
+        ]
     },
     {
-        path:'/adminSystem',                 //後台主版
-        element:<AdminLayout/>,
-        children:[
+        path: '/adminSystem',                 //後台主版
+        element: <AdminLayout />,
+        children: [
             {
                 index:true, 
                 element:<Navigate to="admin" replace />,
             },
             {
-                path:'admin',                //後台首頁
-                element:<AdminHome/>,
+                path: 'admin',                //後台首頁
+                element: <AdminHome />,
             },
             {
-                path:'drama-manage',         //劇會管理頁
-                element:<DramaManage/>,
+                path: 'drama-manage',         //劇會管理頁
+                element: <DramaManage />,
             },
             {
-                path:'tag-manage',           //標籤管理頁
-                element:<TagManage/>,
+                path: 'tag-manage',           //標籤管理頁
+                element: <TagManage />,
             },
             {
-                path:'chart',                //圖表分析頁
-                element:<Chart/>,
+                path: 'chart',                //圖表分析頁
+                element: <Chart />,
             },
-        ]    
+        ]
     },
     {
-        path:'*',                            //404錯誤頁
-        element:<NotFound/>     
+        path: '*',                            //404錯誤頁
+        element: <NotFound />
     },
     {
-        path:'/design',     //樣式檢視頁 (最後會刪掉)
-        element:<Design/>
+        path: '/design',     //樣式檢視頁 (最後會刪掉)
+        element: <Design />
     },
     {
-        path:'compView',
-        element:<ComponentsView/>
+        path: 'compView',
+        element: <ComponentsView />
     }
-
-]);
+    ]
+);
 
 export default router;
