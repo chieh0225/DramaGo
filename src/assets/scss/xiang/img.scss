@@ -20,6 +20,12 @@
   }
 }
 
+.col-lg-6-12{
+  @media (min-width: 992px) {
+    width: calc(50% - 12px);
+  }
+}
+
 .fill-brand-300 {
   fill: #ffa13c;
 }
@@ -31,28 +37,39 @@
   background-position: 0 center;
   background-repeat: no-repeat;
   margin-bottom: 80px;
-  background-image: url("../DramaGo/src/assets/images/Let_s have a great time together.-1.svg");
+}
+
+.bg-decorate-img-992{
   @media (min-width: 992px) {
     background-size: contain;
+    width: 100%;
     height: 201px;
     margin-bottom: 100px;
-    background-image: url("../DramaGo/src/assets/images/Let_s have a great time together..svg");
+    background-position: 0 center;
+    background-repeat: no-repeat;
   }
 }
+
 
 .bg-banner-img {
   background-position: center;
   width: 100%;
   height: 684px;
   background-repeat: no-repeat;
-  background-image: url("../DramaGo/src/assets/images/Frame-1000005399.svg");
+}
+
+.bg-banner-img-992{
   @media (min-width: 992px) {
+    background-repeat: no-repeat;
+    background-position: center;
     width: 1824px;
     height: 936px;
     background-size: cover;
-    background-image: url("../DramaGo/src/assets/images/heroSection.svg");
   }
 }
+
+
+
 
 .bg-center1{
   @media (min-width: 992px) {
@@ -63,5 +80,15 @@
     height: 1196px;
     width: 100%;
     z-index: -1;
+  }
+}
+
+.imgcard{
+  width: 100%;
+  height: 216px;
+  object-fit : cover;
+  @media (min-width: 992px) {
+    width: 280px;
+    height: 192px;
   }
 }

@@ -32,7 +32,11 @@ const LoginModal = ({ mymodal , setState}) => {
                 setState(true)
             })
             .catch((err) => {
-                console.error(`登入失敗`, err)
+                console.error(`登入失敗`, err.response)
+                if(err.response.status == 400){
+                    alert(`密碼錯誤`)
+                }else
+                    alert(`帳密錯誤`)
             })
     }
     
