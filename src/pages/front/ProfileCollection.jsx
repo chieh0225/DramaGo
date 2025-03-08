@@ -1,64 +1,33 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
-const collections = [
-  {
-    category: "甜甜圈",
-    content: "尺寸：14x14cm",
-    description:
-      "濃郁的草莓風味，中心填入滑順不膩口的卡士達內餡，帶來滿滿幸福感！",
-    id: "-L9tH8jxVb2Ka_DYPwng",
-    is_enabled: 1,
-    origin_price: 150,
-    price: 99,
-    title: "草莓莓果夾心圈",
-    unit: "元",
-    num: 10,
-    imageUrl: "https://images.unsplash.com/photo-1583182332473-b31ba08929c8",
-    imagesUrl: [
-      "https://images.unsplash.com/photo-1626094309830-abbb0c99da4a",
-      "https://images.unsplash.com/photo-1559656914-a30970c1affd",
-    ],
-  },
-  {
-    category: "蛋糕",
-    content: "尺寸：6寸",
-    description:
-      "蜜蜂蜜蛋糕，夾層夾上酸酸甜甜的檸檬餡，清爽可口的滋味讓人口水直流！",
-    id: "-McJ-VvcwfN1_Ye_NtVA",
-    is_enabled: 1,
-    origin_price: 1000,
-    price: 900,
-    title: "蜂蜜檸檬蛋糕",
-    unit: "個",
-    num: 1,
-    imageUrl:
-      "https://images.unsplash.com/photo-1627834377411-8da5f4f09de8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1001&q=80",
-    imagesUrl: [
-      "https://images.unsplash.com/photo-1618888007540-2bdead974bbb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=987&q=80",
-    ],
-  },
-  {
-    category: "蛋糕",
-    content: "尺寸：6寸",
-    description: "法式煎薄餅加上濃郁可可醬，呈現經典的美味及口感。",
-    id: "-McJ-VyqaFlLzUMmpPpm",
-    is_enabled: 1,
-    origin_price: 700,
-    price: 600,
-    title: "暗黑千層",
-    unit: "個",
-    num: 15,
-    imageUrl:
-      "https://images.unsplash.com/photo-1505253149613-112d21d9f6a9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDZ8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    imagesUrl: [
-      "https://images.unsplash.com/flagged/photo-1557234985-425e10c9d7f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTA5fHxjYWtlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-      "https://images.unsplash.com/photo-1540337706094-da10342c93d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    ],
-  },
-];
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
+
+import { useDispatch } from "react-redux";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
 
 const ProfileCollection = () => {
-  const [collection, setCollection] = useState({ collections });
+  const dispatch = useDispatch();
+  const [collection, setCollection] = useState([]);
+
+  const getCollection = async () => {
+    try {
+      dispatch(changeLoadingState(true));
+      const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
+      console.log(res.data.data);
+      setCollection(res.data.data.carts);
+    } catch (error) {
+      alert("取得收藏列表失敗");
+    } finally {
+      dispatch(changeLoadingState(false));
+    }
+  };
+
+  useEffect(() => {
+    getCollection();
+  }, []);
 
   return (
     <>
@@ -92,7 +61,7 @@ const ProfileCollection = () => {
           <div className="table-responsive">
             <table
               className={`table align-middle ${
-                collection.collections?.length > 0 ? "table-hover" : ""
+                collection?.length > 0 ? "table-hover" : ""
               }`}
             >
               <thead>
@@ -106,15 +75,23 @@ const ProfileCollection = () => {
                 </tr>
               </thead>
               <tbody>
-                {collection.collections?.length > 0 ? (
-                  collections.map((product) => (
-                    <tr key={product.id}>
+                {collection?.length > 0 ? (
+                  collection?.map((collectionItem) => (
+                    <tr key={collectionItem.id}>
                       <th scope="row">
-                        <small className="date">{product.origin_price}</small>
-                        <p>{product.title}</p>
+                        <small className="date">
+                          {collectionItem.product.date.start.split("T")[0]}
+                        </small>
+                        <small className="date"> ~ </small>
+                        <small className="date">
+                          {collectionItem.product.date.end.split("T")[0]}
+                        </small>
+                        <p>{collectionItem.product.title}</p>
                       </th>
-                      <td>{product.price}</td>
-                      <td>{product.is_enabled ? "啟用" : "未啟用"}</td>
+                      <td>{collectionItem.product.location}</td>
+                      <td>
+                        {collectionItem.product.isFinish ? "已出團" : "未出團"}
+                      </td>
                       <td>
                         <a href="#">
                           <svg
@@ -210,6 +187,7 @@ const ProfileCollection = () => {
           </div>
         </div>
       </div>
+      <Loading />
     </>
   );
 };
