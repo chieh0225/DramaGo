@@ -2,7 +2,7 @@ import { useEffect,useRef,useState } from "react";
 import { Modal,Offcanvas } from "bootstrap";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
-import Loading from "../../components/Loading";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 
 
@@ -67,7 +67,11 @@ const DramaList = () => {
             setDramas(res.data.products);
             setFilterDramas(res.data.products);
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         }
@@ -84,11 +88,21 @@ const DramaList = () => {
         dispatch(changeLoadingState(true));
         try {
             await axios.post(`${baseUrl}/api/${apiPath}/cart`,updateData);
+            dispatch(pushMsg({
+                text:'已加入蒐藏',
+                status:'success',
+            }));
             getLoveDramas();
+            
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
+            getLoveDramas();
         }
     };
     const getLoveDramas = async() => {
@@ -106,9 +120,17 @@ const DramaList = () => {
         dispatch(changeLoadingState(true));
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/cart/${cart_id}`);
+            dispatch(pushMsg({
+                text:'已取消蒐藏',
+                status:'success',
+            }));
             getLoveDramas();
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         }
@@ -307,7 +329,6 @@ const DramaList = () => {
                 </button>
             </div>
         </main>
-        <Loading/>
     </>)
 };
 

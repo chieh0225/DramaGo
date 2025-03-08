@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import {changeLoadingState} from "../../redux/slice/loadingSlice"
-import Loading from "../Loading"
+import { pushMsg } from "../../redux/slice/toastSlice"; 
+
+
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
@@ -66,8 +68,16 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
         try {
             const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData);
             setImageUrl(res.data.imageUrl);
+            dispatch(pushMsg({
+                text:'已上傳圖片',
+                status:'success',
+            }));
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -107,9 +117,16 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const copyWebsite = async() => {
         try {
             await navigator.clipboard.writeText(`${pageUrl}/${unitShareDrama.id}`);
-            alert('已複製網址');
+            dispatch(pushMsg({
+                text:'已複製網址',
+                status:'success',
+            }));
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         }
     };
 
@@ -153,14 +170,21 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 dispatch(changeLoadingState(true));
                 try {
                     await axios.post(`${baseUrl}/api/${apiPath}/admin/product`,updateData);
-                    alert('新增成功');
+                    dispatch(pushMsg({
+                        text:'已新增劇會',
+                        status:'success',
+                    }));
                     reset();
                     setImageUrl('');
                     setSelectedNoteTag([]);
                     setImagesUrl([]);
                     closeDramaForm();
                 } catch (err) {
-                    console.log(err.response?.data?.message);
+                    const message = err.response.data;
+                    dispatch(pushMsg({
+                        text:message.join('、'),
+                        status:'failed',
+                    }));
                 } finally{
                     dispatch(changeLoadingState(false));
                 };
@@ -168,10 +192,17 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 dispatch(changeLoadingState(true));
                 try {
                     await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`,updateData);
-                    alert('修改成功');
+                    dispatch(pushMsg({
+                        text:'已修改劇會內容',
+                        status:'success',
+                    }));
                     closeDramaForm();
                 } catch (err) {
-                    console.log(err.response.data.message);
+                    const message = err.response.data;
+                    dispatch(pushMsg({
+                        text:message.join('、'),
+                        status:'failed',
+                    }));
                 } finally{
                     dispatch(changeLoadingState(false));
                 };
@@ -776,8 +807,6 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
         selectedNoteTag={selectedNoteTag}
         setSelectedNoteTag={setSelectedNoteTag}
         />
-
-        <Loading/>
     </>)
 
 };
