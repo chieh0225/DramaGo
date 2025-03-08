@@ -5,7 +5,7 @@ import { Modal } from "bootstrap";
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
 
-function AttendModal({ dramaId }) {
+function AttendModal({ dramaId, userId }) {
   const [peopleCount, setPeopleCount] = useState(1);
   const [ticketCount, setTicketCount] = useState(1);
 
@@ -57,6 +57,22 @@ function AttendModal({ dramaId }) {
         );
 
         if (orderResponse.data.success) {
+          // 獲取原本的資料
+          const articleResponse = await axios.get(
+            `${BASE_URL}/api/${API_URL}/article/${userId}`
+          );
+
+          // 最後發送 article 更新請求，使用原本的資料
+          await axios.put(
+            `${BASE_URL}/api/${API_URL}/admin/article/${userId}`,
+            {
+              data: {
+                ...articleResponse.data.article,
+                dramaId: dramaId,
+              },
+            }
+          );
+
           // 關閉 modal
           const modal = document.getElementById("exampleModal");
           const modalInstance = Modal.getInstance(modal);

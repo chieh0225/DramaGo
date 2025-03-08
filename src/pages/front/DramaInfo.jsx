@@ -13,7 +13,7 @@ import "swiper/css/free-mode";
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
-const DRAMA_ID = "-OKfdr0iivpNG1vYPmAh";
+const DRAMA_ID = "-OKpYUNk8DZmOwsetHPD";
 
 // 設定 axios 預設值
 axios.defaults.headers.common["Authorization"] =
@@ -24,7 +24,25 @@ axios.defaults.withCredentials = false;
 
 const DramaInfo = () => {
   const navigate = useNavigate();
-  const [dramaData, setDramaData] = useState(null);
+  const [dramaData, setDramaData] = useState({
+    title: "",
+    participants: [
+      {
+        image: avatarImage,
+        name: "主辦人",
+        status: "Host",
+      },
+    ],
+    imageUrl: "",
+    content: "",
+    noteTag: [],
+    imagesUrl: [],
+    comments: [],
+    date: { start: "" },
+    location: "",
+    url: "",
+    people: 0,
+  });
   const [commentText, setCommentText] = useState("");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [userId, setUserId] = useState("");
@@ -136,7 +154,18 @@ const DramaInfo = () => {
       const res = await axios.get(
         `${BASE_URL}/api/${API_URL}/product/${DRAMA_ID}`
       );
-      setDramaData(res.data.product);
+      // 確保 participants 有值
+      const productData = {
+        ...res.data.product,
+        participants: res.data.product.participants || [
+          {
+            image: avatarImage,
+            name: "主辦人",
+            status: "Host",
+          },
+        ],
+      };
+      setDramaData(productData);
       // 獲取所有留言作者和回覆作者的頭像
       if (res.data.product.comments) {
         res.data.product.comments.forEach((comment) => {
@@ -381,7 +410,7 @@ const DramaInfo = () => {
                   </p>
                   <p className="mb-4">
                     <img
-                      src={dramaData.participants[0].image}
+                      src={dramaData.participants?.[0]?.image || avatarImage}
                       alt="發起者"
                       width="40"
                       height="40"
@@ -389,7 +418,7 @@ const DramaInfo = () => {
                       style={{ borderRadius: "1000px" }}
                     />
                     <span className="fw-semibold poppins-font">
-                      {dramaData.participants[0].name}
+                      {dramaData.participants?.[0]?.name || "主辦人"}
                     </span>
                   </p>
                 </div>
@@ -418,11 +447,8 @@ const DramaInfo = () => {
                 >
                   <div className="justify-content-between d-flex mb-8">
                     <p className="fw-semibold">
-                      與會者({dramaData.participants.length})
+                      與會者({dramaData.participants?.length || 0})
                     </p>
-                    <a href="#" className="text-brand-core">
-                      查看全部
-                    </a>
                   </div>
                   <div style={{ marginTop: "32px" }}>
                     <Swiper
@@ -435,31 +461,35 @@ const DramaInfo = () => {
                         padding: "24px 0 0 0",
                       }}
                     >
-                      <SwiperSlide
-                        style={{
-                          width: "auto",
-                          height: "auto",
-                        }}
-                      >
-                        <div className="attendent-card">
-                          <div className="decorative-label">Host</div>
-                          <img
-                            src={dramaData.participants[0].image}
-                            alt="頭像"
-                            className="card-img"
-                            width="40"
-                            height="40"
-                            style={{ borderRadius: "1000px" }}
-                          />
-                          <p className="card-text text-grey-950 fw-semibold">
-                            {dramaData.participants[0].name}
-                          </p>
-                          <p className="card-text fs-12 text-brand-500">
-                            {dramaData.participants[0].status}
-                          </p>
-                        </div>
-                      </SwiperSlide>
-                      {dramaData.participants.slice(1).map((member, index) => (
+                      {dramaData.participants?.[0] && (
+                        <SwiperSlide
+                          style={{
+                            width: "auto",
+                            height: "auto",
+                          }}
+                        >
+                          <div className="attendent-card">
+                            <div className="decorative-label">Host</div>
+                            <img
+                              src={
+                                dramaData.participants[0].image || avatarImage
+                              }
+                              alt="頭像"
+                              className="card-img"
+                              width="40"
+                              height="40"
+                              style={{ borderRadius: "1000px" }}
+                            />
+                            <p className="card-text text-grey-950 fw-semibold">
+                              {dramaData.participants[0].name || "主辦人"}
+                            </p>
+                            <p className="card-text fs-12 text-brand-500">
+                              {dramaData.participants[0].status || "Host"}
+                            </p>
+                          </div>
+                        </SwiperSlide>
+                      )}
+                      {dramaData.participants?.slice(1).map((member, index) => (
                         <SwiperSlide
                           key={index}
                           style={{
@@ -469,7 +499,7 @@ const DramaInfo = () => {
                         >
                           <div className="attendent-card">
                             <img
-                              src={member.image}
+                              src={member.image || avatarImage}
                               alt="頭像"
                               className="card-img"
                               width="40"
@@ -477,10 +507,10 @@ const DramaInfo = () => {
                               style={{ borderRadius: "1000px" }}
                             />
                             <p className="card-text text-grey-950 fw-semibold">
-                              {member.name}
+                              {member.name || "參與者"}
                             </p>
                             <p className="card-text fs-12 text-brand-500">
-                              {member.status}
+                              {member.status || "成員"}
                             </p>
                           </div>
                         </SwiperSlide>
@@ -494,12 +524,9 @@ const DramaInfo = () => {
                   style={{ borderBottom: "1px solid #FFCA88" }}
                 >
                   <div className="justify-content-between d-flex mb-4">
-                    <p className="fw-semibold ">
+                    <p className="fw-semibold">
                       照片({dramaData.imagesUrl.length})
                     </p>
-                    <a href="#" className="text-brand-core">
-                      查看全部
-                    </a>
                   </div>
                   <Swiper
                     modules={[FreeMode]}
@@ -533,9 +560,6 @@ const DramaInfo = () => {
                     <p className="fw-semibold">
                       留言({dramaData.comments?.length || 0})
                     </p>
-                    <a href="#" className="text-brand-core">
-                      查看全部
-                    </a>
                   </div>
                   <div className="comment-board px-md-8 px-4">
                     {dramaData.comments?.map((comment, index) => (
@@ -784,7 +808,12 @@ const DramaInfo = () => {
         </div>
       </div>
 
-      <AttendModal dramaId={DRAMA_ID} remainingSpots={remainingSpots} />
+      <AttendModal
+        dramaId={DRAMA_ID}
+        remainingSpots={remainingSpots}
+        dramaData={dramaData}
+        userId={userId}
+      />
       <ShareModal />
     </>
   );
