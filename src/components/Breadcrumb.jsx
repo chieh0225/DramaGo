@@ -1,12 +1,7 @@
-
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Breadcrumb = ({pageLink}) => {
 
-    useEffect(()=>{
-        console.log(pageLink)
-    })
     return(<>
         <nav aria-label="breadcrumb">
            <ol className="breadcrumb">

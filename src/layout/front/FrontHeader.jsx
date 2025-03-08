@@ -1,19 +1,40 @@
 import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
-import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import SearchBar from "../../components/SearchBar";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
 //照片
 import logout from "../../assets/images/icon/24px/solid/logout.svg";
 import logo from "../../assets/images/Variant7.svg";
 import search from "../../assets/images/icon/24px/line/search.svg";
 import menber from "../../assets/images/icon/24px/solid/memember.svg"
 import ueser from "../../assets/images/icon/24px/solid/ueser.svg"
+import axios from "axios";
 
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const FrontHeader = ({ state, setState ,mymodal }) => {
-    
-    const navigate = useNavigate()
+const FrontHeader = ({ state, setState, mymodal, dramas, setDramas }) => {
+    const [filterDramas, setFilterDramas] = useState(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    // 渲染劇會列表
+    useEffect(() => {
+        (async () => {
+            dispatch(changeLoadingState(true));
+            try {
+                const res = await axios.get(`${baseUrl}/api/${apiPath}/products`);
+                setFilterDramas(res.data.products);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                dispatch(changeLoadingState(false));
+            }
+        })()
+    }, [])
 
     //Login modal
     const LoginOpenMadal = () => {
@@ -48,10 +69,9 @@ const FrontHeader = ({ state, setState ,mymodal }) => {
                     <div className=" dropdown-menu w-100 py-0" aria-labelledby="navbarDropdown">
                         <div style={{ height: `calc(100vh - 58px)` }} className="d-flex flex-column border-top border-1 border-brand-200 w-100 border-0 bg-brand-50 pt-3 pb-6 px-3">
                             <div className="mb-2">
-                                <form className="d-flex position-relative">
-                                    <input className="form-control py-3 ps-6 rounded-pill border border-brand-300" type="search" placeholder="搜尋劇會" aria-label="Search" />
-                                    <img className="position-absolute end-0 me-5 mt-3 nav-icon-2" src={search} alt="" />
-                                </form>
+                                <div>
+                                    <SearchBar bar={true} filterDramas={filterDramas} setDramas={setDramas} />
+                                </div>
                             </div>
                             <Link className="text-grey-950 fs-2 w-100 pt-6 ps-4" to="/dramaList">劇會總覽</Link>
                             {state &&
@@ -89,10 +109,9 @@ const FrontHeader = ({ state, setState ,mymodal }) => {
                 <nav className="navbar">
                     <div className="d-flex align-items-center">
                         <Link className="ms-3 me-13" to="/"><img src={logo} alt="" /></Link>
-                        <form style={{ width: "400px" }} className="d-flex position-relative">
-                            <input className="form-control py-3 ps-6 rounded-pill border border-brand-300" type="search" placeholder="搜尋劇會" aria-label="Search" />
-                            <img className="position-absolute end-0 me-5 mt-3 nav-icon-2" src={search} alt="" />
-                        </form>
+                        <div style={{ width: "400px" }} className="">
+                            <SearchBar bar={true} filterDramas={filterDramas} setDramas={setDramas} />
+                        </div>
                     </div>
                     <div className="d-flex align-items-center ">
                         {state &&

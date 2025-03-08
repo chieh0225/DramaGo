@@ -1,9 +1,9 @@
 import { useEffect,useRef,useState } from "react";
 import { useForm,useWatch } from "react-hook-form";
 import { Modal,Offcanvas } from "bootstrap";
-
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
 import { pushMsg } from "../../redux/slice/toastSlice";
 
 import Breadcrumb from "../../components/Breadcrumb";
@@ -11,6 +11,7 @@ import SearchBar from "../../components/SearchBar";
 import Dropdown from "../../components/Dropdown";
 import DramaFormModal from "../../components/modal/DramaFormModal";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -74,15 +75,15 @@ const DramaList = () => {
     const searchOffcanvasInstance = useRef(null);
     const [modalMode,setModalMode] = useState('');
     const openButtonRef = useRef(null);
-    const [dramas,setDramas] = useState([]);
+    const {dramas , setDramas } =useOutletContext()
+    //(有修改) const [dramas,setDramas] = useState([]);
     const [loveDramas,setLoveDramas] = useState([]);
     const [filterDramas,setFilterDramas]=useState([]);
     const [tagFilter,setTagFilter] = useState([]);
     const [unitShareDrama,setUnitShareDrama] = useState({});
     const [dramaState,setDramaState] = useState('onGoing');
     const dispatch = useDispatch();
-    
-
+    const [phoneSearchState , setPhoneSearchState] = useState(false)
     // 開關劇會modal
     const openDramaForm = ()=>{
         dramaFormInstance.current.show();
@@ -191,7 +192,7 @@ const DramaList = () => {
             
         })
         
-        setDramas(newData);
+         setDramas(newData);
     };
 
 
@@ -212,7 +213,6 @@ const DramaList = () => {
         getDramas();
         getLoveDramas();
     },[]);
-
     useEffect(() => {
         const arr = Object.values(watchForm).filter(item=>item !== '全部');
         setTagFilter(arr);
@@ -221,14 +221,16 @@ const DramaList = () => {
     }, [watchForm]);
 
     useEffect(()=>{
-        dramaFilter();
-        console.log(tagFilter);
-        
+        dramaFilter(); 
     },[tagFilter]);
 
     useEffect(()=>{
         getDramas();
     },[modalMode]);
+
+    const phoneSearch =()=>{
+        setPhoneSearchState(true)
+    }
 
     return(<>
         <main className="dramaList bg-brand-50 pt-lg-13 pt-6 pb-15">
@@ -257,6 +259,7 @@ const DramaList = () => {
                         <div  className="d-flex flex-column align-items-start bg-white p-5">
                             {/* 搜尋bar */}
                             <SearchBar 
+                            bar={false}
                             filterDramas={filterDramas}
                             setDramas={setDramas}
                             />
@@ -455,7 +458,7 @@ const DramaList = () => {
                         </div>
                         {/* 卡片區 */}
                         <div className="row row-cols-md-2 gy-4">
-                            {
+                             {
                                 dramas.map(drama=>
                                 <div className="col" key={drama.id}>
                                     <div className="card border-0 rounded-3 shadow position-relative" >
@@ -519,7 +522,7 @@ const DramaList = () => {
                                 </div>
 
                                 )
-                            }
+                            } 
                             
                         </div>
                     </div>
@@ -538,7 +541,7 @@ const DramaList = () => {
                         <span className="ms-1 fs-6">我要發起劇會</span>
                     </button>
                     <div className="h4" >
-                        <span  type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"><i className="bi bi-funnel"></i></span>
+                        <span  type="button" onClick={phoneSearch} data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"><i className="bi bi-funnel"></i></span>
                         <span  type="button" data-bs-toggle="offcanvas" data-bs-target="#sortOffcanvas" aria-controls="sortOffcanvas"><i className="bi bi-sort-down ms-4"></i></span>
                         
                     </div>                        
@@ -607,7 +610,7 @@ const DramaList = () => {
                                 </div>
                             </div>
                         )
-                    }
+                    } 
                     
                 </div>                           
             </div>
@@ -627,8 +630,10 @@ const DramaList = () => {
                 <div className="offcanvas-body">
                     <div  className="d-flex flex-column align-items-start bg-white p-5">
                         <SearchBar 
+                            bar={false}
                             filterDramas={filterDramas}
                             setDramas={setDramas}
+                            phoneSearchState={phoneSearchState}
                             closeSearchOffcanvas={closeSearchOffcanvas}
                         />
                         <div className="mt-8 mb-4">
