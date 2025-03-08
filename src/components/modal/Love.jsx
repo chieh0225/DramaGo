@@ -1,13 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-// const token = Cookies.get(`token`);
-// const config = {
-//   headers : {
-//     Authorization : `${token}`
-//   }
-// }
-
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 const Love = ({ id, state , mymodal }) => {
