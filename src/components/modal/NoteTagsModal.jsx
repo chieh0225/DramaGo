@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
 import axios from "axios";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -28,7 +29,11 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
             setNoteTags(res.data.coupons);
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         }
     };
 
@@ -38,7 +43,7 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
     },[]);
     useEffect(()=>{
         getTags();
-    },[]);
+    },[noteTags]);
 
 
 
