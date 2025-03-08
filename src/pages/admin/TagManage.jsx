@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState,useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
-import Loading from "../../components/Loading";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -31,8 +31,16 @@ const TagManage = () => {
             await axios.post(`${baseUrl}/api/${apiPath}/admin/coupon`,updateData);
             getTags();
             setTagInput('');
+            dispatch(pushMsg({
+                text:'已新增標籤',
+                status:'success',
+            }));
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -43,7 +51,11 @@ const TagManage = () => {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
             setNoteTags(res.data.coupons);
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -53,8 +65,16 @@ const TagManage = () => {
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/admin/coupon/${id}`);
             getTags();
+            dispatch(pushMsg({
+                text:'已刪除標籤',
+                status:'success',
+            }));
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -109,7 +129,6 @@ const TagManage = () => {
                 }
             </div>
         </div>
-        <Loading/>
     </>)
 };
 

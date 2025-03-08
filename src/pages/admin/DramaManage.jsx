@@ -4,7 +4,7 @@ import { Modal } from "bootstrap";
 import DramaFormModal from "../../components/modal/DramaFormModal";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
-import Loading from "../../components/Loading";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -34,7 +34,11 @@ const DramaManage = () => {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/products`);    
             setDramas(res.data.products);
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -51,11 +55,18 @@ const DramaManage = () => {
         dispatch(changeLoadingState(true));
         try {
             await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${drama.id}`,updateData);
-            alert('修改成功');    
+            dispatch(pushMsg({
+                text:'已修改劇會狀態',
+                status:'success',
+            }));   
             getDramas();
             closeDramaForm();
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -64,11 +75,18 @@ const DramaManage = () => {
         dispatch(changeLoadingState(true));
         try {
             await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}`);    
-            alert('刪除成功');
+            dispatch(pushMsg({
+                text:'已刪除劇會',
+                status:'success',
+            })); 
             getDramas();
             closeDramaForm();
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
         } finally{
             dispatch(changeLoadingState(false));
         };
@@ -164,7 +182,6 @@ const DramaManage = () => {
         />
 
     </div>
-    <Loading/>
     </>)
 };
 

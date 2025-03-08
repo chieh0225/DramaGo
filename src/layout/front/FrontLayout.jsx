@@ -1,18 +1,19 @@
 import { Outlet } from "react-router-dom";
 import FrontHeader from "./FrontHeader";
 import FrontFooter from "./FrontFooter";
-import { useRef, useState } from "react";
 
+import DramaToasts from "../../components/DramaToasts";
+import Loading from "../../components/Loading";
 
 
 const FrontLayout = () => {
-    const [state, setState] = useState(false);
-    const mymodal = useRef(null);
+    return(<>
+            <FrontHeader/>
+            <Outlet/>
+            <FrontFooter/>
 
-    return (<>
-        <FrontHeader setState={setState} state={state} mymodal={mymodal} />
-        <Outlet context={{ state , mymodal }} />
-        <FrontFooter />
+            <Loading/>
+            <DramaToasts/>
     </>)
 };
 
