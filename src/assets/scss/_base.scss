@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-  // outline: 1px solid red;
+ //outline: 1px solid red;
 }
 
 picture {
@@ -58,6 +58,7 @@ input:focus {
 
 ::placeholder {
   color: $grey-400;
+  font-size: 14px;
 }
 
 //[嚼勁]bootstrap內建icon系統

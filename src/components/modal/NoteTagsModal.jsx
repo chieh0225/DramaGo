@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedNoteTag,setSelectedNoteTag}) => {
     
-    const noteTags = ['我不遲到','友善攜寵','I人話少','E人搞威','不可中離','不說髒話'];
+    const [noteTags,setNoteTags] = useState([]);
     
     const handleCheckbox = (tag) => {
         setSelectedNoteTag(prev=>{
@@ -20,6 +24,28 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
         closeNoteModal();        
     };
 
+    const getTags = async() => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
+            setNoteTags(res.data.coupons);
+        } catch (err) {
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text:message.join('、'),
+                status:'failed',
+            }));
+        }
+    };
+
+    useEffect(()=>{
+        const getToken = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,"$1",);
+        axios.defaults.headers.common['Authorization'] = getToken;
+    },[]);
+    useEffect(()=>{
+        getTags();
+    },[noteTags]);
+
+
 
     return(<>
     <div className="modal" tabIndex="-1" ref={noteModalRef}>
@@ -34,23 +60,27 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
                 ></button>
             </div>
             <div className="modal-body">
-                {
-                    noteTags.map(tag=>
-                        <span className="my-1 mx-1" key={tag}>
+                {   
+                    noteTags&&
+                    noteTags?.map(tag=>
+                        <a role="button" className="my-1 mx-1" key={tag.id}>
                             <input
                             type="checkbox"
                             className="btn-check"
                             name="note"
-                            id={`noteTag-${tag}`}
-                            onChange={()=>handleCheckbox(tag)}
-                            checked={selectedNoteTag.includes(tag)}
+                            id={`noteTag-${tag.id}`}
+                            onChange={()=>handleCheckbox(tag.title)}
+                            checked={selectedNoteTag.includes(tag.title)}
                             />
+
                             <label
-                            className={`brandBtn-2-sm ${selectedNoteTag.includes(tag)&&'active'}`}
-                            htmlFor={`noteTag-${tag}`}
+                            className={`brandBtn-2-sm ${selectedNoteTag.includes(tag.title)&&'active'}`}
+                            htmlFor={`noteTag-${tag.id}`}
                             style={{cursor:'pointer'}}
-                            >{tag}</label>
-                        </span>
+                            >
+                                {tag.title}
+                            </label>
+                        </a>
                     )
                 }
             </div>

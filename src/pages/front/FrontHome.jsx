@@ -1,8 +1,35 @@
-import React, { useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import Love from '../../components/modal/Love';
 import 'swiper/css/navigation';
+import { motion } from "framer-motion";
+//照片
+import swiper1 from "../../assets/images/Frame 1000005334.png";
+import swiper2 from "../../assets/images/Frame 1000005334-1.png";
+import swiper3 from "../../assets/images/Frame 1000005334-2.png";
+import swiper4 from "../../assets/images/Frame 1000005334-3.png";
+import cardUser from "../../assets/images/inner/Frame 1000005423.png"
+import SwiperModalimg1 from "../../assets/images/Frame 1000005367.png"
+import SwiperModalimg2 from "../../assets/images/Frame 1000005366.png"
+import SwiperModalimg3 from "../../assets/images/Frame 1000005390.png"
+import SwiperModalimg4 from "../../assets/images/Frame 1000005368.png"
+import SwiperModalimg5 from "../../assets/images/Frame 1000005373.png"
+import component1 from "../../assets/images/Component 3.svg"
+import component2 from "../../assets/images/Component 4.svg"
+import component3 from "../../assets/images/Component 2.svg"
+import img1 from "../../assets/images/Frame 1000005407.svg"
+import img2 from "../../assets/images/Frame 1000005408.svg"
+import decorate from "../../assets/images/Let_s have a great time together.-1.svg"
+import decorate992 from "../../assets/images/Let_s have a great time together..svg"
+import banner from "../../assets/images/Frame-1000005399.svg"
+import banner992 from "../../assets/images/heroSection.svg"
+import axios from 'axios';
+import { useOutletContext } from 'react-router-dom';
+
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const SwiperModalType = () => {
 
@@ -33,19 +60,19 @@ const SwiperModalType = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className='mb-4' src="../DramaGo/src/assets/images/Frame 1000005334.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='mb-4' src={swiper1} alt="" />
           <p className='fw-semibold fs-5 text-center'>當主揪自己開團</p>
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='mb-4' src="../DramaGo/src/assets/images/Frame 1000005334-1.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='mb-4' src={swiper2} alt="" />
           <p className='fw-semibold fs-5 text-center'>參加電影劇會</p>
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='mb-4' src="../DramaGo/src/assets/images/Frame 1000005334-2.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='mb-4' src={swiper3} alt="" />
           <p className='fw-semibold fs-5 text-center'>參加劇本殺</p>
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='mb-4' src="../DramaGo/src/assets/images/Frame 1000005334-3.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='mb-4' src={swiper4} alt="" />
           <p className='fw-semibold fs-5 text-center'>參加逛劇展</p>
         </SwiperSlide>
       </Swiper>
@@ -66,32 +93,65 @@ const SwiperModalType = () => {
 }
 
 const Card = () => {
+  const [recommend, setRecommend] = useState([]);
+  const {state , mymodal} = useOutletContext();
+
+  //取得產品資訊
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
+        let length = res.data.products.length;
+        const product = res.data.products
+
+
+        for (length; length >= 5; length--) {
+          const a = (Math.ceil(Math.random() * (length)));
+          product.splice(a - 1, 1)
+        }
+
+        setRecommend(product)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchData();
+  }, [])
   return (
     <>
-      <div className='row w-100 mb-lg-23x mb-24x'>
-        <div className="card flex-lg-row  shadow border-0 col-lg-6 p-4 mb-3 mb-lg-6">
-          <img src="../DramaGo/src/assets/images/Frame 1000005356.png" className="card-img-top" alt="..." />
-          <div className="card-body pb-0">
-            <p className="text-gerey-950 fs-b1 fw-semibold mb-3">黑白大廚同樂會：戲裡戲外的美食人生|흑백요리사: 요리계급전쟁</p>
-            <div className='d-flex mb-1'>
-              <p className='text-grey-700 pe-4'>出團時間</p>
-              <p className='text-grey-700 pe-4'>12/25 19:00</p>
-            </div>
-            <div className='d-flex  border-bottom border-brand-100 mb-2'>
-              <p className='text-grey-700 pe-4'>參加人數</p>
-              <p className='text-grey-700 pe-4 pb-6'>10</p>
-            </div>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <img className='img-l me-4' src="../DramaGo/src/assets/images/inner/Frame 1000005423.png" alt="" />
-                <p className='fw-semibold text-grey-950'>xiang</p>
-              </div>
-              {/* 點擊後觸發API修改為收藏並修改顏色brand/core */}
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="#FFFFFF">
-                <path d="M7.86277 24.6096V24.5899L7.86137 24.5702C7.75272 23.0491 7.75234 20.7556 7.75234 17.1004C7.75234 12.5851 7.86239 9.72975 7.9714 8.20047C8.06485 7.19283 8.69305 6.31611 9.74692 6.04515C10.9404 5.82867 13.0002 5.50527 16.2554 5.50527C18.8468 5.50527 20.6715 5.70901 21.9372 5.85033C22.2542 5.88571 22.5361 5.91719 22.7862 5.94057C23.7952 6.21056 24.3333 7.05457 24.429 8.09001C24.538 9.61928 24.648 12.4747 24.648 16.9899C24.648 20.6363 24.6477 22.9276 24.5398 24.4487C24.4388 25.3428 24.162 25.8917 23.5177 26.2139L23.504 26.2207L23.4907 26.2283C22.9775 26.5216 22.2235 26.4113 21.5457 25.9271L21.5353 25.9198L21.5247 25.9129L17.7802 23.49C16.8187 22.8098 15.5759 22.811 14.6154 23.4934L10.8663 26.0295L10.8662 26.0294L10.8547 26.0376C10.2271 26.4859 9.43621 26.5605 8.85328 26.3106L8.84157 26.3056L8.82965 26.3012C8.22992 26.0763 7.86277 25.4559 7.86277 24.6096Z" fill="#FFFFFF" stroke="#989898" strokeWidth="1.10429" />
-              </svg>
-            </div>
-          </div>
+      <div className='container'>
+        <div className='row mb-lg-23x mb-24x justify-content-between'>
+
+          {
+            recommend.map((product, index) => {
+              const { date, people, title, imageUrl, id } = product;
+
+              return (
+                <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
+                  <img src={imageUrl} className="imgcard card-img-top" alt="..." />
+                  <div className="card-body py-0">
+                    <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
+                    <div className='d-flex mb-1'>
+                      <p className='text-grey-700 pe-4'>出團時間</p>
+                      <p className='text-grey-700 pe-4'>{date.start.substr(5)}</p>
+                    </div>
+                    <div className='d-flex  border-bottom border-brand-100 mb-2'>
+                      <p className='text-grey-700 pe-4'>參加人數</p>
+                      <p className='text-grey-700 pe-4 pb-6'>{people}</p>
+                    </div>
+                    <div className='d-flex justify-content-between align-items-center'>
+                      <div className='d-flex align-items-center'>
+                        <img className='img-l me-4' src={cardUser} alt="" />
+                        <p className='fw-semibold text-grey-950'>xiang</p>
+                      </div>
+                      <Love id={id} state={state} mymodal={mymodal} />
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
+
         </div>
       </div>
     </>
@@ -132,19 +192,19 @@ const SwiperModalimg = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src="../DramaGo/src/assets/images/Frame 1000005367.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src={SwiperModalimg1} alt="" />
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='pt-lg-4' src="../DramaGo/src/assets/images/Frame 1000005366.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='pt-lg-4' src={SwiperModalimg2} alt="" />
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src="../DramaGo/src/assets/images/Frame 1000005390.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src={SwiperModalimg3} alt="" />
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='pt-lg-4' src="../DramaGo/src/assets/images/Frame 1000005368.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='pt-lg-4' src={SwiperModalimg4} alt="" />
         </SwiperSlide>
         <SwiperSlide >
-          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src="../DramaGo/src/assets/images/Frame 1000005373.png" alt="" />
+          <img style={{ width: '100%', height: '100%' }} className='pb-lg-4' src={SwiperModalimg5} alt="" />
         </SwiperSlide>
       </Swiper>
       <div className='d-flex mt-10 mt-lg-8 mb-6 mb-lg-0'>
@@ -163,68 +223,122 @@ const SwiperModalimg = () => {
   )
 }
 
+const Marquee = () => {
+  return (
+    <div className='d-lg-none mb-15' style={{ overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}>
+      <motion.img
+        src={decorate}
+        alt="跑馬燈圖片"
+        style={{ display: "inline-block", height: `96px` }}
+        animate={{ x: ["100%", "-100%"] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+      />
+    </div>
+  );
+};
+
+const Marquee992 = () => {
+  return (
+    <div className='d-none d-lg-block mb-17' style={{ overflow: "hidden", whiteSpace: "nowrap", width: "100%" }}>
+      <motion.img
+        src={decorate992}
+        alt="跑馬燈圖片"
+        style={{ display: "inline-block", height: `201px` }}
+        animate={{ x: ["35%", "-100%"] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+      />
+    </div>
+  );
+};
+
+
 const FrontHome = () => {
 
   return (
     <>
-      <main className="container">
-        <div className="bg-banner-img d-flex align-items-center justify-content-center justify-content-lg-start">
+      <main>
+        <div style={{ backgroundImage: `url(${banner})` }} className="bg-banner-img d-flex mx-auto d-lg-none align-items-center justify-content-center justify-content-lg-start ">
           <div className='d-flex flex-column align-items-center ms-lg-25x'>
             <h2 className=" fw-semibold text-center fs-1m text-brand-950 mb-3">相約美好<br className='d-lg-none' />聚會時光</h2>
             <p className="fw-semibold fs-4 text-brand-200 mb-10 text-center">Let's have<br className='d-lg-none' /> a great time together.</p>
           </div>
+        </div>
+
+        <div style={{ backgroundImage: `url(${banner992})` }} className="bg-banner-img-992 d-lg-flex mx-auto d-none align-items-center justify-content-center justify-content-lg-start ">
+          <div className='d-flex flex-column align-items-center ms-lg-25x'>
+            <h2 className=" fw-semibold text-center fs-1m text-brand-950 mb-3">相約美好<br className='d-lg-none' />聚會時光</h2>
+            <p className="fw-semibold fs-4 text-brand-200 mb-10 text-center">Let's have<br className='d-lg-none' /> a great time together.</p>
+          </div>
+        </div>
+
+        <div className="container">
+
+          {/* 當我們劇在一起能做什麼 */}
+          <section className="position-relative d-flex flex-column align-items-center justify-content-center pt-lg-18 pt-15 ">
+            <h1 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">當我們<span className="text-brand-300">劇</span>在一起<br className="d-lg-none" />能做什麼</h1>
+            <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
+            <div className="row mb-lg-17 ">
+              <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
+                <img className="mb-6" src={component1} alt="" />
+                <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
+                <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
+              </div>
+              <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
+                <img className="mb-6" src={component2} alt="" />
+                <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
+                <p className="text-center">沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會</p>
+              </div>
+              <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
+                <img className="mb-6" src={component3} alt="" />
+                <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
+                <p className="text-center">除了線上劇會，也可以選擇參加線下的劇會，<br />例如: 參加博覽會</p>
+              </div>
+            </div>
+            <div style={{ marginTop: "118px", transform: "translate(-100%)" }} className='position-absolute top-0 start-0 d-none d-lg-block'>
+              <img src={img1} alt="" />
+            </div>
+            <div style={{ marginTop: "49px", transform: "translate(75%)" }} className='position-absolute top-0 end-0 d-none d-lg-block'>
+              <img src={img2} alt="" />
+            </div>
+          </section>
 
         </div>
-        {/* 當我們劇在一起能做什麼 */}
-        <section className="position-relative d-flex flex-column align-items-center justify-content-center pt-18">
-          <h1 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">當我們<span className="text-brand-300">劇</span>在一起<br className="d-lg-none" />能做什麼</h1>
-          <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
-          <div className="row mb-lg-17 ">
-            <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
-              <img className="mb-6" src="../DramaGo/src/assets/images/Component 3.svg" alt="" />
-              <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
-              <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
-            </div>
-            <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-              <img className="mb-6" src="../DramaGo/src/assets/images/Component 4.svg" alt="" />
-              <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
-              <p className="text-center">沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會</p>
-            </div>
-            <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-              <img className="mb-6" src="../DramaGo/src/assets/images/Component 2.svg" alt="" />
-              <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
-              <p className="text-center">除了線上劇會，也可以選擇參加線下的劇會，<br />例如: 參加博覽會</p>
-            </div>
+        <div className='position-relative'>
+          <div className="container">
+            {/* 劇會類型 */}
+            <section className="d-flex flex-column align-items-center justify-content-center pt-15 pt-lg-18">
+              <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">熱門<span className="text-brand-300">劇</span>會類型</h2>
+              <p className="fw-semibold fs-5 text-grey-200 mb-6">HOT</p>
+              <SwiperModalType />
+            </section>
+            {/* 每日推薦 */}
+            <section className="d-flex flex-column align-items-center justify-content-center pt-15">
+              <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">每日推薦</h2>
+              <p className="fw-semibold fs-5 text-brand-200 mb-10">Daily recommendations</p>
+              <Card />
+            </section>
           </div>
-          <div style={{ marginTop: "118px", transform: "translate(-100%)" }} className='position-absolute top-0 start-0 d-none d-lg-block'>
-            <img src="../DramaGo/src/assets/images/Frame 1000005407.svg" alt="" />
-          </div>
-          <div style={{ marginTop: "49px", transform: "translate(75%)" }} className='position-absolute top-0 end-0 d-none d-lg-block'>
-            <img src="../DramaGo/src/assets/images/Frame 1000005408.svg" alt="" />
-          </div>
-        </section>
-        {/* 劇會類型 */}
-        <section className="d-flex flex-column align-items-center justify-content-center">
-          <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">熱門<span className="text-brand-300">劇</span>會類型</h2>
-          <p className="fw-semibold fs-5 text-grey-200 mb-6">HOT</p>
-          <SwiperModalType />
-        </section>
-        {/* 每日推薦 */}
-        <section className="d-flex flex-column align-items-center justify-content-center pt-15">
-          <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">每日推薦</h2>
-          <p className="fw-semibold fs-5 text-brand-200 mb-10">Daily recommendations</p>
-          <Card />
-        </section>
-        {/* 劇會照片 */}
-        <section className="d-flex flex-column align-items-center justify-content-center">
-          <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3"><span className="text-brand-300">劇</span>會照片</h2>
-          <p className="fw-semibold fs-5 text-grey-200 mb-6">Memoirs</p>
-          <SwiperModalimg />
-        </section>
+          <div className='bg-center1 position-absolute top-0' style={{ marginTop: "306px" }} ></div>
+        </div>
+
+        <div className="container pt-lg-18">
+          {/* 劇會照片 */}
+          <section className="d-flex flex-column align-items-center justify-content-center">
+            <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3"><span className="text-brand-300">劇</span>會照片</h2>
+            <p className="fw-semibold fs-5 text-grey-200 mb-6">Memoirs</p>
+            <SwiperModalimg />
+          </section>
+        </div>
+
       </main>
-      <div className='bg-decorate-img'></div>
+      <Marquee />
+      <Marquee992 />
     </>
   )
 };
 
+
+
 export default FrontHome;
+
+

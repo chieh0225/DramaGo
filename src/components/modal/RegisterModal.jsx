@@ -1,17 +1,62 @@
-import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal } from "bootstrap";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import Cookies from "js-cookie";
+//照片
+import sing from "../../assets/images/Sign-up-cuate.png"
 
-//註冊->個人頁面
-//註冊後要補上關閉的code
-const RegisterModal = () => {
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
+const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
+    const registerModal = useRef(null)
+    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const navigate = useNavigate();
+
+    // 初始化模態框
+    useEffect(() => {
+        myRegisterModal.current = new Modal(registerModal.current);
+    }, []);
+
+    //表單註冊
+    const onSubmit = () => {
+        axios.post(`${baseUrl}/admin/signin`, {
+            "username": 'dramaGo@gmail.com',
+            "password": 'dramago'
+        })
+            .then((res) => {
+                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                myRegisterModal.current.hide();
+                reset();
+                navigate('/profile')
+                setState(true)
+            })
+            .catch((err) => {
+                console.error(`登入失敗`, err)
+                if (err.response?.status == 400) {
+                    alert(`密碼錯誤`)
+                } else
+                    alert(`帳密錯誤`)
+            })
+    }
+
+    //登入
+    const LoginOpenMadal = () => {
+        reset();
+        myRegisterModal.current.hide();
+        mymodal.current.show();
+    }
+
     return (
         <>
             {/* <!-- Modal --> */}
-            <div className="modal fade" id="Register" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="Register" aria-hidden="true">
+            <div className="modal fade" ref={registerModal} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content bg-brand-50">
                         <div className="row">
                             <div className="col-lg-6 d-none d-lg-flex align-items-center">
-                                <img src="../DramaGo/src/assets/images/Sign-up-cuate.png" alt="" /> 
+                                <img src={sing} alt="" />
                             </div>
                             <div className="col-lg-6 py-8 px-6 ps-lg-3">
                                 <div className="d-flex justify-content-between">
@@ -39,23 +84,69 @@ const RegisterModal = () => {
                                     </div>
                                 </button>
 
-                                <form>
+                                <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">name</label>
-                                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="使用者名稱" />
+                                        <label htmlFor="registerName" className="form-label">name</label>
+                                        <input
+                                            {...register('registerName', {
+                                                required: "請填寫名稱"
+                                            })}
+                                            type="name"
+                                            autoComplete="username"
+                                            name="registerName"
+                                            className="form-control"
+                                            id="registerName"
+                                            aria-describedby="registerName"
+                                            placeholder="使用者名稱" />
+                                        {errors.registerName && <span className="text-danger">{errors.registerName.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-                                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="信箱" />
+                                        <label htmlFor="registerEmail" className="form-label">Email</label>
+                                        <input
+                                            {...register('registerEmail', {
+                                                required: "請填寫Email",
+                                                validate: {
+                                                    Email: value => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) || "請輸入有效的email地址"
+                                                }
+                                            })}
+                                            type="email"
+                                            autoComplete="email"
+                                            name="registerEmail"
+                                            className="form-control"
+                                            id="registerEmail"
+                                            aria-describedby="registerEmail"
+                                            placeholder="信箱" />
+                                        {errors.registerEmail && <span className="text-danger">{errors.registerEmail.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="密碼" />
+                                        <label htmlFor="registerPassword" className="form-label">Password</label>
+                                        <input
+                                            {...register('registerPassword', {
+                                                required: "請正確填寫密碼",
+                                                minLength: { value: 8, message: "密碼最少8位數" },
+                                                validate: {
+                                                    containsUpperCase: value => /[A-Z]/.test(value) || '密碼必須包含至少一個大寫字母',
+                                                    containsNumber: value => /[0-9]/.test(value) || '密碼必須包含至少一個數字',
+                                                    smailCase: value => /[a-z]/.test(value) || '密碼必須包含至少一個小寫字母',
+                                                }
+                                            })}
+                                            autoComplete="current-password"
+                                            type="password"
+                                            name="registerPassword"
+                                            className="form-control"
+                                            id="registerPassword"
+                                            placeholder="密碼" />
+                                        {errors.registerPassword && <span className="text-danger">{errors.registerPassword.message}</span>}
+                                        <ul className="fs-c text-grey-600 my-3">
+                                            <li className="py-1" >密碼最少8位</li>
+                                            <li className="py-1" >密碼必須包含大小寫字母</li>
+                                            <li className="py-1" >密碼必須包含一個數字</li>
+                                        </ul>
                                     </div>
-                                    <Link type="submit" className="btn w-100 rounded-pill btn-brand-400 mb-4" to="/profile">註冊</Link>
+                                    <button type="submit" className="btn w-100 rounded-pill btn-brand-400 mb-4" >註冊</button>
                                 </form>
                                 <div className="d-flex justify-content-center">
-                                    <p>已經註冊 , <a className="text-brand-600" href="#Login" data-bs-toggle="modal">登入</a></p>
+                                    <p>已經註冊 , <a className="text-brand-600" href="#" onClick={LoginOpenMadal} >登入</a></p>
                                 </div>
                             </div>
                         </div>
@@ -68,4 +159,4 @@ const RegisterModal = () => {
 }
 
 
-export default RegisterModal ;
+export default RegisterModal;
