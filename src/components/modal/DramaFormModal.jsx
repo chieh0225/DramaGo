@@ -186,11 +186,10 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 closeDramaForm();
             } catch (err) {
                 const message = err.response.data;
-                // dispatch(pushMsg({
-                //     text: message.join('、'),
-                //     status: 'failed',
-                // }));
-                console.log(err)
+                dispatch(pushMsg({
+                    text: message.join('、'),
+                    status: 'failed',
+                }));
             } finally {
                 dispatch(changeLoadingState(false));
             };
