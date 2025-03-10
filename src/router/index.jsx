@@ -10,7 +10,6 @@ import ProfileInfo from "../pages/front/ProfileInfo";
 import ProfileRecord from "../pages/front/ProfileRecord";
 import ProfileCollection from "../pages/front/ProfileCollection";
 // 後台
-import AdminLayout from "../layout/admin/AdminLayout";
 import AdminHome from "../pages/admin/AdminHome";
 import DramaManage from "../pages/admin/DramaManage";
 import TagManage from "../pages/admin/TagManage";
@@ -56,36 +55,28 @@ const router = createHashRouter(
                     },
                 ],
             },
-        ]
-    },
-    {
-        path: '/adminSystem',                 //後台主版
-        element: <AdminLayout />,
-        children: [
             {
-                index:true, 
-                element:<Navigate to="admin" replace />,
-            },
-            {
-                path: 'admin',                //後台首頁
+                path: '/adminSystem',                 //後台主版
                 element: <AdminHome />,
-            },
-            {
-                path: 'drama-manage',         //劇會管理頁
-                element: <DramaManage />,
-            },
-            {
-                path: 'tag-manage',           //標籤管理頁
-                element: <TagManage />,
-            },
-            {
-                path: 'chart',                //圖表分析頁
-                element: <Chart />,
+                children: [
+                    {
+                        index: true,            //劇會管理頁
+                        element: <DramaManage />,
+                    },
+                    {   
+                        path: 'tag-manage',           //標籤管理頁
+                        element: <TagManage />,
+                    },
+                    {
+                        path: 'chart',                //圖表分析頁
+                        element: <Chart />,
+                    },
+                ]
             },
         ]
     },
     {
-        path: '*',                            //404錯誤頁
+        path: '*', //404錯誤頁
         element: <NotFound />
     },
     {

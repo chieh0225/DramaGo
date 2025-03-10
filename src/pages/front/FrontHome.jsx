@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -27,6 +27,11 @@ import banner from "../../assets/images/Frame-1000005399.svg"
 import banner992 from "../../assets/images/heroSection.svg"
 import axios from 'axios';
 import { useOutletContext } from 'react-router-dom';
+
+// 串接Google 登入 API 文件
+// 串接Facebook 登入 API 文件
+// 後台所有功能
+
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -94,7 +99,7 @@ const SwiperModalType = () => {
 
 const Card = () => {
   const [recommend, setRecommend] = useState([]);
-  const {state , mymodal} = useOutletContext();
+  const { state, mymodal } = useOutletContext();
 
   //取得產品資訊
   useEffect(() => {
@@ -103,8 +108,6 @@ const Card = () => {
         const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
         let length = res.data.products.length;
         const product = res.data.products
-
-
         for (length; length >= 5; length--) {
           const a = (Math.ceil(Math.random() * (length)));
           product.splice(a - 1, 1)
@@ -129,17 +132,20 @@ const Card = () => {
               return (
                 <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
                   <img src={imageUrl} className="imgcard card-img-top" alt="..." />
-                  <div className="card-body py-0">
-                    <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
-                    <div className='d-flex mb-1'>
-                      <p className='text-grey-700 pe-4'>出團時間</p>
-                      <p className='text-grey-700 pe-4'>{date.start.substr(5)}</p>
+                  <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
+                    <div>
+                      <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
+                      <div className='d-flex mb-1'>
+                        <p className='text-grey-700 pe-4'>出團時間</p>
+                        <p className='text-grey-700 pe-4'>{date.start.substr(5)}</p>
+                      </div>
+                      <div className='d-flex mb-3'>
+                        <p className='text-grey-700 pe-4'>參加人數</p>
+                        <p className='text-grey-700 pe-4'>{people}</p>
+                      </div>
                     </div>
-                    <div className='d-flex  border-bottom border-brand-100 mb-2'>
-                      <p className='text-grey-700 pe-4'>參加人數</p>
-                      <p className='text-grey-700 pe-4 pb-6'>{people}</p>
-                    </div>
-                    <div className='d-flex justify-content-between align-items-center'>
+
+                    <div className='border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center'>
                       <div className='d-flex align-items-center'>
                         <img className='img-l me-4' src={cardUser} alt="" />
                         <p className='fw-semibold text-grey-950'>xiang</p>
@@ -244,7 +250,7 @@ const Marquee992 = () => {
         src={decorate992}
         alt="跑馬燈圖片"
         style={{ display: "inline-block", height: `201px` }}
-        animate={{ x: ["35%", "-100%"] }}
+        animate={{ x: ["100%", "-100%"] }}
         transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
       />
     </div>
