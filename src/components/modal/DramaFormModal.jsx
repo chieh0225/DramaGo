@@ -16,7 +16,9 @@ const uid = localStorage.getItem('uid');
 const now = dayjs();
 const pageUrl = window.location.href;
 
-const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, unitDrama, getDramas, unitShareDrama }) => {
+
+const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitDrama,unitShareDrama}) => {
+
     const noteModalRef = useRef(null);
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
