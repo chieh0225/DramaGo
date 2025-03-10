@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas , bar ,phoneSearchState}) => {
+const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSearchState }) => {
     const [keyword, setKeyword] = useState('');
     const [isFirstRender, setIsFirstRender] = useState(true);
     const navigate = useNavigate();
@@ -10,16 +10,18 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas , bar ,phoneS
         e.preventDefault();
         if (location.pathname != '/dramaList') {
             navigate('/dramaList')
-            setTimeout(find, 1000)
+            setTimeout(find, 1500)
         } else {
             find();
+
         }
     };
+
 
     const find = () => {
         const newArr = filterDramas.filter(drama => drama.title.includes(keyword));
         setDramas(newArr);
-        if(phoneSearchState==true){
+        if (phoneSearchState == true) {
             closeSearchOffcanvas();
         }
     }
@@ -34,8 +36,8 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas , bar ,phoneS
         };
     }, [keyword]);
 
-    return bar ? 
-     (<>
+    return bar ?
+        (<>
             <div className="position-relative w-100">
                 <form>
                     <label
@@ -61,7 +63,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas , bar ,phoneS
                 </form>
             </div>
         </>)
-     :  (<>
+        : (<>
             <div className="mb-3 position-relative w-100">
                 <form>
                     <label
