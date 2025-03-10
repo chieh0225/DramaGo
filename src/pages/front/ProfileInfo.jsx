@@ -2,16 +2,16 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import Toast from "../../components/Toasts";
 
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import Loading from "../../components/Loading";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const fiId = "-OKjOyDTSJ1ATYkUxSmj";
+const leId = "-OKxd94Su2SMB1GKkzqL";
 
 const area = [
   "臺北市",
@@ -44,6 +44,7 @@ const ProfileInfo = () => {
   const dispatch = useDispatch();
   const [info, setInfo] = useState([]);
 
+  // 會員資訊表單
   const {
     register,
     handleSubmit,
@@ -53,6 +54,21 @@ const ProfileInfo = () => {
     mode: "onTouched",
   });
 
+  // 重設密碼表單
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    formState: { errors: passwordErrors, touchedFields: passwordTouchedFields },
+    reset: resetPassword,
+    watch,
+  } = useForm({
+    mode: "onTouched",
+  });
+
+  const password = watch("password");
+  const newPassword = watch("newPassword");
+  const newPasswordCheck = watch("newPasswordCheck");
+
   const getInfo = async () => {
     dispatch(changeLoadingState(true));
     const token = Cookies.get("token");
@@ -60,7 +76,7 @@ const ProfileInfo = () => {
     console.log("發送 API 請求中...");
     try {
       const res = await axios.get(
-        `${baseUrl}/api/${apiPath}/admin/article/${fiId}`
+        `${baseUrl}/api/${apiPath}/admin/article/${leId}`
       );
 
       console.log("API 回應成功：", res);
@@ -78,8 +94,11 @@ const ProfileInfo = () => {
         area: res.data.article.area,
         description: res.data.article.description,
       });
+
+      // 重設密碼表單不需要預設值
+      resetPassword();
     } catch (error) {
-      console.error("取得個人資料失敗：", err);
+      console.error("取得個人資料失敗：", error);
       alert("取得個人資料失敗");
     } finally {
       dispatch(changeLoadingState(false));
@@ -107,14 +126,16 @@ const ProfileInfo = () => {
       ...info,
     };
     try {
-      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${fiId}`, {
+      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${leId}`, {
         data,
       });
       await getInfo();
-      Toast.fire({
-        icon: "success",
-        title: "更新個人資料成功！",
-      });
+      dispatch(
+        pushMsg({
+          text: "更新個人資料成功！",
+          status: "success",
+        })
+      );
     } catch (error) {
       alert("更新個人資料失敗");
       console.error(error);
@@ -124,6 +145,68 @@ const ProfileInfo = () => {
 
   const handleUpdateInfo = () => {
     updateInfo();
+  };
+
+  // 提交重設密碼表單
+  const onSubmitPassword = handleSubmitPassword(async (data) => {
+    dispatch(changeLoadingState(true));
+
+    try {
+      // 執行密碼重設，因為即時驗證已經確保舊密碼正確
+      await resetPasswordHandler(data);
+      dispatch(
+        pushMsg({
+          text: "密碼重設成功！",
+          status: "success",
+        })
+      );
+    } catch (error) {
+      console.error("密碼重設失敗：", error);
+      dispatch(
+        pushMsg({
+          text: "密碼重設失敗，請稍後再試",
+          status: "failed",
+        })
+      );
+    } finally {
+      dispatch(changeLoadingState(false));
+    }
+  });
+
+  // 重設密碼
+  const resetPasswordHandler = async (data) => {
+    try {
+      dispatch(changeLoadingState(true));
+
+      const updatedData = {
+        ...info, // 保留原有的所有資料
+        password: data.newPassword, // 更新密碼欄位
+      };
+
+      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${leId}`, {
+        data: updatedData,
+      });
+
+      // 重設密碼表單
+      resetPassword();
+
+      dispatch(
+        pushMsg({
+          text: "密碼重設成功！",
+          status: "success",
+        })
+      );
+    } catch (error) {
+      console.error("密碼重設失敗：", error);
+      dispatch(
+        pushMsg({
+          text: "密碼重設失敗，請稍後再試",
+          status: "failed",
+        })
+      );
+    } finally {
+      dispatch(changeLoadingState(false));
+    }
   };
 
   return (
@@ -457,72 +540,159 @@ const ProfileInfo = () => {
           </section>
         </div>
 
-        <div className="reset-password">
-          <h2 className="fs-md-1m fs-4 mb-8">重設密碼</h2>
-          <section className="reset-password-section d-md-flex flex-md-row flex-column align-items-end">
-            <div className="w-100">
-              <div className="mb-3 row">
-                <label
-                  htmlFor="inputPassword"
-                  className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
-                >
-                  舊密碼
-                </label>
-                <div className="col-md-auto">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="inputPassword"
-                    placeholder="密碼 (限 8-24 碼英文數字符號) "
-                    name="password"
-                  />
+        <form onSubmit={onSubmitPassword}>
+          <div className="reset-password">
+            <h2 className="fs-md-1m fs-4 mb-8">重設密碼</h2>
+            <section className="reset-password-section d-md-flex flex-md-row flex-column align-items-end">
+              <div className="w-100">
+                <div className="mb-3 row">
+                  <label
+                    htmlFor="password"
+                    className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
+                  >
+                    舊密碼
+                  </label>
+                  <div className="col-md-auto position-relative">
+                    <input
+                      type="password"
+                      className={`form-control ${
+                        passwordTouchedFields.password
+                          ? passwordErrors.password
+                            ? "is-invalid"
+                            : "is-valid"
+                          : ""
+                      }`}
+                      {...registerPassword("password", {
+                        required: "舊密碼欄位必填",
+                        minLength: {
+                          value: 8,
+                          message: "密碼至少需要 8 個字元",
+                        },
+                        maxLength: {
+                          value: 24,
+                          message: "密碼最多 24 個字元",
+                        },
+                        validate: async (value) => {
+                          try {
+                            const response = await axios.get(
+                              `${baseUrl}/api/${apiPath}/admin/article/${leId}`
+                            );
+                            const currentPassword =
+                              response.data.article.password;
+
+                            if (value !== currentPassword) {
+                              return "舊密碼不正確，請重新輸入";
+                            }
+                          } catch (error) {
+                            console.error("無法驗證舊密碼：", error);
+                            return "驗證密碼時出現問題，請稍後再試";
+                          }
+                        },
+                      })}
+                      id="password"
+                      placeholder="密碼 (限 8-24 碼英文數字符號) "
+                    />
+                    {passwordErrors.password && (
+                      <div className="col-auto invalid-feedback">
+                        {passwordErrors.password.message}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mb-3 row">
+                  <label
+                    htmlFor="newPassword"
+                    className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
+                  >
+                    新密碼
+                  </label>
+                  <div className="col-md-auto position-relative">
+                    <input
+                      type="password"
+                      className={`form-control ${
+                        passwordTouchedFields.newPassword
+                          ? passwordErrors.newPassword
+                            ? "is-invalid"
+                            : "is-valid"
+                          : ""
+                      }`}
+                      {...registerPassword("newPassword", {
+                        required: "新密碼欄位必填",
+                        minLength: {
+                          value: 8,
+                          message: "密碼至少需要 8 個字元",
+                        },
+                        maxLength: {
+                          value: 24,
+                          message: "密碼最多 24 個字元",
+                        },
+                      })}
+                      id="newPassword"
+                      placeholder="密碼 (限 8-24 碼英文數字符號) "
+                    />
+                    {passwordErrors.newPassword && (
+                      <div className="col-auto invalid-feedback">
+                        {passwordErrors.newPassword.message}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mb-md-0 mb-8 row">
+                  <label
+                    htmlFor="newPasswordCheck"
+                    className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
+                  >
+                    確認新密碼
+                  </label>
+                  <div className="col-md-auto position-relative">
+                    <input
+                      type="password"
+                      className={`form-control ${
+                        passwordTouchedFields.newPasswordCheck
+                          ? passwordErrors.newPasswordCheck
+                            ? "is-invalid"
+                            : "is-valid"
+                          : ""
+                      }`}
+                      {...registerPassword("newPasswordCheck", {
+                        required: "再次輸入密碼欄位必填",
+                        validate: (value, formValues) =>
+                          value === formValues.newPassword ||
+                          "新密碼與確認密碼不一致",
+                      })}
+                      id="newPasswordCheck"
+                      placeholder="再次輸入密碼"
+                    />
+                    {passwordErrors.newPasswordCheck && (
+                      <div className="col-auto invalid-feedback">
+                        {passwordErrors.newPasswordCheck.message}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <div className="mb-3 row">
-                <label
-                  htmlFor="newPasswor"
-                  className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-brand text-white w-100 text-nowrap"
+                  disabled={
+                    !password || // 檢查舊密碼是否已填寫
+                    !newPassword || // 檢查新密碼是否已填寫
+                    !newPasswordCheck || // 檢查確認密碼是否已填寫
+                    passwordErrors.password || // 檢查舊密碼是否有錯誤
+                    passwordErrors.newPassword || // 檢查新密碼是否有錯誤
+                    passwordErrors.newPasswordCheck // 檢查確認密碼是否有錯誤
+                  }
                 >
-                  新密碼
-                </label>
-                <div className="col-md-auto">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="newPasswor"
-                    placeholder="密碼 (限 8-24 碼英文數字符號) "
-                    name="newPasswor"
-                  />
-                </div>
+                  確認修改
+                </button>
               </div>
-
-              <div className="mb-md-0 mb-8 row">
-                <label
-                  htmlFor="newPasswordCheck"
-                  className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6"
-                >
-                  確認新密碼
-                </label>
-                <div className="col-md-auto">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="newPasswordCheck"
-                    placeholder="再次輸入密碼"
-                    name="newPasswordCheck"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="">
-              <button className="btn btn-brand text-white w-100 text-nowrap">
-                確認修改
-              </button>
-            </div>
-          </section>
-        </div>
+            </section>
+          </div>
+        </form>
       </div>
       <Loading />
     </>
