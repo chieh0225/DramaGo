@@ -9,9 +9,9 @@ import "../../assets/scss/xiang/c3.scss"
 const BarChartComponent = () => {
     useEffect(() => {
         c3.generate({
-            bindto: '#chart', // 綁定圖表容器
+            bindto: '#chart', 
             data: {
-                x: 'x', // 指定 X 軸資料欄位
+                x: 'x', 
                 columns: [
                     ['x', '2023-12-05', '2023-12-06', '2023-12-07', '2023-12-08', '2023-12-09'], // X 軸資料 (日期)
                     ['待出圈', 1, 2, 1, 4, 3],    // 第一組數據
