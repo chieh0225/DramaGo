@@ -17,19 +17,13 @@ const now = dayjs();
 const pageUrl = window.location.href;
 
 
-const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitDrama,unitShareDrama}) => {
+const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, unitDrama, getDramas , unitShareDrama }) => {
 
     const noteModalRef = useRef(null);
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
     const dispatch = useDispatch();
     const token = Cookies.get(`token`);
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `${token}`
-            }
-        }
 
     // 功能：表單
     const {
@@ -72,6 +66,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const handleImgInput = async (e) => {
         const file = e.target.files[0];
         const formData = new FormData();
+        formData.append('file', file);
         dispatch(changeLoadingState(true));
         try {
             const token = Cookies.get(`token`);
@@ -81,7 +76,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                     Authorization: `${token}`
                 }
             }
-            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData ,config);
+            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData, config);
 
             setImageUrl(res.data.imageUrl);
             dispatch(pushMsg({
@@ -89,7 +84,6 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 status: 'success',
             }));
         } catch (err) {
-            console.log(err.response); // 打印錯誤回應
             const message = err.response.data;
              dispatch(pushMsg({
                  text: message.join('、'),
@@ -164,7 +158,6 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 is_enabled: 1, //是否上架
                 imageUrl, //劇會主圖
                 imagesUrl, //劇會副圖
-
                 uid,
                 date: { start: startDate, end: endDate, },   //劇會時間
                 location, //劇會地點
@@ -182,11 +175,16 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 buildDate: now.format('YYYY/MM/DD hh:mm A'),
             }
         };
-
+        const token = Cookies.get(`token`);
+        const config = {
+            headers: {
+                Authorization: `${token}`
+            }
+        }
         if (modalMode === 'add') {
             dispatch(changeLoadingState(true));
             try {
-                await axios.post(`${baseUrl}/api/${apiPath}/admin/product`, updateData, config);
+                await axios.post(`${baseUrl}/api/${apiPath}/admin/product`, updateData , config);
                 dispatch(pushMsg({
                     text: '已新增劇會',
                     status: 'success',
@@ -198,10 +196,10 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 closeDramaForm();
             } catch (err) {
                 const message = err.response.data;
-                dispatch(pushMsg({
-                    text: message.join('、'),
-                    status: 'failed',
-                }));
+                 dispatch(pushMsg({
+                     text: message.join('、'),
+                     status: 'failed',
+                 }));
             } finally {
                 dispatch(changeLoadingState(false));
             };
@@ -216,11 +214,12 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 getDramas();
                 closeDramaForm();
             } catch (err) {
-                const message = err.response.data;
-                dispatch(pushMsg({
-                    text: message.join('、'),
-                    status: 'failed',
-                }));
+                // const message = err.response.data;
+                //  dispatch(pushMsg({
+                //      text: message.join('、'),
+                //      status: 'failed',
+                //  }));
+                console.log(err)
             } finally {
                 dispatch(changeLoadingState(false));
             };
