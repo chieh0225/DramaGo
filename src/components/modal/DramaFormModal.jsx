@@ -23,6 +23,13 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
     const dispatch = useDispatch();
+    const token = Cookies.get(`token`);
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `${token}`
+            }
+        }
 
     // 功能：表單
     const {
@@ -65,17 +72,20 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
     const handleImgInput = async (e) => {
         const file = e.target.files[0];
         const formData = new FormData();
-        formData.append('file-to-upload', file);
         dispatch(changeLoadingState(true));
         try {
-            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData);
+            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData,config);
+            console.log(res.data);
+            
             setImageUrl(res.data.imageUrl);
             dispatch(pushMsg({
                 text: '已上傳圖片',
                 status: 'success',
             }));
         } catch (err) {
+            console.log(err.response); // 打印錯誤回應
             const message = err.response.data;
+            
             dispatch(pushMsg({
                 text: message.join('、'),
                 status: 'failed',
@@ -167,12 +177,7 @@ const DramaFormModal = ({dramaFormRef,closeDramaForm,deleteDrama,modalMode,unitD
                 buildDate: now.format('YYYY/MM/DD hh:mm A'),
             }
         };
-        const token = Cookies.get(`token`);
-        const config = {
-            headers: {
-                Authorization: `${token}`
-            }
-        }
+
         if (modalMode === 'add') {
             dispatch(changeLoadingState(true));
             try {
