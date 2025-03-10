@@ -1,64 +1,36 @@
-import { useState } from "react";
+// Todo 收藏日期功能
 
-const collections = [
-  {
-    category: "甜甜圈",
-    content: "尺寸：14x14cm",
-    description:
-      "濃郁的草莓風味，中心填入滑順不膩口的卡士達內餡，帶來滿滿幸福感！",
-    id: "-L9tH8jxVb2Ka_DYPwng",
-    is_enabled: 1,
-    origin_price: 150,
-    price: 99,
-    title: "草莓莓果夾心圈",
-    unit: "元",
-    num: 10,
-    imageUrl: "https://images.unsplash.com/photo-1583182332473-b31ba08929c8",
-    imagesUrl: [
-      "https://images.unsplash.com/photo-1626094309830-abbb0c99da4a",
-      "https://images.unsplash.com/photo-1559656914-a30970c1affd",
-    ],
-  },
-  {
-    category: "蛋糕",
-    content: "尺寸：6寸",
-    description:
-      "蜜蜂蜜蛋糕，夾層夾上酸酸甜甜的檸檬餡，清爽可口的滋味讓人口水直流！",
-    id: "-McJ-VvcwfN1_Ye_NtVA",
-    is_enabled: 1,
-    origin_price: 1000,
-    price: 900,
-    title: "蜂蜜檸檬蛋糕",
-    unit: "個",
-    num: 1,
-    imageUrl:
-      "https://images.unsplash.com/photo-1627834377411-8da5f4f09de8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1001&q=80",
-    imagesUrl: [
-      "https://images.unsplash.com/photo-1618888007540-2bdead974bbb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=987&q=80",
-    ],
-  },
-  {
-    category: "蛋糕",
-    content: "尺寸：6寸",
-    description: "法式煎薄餅加上濃郁可可醬，呈現經典的美味及口感。",
-    id: "-McJ-VyqaFlLzUMmpPpm",
-    is_enabled: 1,
-    origin_price: 700,
-    price: 600,
-    title: "暗黑千層",
-    unit: "個",
-    num: 15,
-    imageUrl:
-      "https://images.unsplash.com/photo-1505253149613-112d21d9f6a9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDZ8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    imagesUrl: [
-      "https://images.unsplash.com/flagged/photo-1557234985-425e10c9d7f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTA5fHxjYWtlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-      "https://images.unsplash.com/photo-1540337706094-da10342c93d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    ],
-  },
-];
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
+
+import { useDispatch } from "react-redux";
+import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import Loading from "../../components/Loading";
 
 const ProfileCollection = () => {
-  const [collection, setCollection] = useState({ collections });
+  const dispatch = useDispatch();
+  const [collection, setCollection] = useState([]);
+
+  const getCollection = async () => {
+    try {
+      dispatch(changeLoadingState(true));
+      const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
+      console.log(res.data.data);
+      setCollection(res.data.data.carts);
+    } catch (error) {
+      alert("取得收藏列表失敗");
+    } finally {
+      dispatch(changeLoadingState(false));
+    }
+  };
+
+  useEffect(() => {
+    getCollection();
+  }, []);
 
   return (
     <>
@@ -92,7 +64,7 @@ const ProfileCollection = () => {
           <div className="table-responsive">
             <table
               className={`table align-middle ${
-                collection.collections?.length > 0 ? "table-hover" : ""
+                collection?.length > 0 ? "table-hover" : ""
               }`}
             >
               <thead>
@@ -106,15 +78,23 @@ const ProfileCollection = () => {
                 </tr>
               </thead>
               <tbody>
-                {collection.collections?.length > 0 ? (
-                  collections.map((product) => (
-                    <tr key={product.id}>
+                {collection?.length > 0 ? (
+                  collection?.map((collectionItem) => (
+                    <tr key={collectionItem.id}>
                       <th scope="row">
-                        <small className="date">{product.origin_price}</small>
-                        <p>{product.title}</p>
+                        <small className="date">
+                          {collectionItem.product.date.start.split("T")[0]}
+                        </small>
+                        <small className="date"> ~ </small>
+                        <small className="date">
+                          {collectionItem.product.date.end.split("T")[0]}
+                        </small>
+                        <p>{collectionItem.product.title}</p>
                       </th>
-                      <td>{product.price}</td>
-                      <td>{product.is_enabled ? "啟用" : "未啟用"}</td>
+                      <td>{collectionItem.product.location}</td>
+                      <td>
+                        {collectionItem.product.isFinish ? "已出團" : "未出團"}
+                      </td>
                       <td>
                         <a href="#">
                           <svg
@@ -182,25 +162,31 @@ const ProfileCollection = () => {
                         style={{ height: "100%" }}
                       >
                         <p className="fs-3 mb-4">目前尚無收藏劇會</p>
-                        <p className="d-flex align-items-center justify-content-center">
-                          探索更多劇會活動
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            className="ms-1"
-                          >
-                            <title>search_line</title>
-                            <g id="search_line" fill="none" fill-rule="evenodd">
-                              <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
-                              <path
-                                fill="#FFA13CFF"
-                                d="M10.5 2a8.5 8.5 0 1 0 5.262 15.176l3.652 3.652a1 1 0 0 0 1.414-1.414l-3.652-3.652A8.5 8.5 0 0 0 10.5 2M4 10.5a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0"
-                              />
-                            </g>
-                          </svg>
-                        </p>
+                        <NavLink className="nav-link" to="/dramaList">
+                          <p className="fs-5 text-brand-400 d-flex align-items-center justify-content-center">
+                            探索更多劇會活動
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              className="ms-1"
+                            >
+                              <title>search_line</title>
+                              <g
+                                id="search_line"
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
+                                <path
+                                  fill="#FFA13CFF"
+                                  d="M10.5 2a8.5 8.5 0 1 0 5.262 15.176l3.652 3.652a1 1 0 0 0 1.414-1.414l-3.652-3.652A8.5 8.5 0 0 0 10.5 2M4 10.5a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0"
+                                />
+                              </g>
+                            </svg>
+                          </p>
+                        </NavLink>
                       </div>
                     </td>
                   </tr>
@@ -210,6 +196,7 @@ const ProfileCollection = () => {
           </div>
         </div>
       </div>
+      <Loading />
     </>
   );
 };

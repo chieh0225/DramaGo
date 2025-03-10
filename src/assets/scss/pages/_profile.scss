@@ -7,8 +7,20 @@
   border-radius: 20px;
   border: 1px solid $brand-400;
   height: 100%;
-  .avatar-image {
-    border: 1px solid $brand-400;
+  .profile-pic-container {
+    .change-btn {
+      width: 40px;
+      height: 40px;
+      bottom: 0;
+      right: 10px;
+      border: 2px solid $brand-400;
+      @include hover-transform(1.1);
+    }
+
+    .profile-pic {
+      object-position: 10% 20%;
+      border: 2px solid $brand-400;
+    }
   }
 }
 
