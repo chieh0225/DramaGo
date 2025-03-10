@@ -2,6 +2,7 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { pushMsg } from "../../redux/slice/toastSlice";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -9,7 +10,7 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedNoteTag,setSelectedNoteTag}) => {
     const dispatch = useDispatch();
     const [noteTags,setNoteTags] = useState([]);
-    
+    const dispatch = useDispatch();
     const handleCheckbox = (tag) => {
         setSelectedNoteTag(prev=>{
             if (prev.includes(tag)) {
@@ -26,15 +27,24 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
     };
 
     const getTags = async() => {
+        const token = Cookies.get(`token`)
+        const config = {
+            headers : {
+              Authorization : `${token}`
+            }
+          }
         try {
-            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons` , config);
             setNoteTags(res.data.coupons);
         } catch (err) {
             const message = err.response.data;
-            dispatch(pushMsg({
-                text:message.join('、'),
-                status:'failed',
-            }));
+            if(Array.isArray(message)){
+                dispatch(pushMsg({
+                    text:message.join('、'),
+                    status:'failed',
+                }));
+            }
+            console.log(err)
         }
     };
 
@@ -42,9 +52,11 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
         const getToken = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,"$1",);
         axios.defaults.headers.common['Authorization'] = getToken;
     },[]);
+
+    
     useEffect(()=>{
         getTags();
-    },[noteTags]);
+    },[]);
 
 
 

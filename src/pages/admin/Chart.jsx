@@ -1,8 +1,17 @@
 const Chart = () => {
 
     return(<>
-        
-        <h2>我是圖表分析頁</h2>
+        <section className="row">
+            <div className="col-4">
+                <h1>123</h1>
+            </div>
+            <div className="col-4">
+                <h1>123</h1>
+            </div>
+            <div className="col-4">
+                <h1>123</h1>
+            </div>
+        </section>
         
     </>)
 };
