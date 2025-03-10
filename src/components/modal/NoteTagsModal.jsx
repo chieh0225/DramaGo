@@ -10,7 +10,6 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedNoteTag,setSelectedNoteTag}) => {
     const dispatch = useDispatch();
     const [noteTags,setNoteTags] = useState([]);
-    const dispatch = useDispatch();
     const handleCheckbox = (tag) => {
         setSelectedNoteTag(prev=>{
             if (prev.includes(tag)) {
