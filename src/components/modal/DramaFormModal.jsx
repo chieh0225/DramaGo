@@ -66,7 +66,14 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
         formData.append('file-to-upload', file);
         dispatch(changeLoadingState(true));
         try {
-            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData);
+            const token = Cookies.get(`token`);
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `${token}`
+                }
+            }
+            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData ,config);
             setImageUrl(res.data.imageUrl);
             dispatch(pushMsg({
                 text: '已上傳圖片',
@@ -74,10 +81,10 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
             }));
         } catch (err) {
             const message = err.response.data;
-            dispatch(pushMsg({
-                text: message.join('、'),
-                status: 'failed',
-            }));
+             dispatch(pushMsg({
+                 text: message.join('、'),
+                 status: 'failed',
+             }));
         } finally {
             dispatch(changeLoadingState(false));
         };
@@ -174,7 +181,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
         if (modalMode === 'add') {
             dispatch(changeLoadingState(true));
             try {
-                await axios.post(`${baseUrl}/api/${apiPath}/admin/product`, updateData , config);
+                await axios.post(`${baseUrl}/api/${apiPath}/admin/product`, updateData, config);
                 dispatch(pushMsg({
                     text: '已新增劇會',
                     status: 'success',
@@ -196,7 +203,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
         } else if (modalMode === 'edit') {
             dispatch(changeLoadingState(true));
             try {
-                await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`, updateData , config);
+                await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${unitDrama.id}`, updateData, config);
                 dispatch(pushMsg({
                     text: '已修改劇會內容',
                     status: 'success',
