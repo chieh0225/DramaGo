@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
 import { Modal, Offcanvas } from "bootstrap";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
@@ -30,45 +29,6 @@ const pageLink = [
 ]
 
 const DramaList = () => {
-    //功能：表單
-    const {
-        register,
-        watch,
-        control,
-    } = useForm({
-        defaultValues: {
-            category: '全部',
-            day: '全部',
-            cost: '全部',
-            genderTerm: '全部',
-            ageTerm: '全部',
-            areaTerm: '全部',
-            state: '全部',
-        },
-    });
-
-    const watchForm = useWatch({
-        control,
-    });
-
-
-    // 用戶輸入值
-    const categoryTag = watch('category');
-    const dayTag = watch('day');
-    const costTag = watch('cost');
-    const genderTag = watch('genderTerm');
-    const ageTag = watch('ageTerm');
-    const areaTag = watch('areaTerm');
-    const stateTag = watch('state');
-
-    // 系統標籤
-    const categoryTags = ['全部', '看電影', '看表演', '逛劇展', '買劇品', '上劇課', '劇本殺', '接劇龍', '聽劇透', '遊劇旅', '追影星'];
-    const dayTags = ['全部', '1天內', '2天以上'];
-    const costTags = ['全部', '免費', 'AA制', '團主請客', '男生請客', '女生請客'];
-    const genderTags = ['全部', '不限男女', '限男生', '限女生'];
-    const ageTags = ['全部', '不限年齡', '限年齡'];
-    const areaTags = ['全部', '不限居住地', '限居住地'];
-    const stateTags = ['全部', '差一人出團', '三天內到期'];
 
     // 變數宣告
     const dramaFormRef = useRef(null);
@@ -78,10 +38,8 @@ const DramaList = () => {
     const [modalMode, setModalMode] = useState('');
     const openButtonRef = useRef(null);
     const { dramas, setDramas } = useOutletContext()
-    //(有修改) const [dramas,setDramas] = useState([]);
     const [loveDramas, setLoveDramas] = useState([]);
     const [filterDramas, setFilterDramas] = useState([]);
-    const [tagFilter, setTagFilter] = useState([]);
     const [unitShareDrama, setUnitShareDrama] = useState({});
     const [dramaState, setDramaState] = useState('onGoing');
     const dispatch = useDispatch();
@@ -151,7 +109,11 @@ const DramaList = () => {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
             setLoveDramas(res.data.data.carts);
         } catch (err) {
-            console.log(err.response?.data?.message);
+            const message = err.response.data;
+            dispatch(pushMsg({
+                text: message.join('、'),
+                status: 'failed',
+            }));
         } finally {
             dispatch(changeLoadingState(false));
         }
@@ -184,18 +146,6 @@ const DramaList = () => {
         };
     };
 
-    // 複選標籤劇會篩選
-    const dramaFilter = () => {
-        const newData = filterDramas.filter(drama => {
-            const { category, cost } = drama;
-            const { gender, age: { condition: ageCondition }, area: { condition: areaCondition } } = drama.term;
-            const dramaTagsArr = [category, cost, gender, ageCondition, areaCondition];
-            return tagFilter.every(item => dramaTagsArr.includes(item))
-
-        })
-        setDramas(newData);
-    };
-
 
     // 初始化
     useEffect(() => {
@@ -210,20 +160,11 @@ const DramaList = () => {
         if (searchOffcanvasRef.current) {
             searchOffcanvasInstance.current = new Offcanvas(searchOffcanvasRef.current);
         };
-
+    },[]);
+    useEffect(()=>{
         getDramas();
         getLoveDramas();
     },[]);
-
-    useEffect(() => {
-        const arr = Object.values(watchForm).filter(item => item !== '全部');
-        setTagFilter(arr);
-        console.log(arr);
-    }, [watchForm]);
-
-    useEffect(() => {
-        dramaFilter();
-    }, [tagFilter]);
 
     useEffect(() => {
         getDramas();
@@ -272,7 +213,6 @@ const DramaList = () => {
                             dramaState={dramaState}
                             />
 
-                           
                         </div>
                     </div>
                     <div className="col-9">
@@ -309,13 +249,12 @@ const DramaList = () => {
                                 )
                             }
                             
-                              
                         </div>
                     </div>
                 </div>
 
                 {/* 平板/手機版 */}
-
+                {/* 下拉選單 */}            
                 <div className="d-flex d-lg-none align-items-center justify-content-between mb-4">
                     <button type="button" className="btn btn-brand-400 rounded-pill fs-5 text-white"
                         onClick={() => {
@@ -334,70 +273,18 @@ const DramaList = () => {
                 </div>
                 <div className="row row-cols-md-2 d-lg-none gy-4">
                     {
-                        dramas.map(drama =>
-                            <div className="col" key={drama.id}>
-                                <div className="card border-0 rounded-3 shadow position-relative" >
-                                    <div className="p-4 rounded-2">
-                                        <div className="overflow-hidden cursor">
-                                            <img src={drama.imageUrl} className="object-fit rounded-2 img-scale " alt={drama.title} />
-                                        </div>
-                                    </div>
-                                    <div className="badge-group position-absolute d-flex flex-column">
-                                        <span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">差一人出團</span>
-                                        <span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">三天內到期</span>
-                                    </div>
-                                    <div className="card-body">
-                                        <h5 className="card-title">{drama.title}</h5>
-                                        <div className="my-4">
-                                            <button type="button" className="brandBtn-4 mx-1 my-2" >{drama.category}</button>
-                                            <button type="button" className="brandBtn-4 mx-1 my-2" >{drama.cost}</button>
-                                            <button type="button" className="brandBtn-4 mx-1 my-2" >{drama.term.gender}</button>
-                                            <button type="button" className="brandBtn-4 mx-1 my-2" >{drama.term.age.condition}</button>
-                                            <button type="button" className="brandBtn-4 mx-1 my-2" >{drama.term.area.condition}</button>
-                                        </div>
-                                        <p className="card-text">
-                                            <i className="bi bi-clock text-grey-300 me-4 mb-3"></i>
-                                            <time dateTime={drama.date.start} className="fs-b3 text-grey-700">{drama.date.start}~{drama.date.end}</time>
-                                        </p>
-                                        <p className="card-text">
-                                            <i className="bi bi-geo-alt text-grey-300 me-4 mb-3"></i>
-                                            <span className="text-grey-700">{drama.location}</span>
-                                        </p>
-                                        <p className="card-text">
-                                            <i className="bi bi-people text-grey-300 me-4 mb-3"></i>
-                                            <span className="text-grey-700 me-4">欲揪人數｜<span>{drama.people}</span></span>
-                                            <span className="text-grey-700">已跟團者｜<span>2</span></span>
-                                        </p>
-                                        <hr />
-                                        <div className="d-flex justify-content-between">
-                                            <div className="d-flex align-items-center cursor">
-                                                <div className="avatar me-2">
-                                                    <img src="https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="頭像" className="object-fit rounded-circle" />
-                                                </div>
-                                                <div className="d-flex flex-column">
-                                                    <span className="h6">樂樂</span>
-                                                    <span className="text-grey-400 fs-c">揪團主</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center">
-                                                <button
-                                                    type="button"
-                                                    className="btn p-0"
-                                                    style={{ "--bs-btn-border-color": "none" }}
-                                                    onClick={() => handleLoveClick(drama.id)}
-                                                >
-                                                    <i className={`bi text-brand-core fs-2 mx-1 ${loveDramas.some(item => item.product.id === drama.id) ? 'bi-bookmark-heart-fill' : 'bi-bookmark-heart'}`}></i>
-                                                </button>
-                                                <span className="material-symbols-rounded text-brand-core fs-2 mx-1 cursor">share</span>
-                                                <button type="button" className="brandBtn-1-lg">劇會內容</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        dramas.map(drama=>
+                            <DramaListCard 
+                            key={drama.id} 
+                            drama={drama}
+                            loveDramas={loveDramas}
+                            handleLoveClick={handleLoveClick}
+                            openDramaForm={openDramaForm}
+                            setModalMode={setModalMode}
+                            setUnitShareDrama={setUnitShareDrama}
+                            />
                         )
                     }
-
                 </div>
             </div>
 
@@ -429,7 +316,7 @@ const DramaList = () => {
                         filterDramas={filterDramas}
                         setDramas={setDramas}
                         />
-                       
+
                     </div>
                 </div>
                 <button className="btn btn-brand-core w-100 text-white rounded-0" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
@@ -440,10 +327,16 @@ const DramaList = () => {
             <div className="offcanvas offcanvas-bottom offcanvas-sort rounded-6 rounded-bottom" tabIndex="-1" id="sortOffcanvas" aria-labelledby="sortOffcanvasLabel">
                 <div className="offcanvas-body">
                     <span className="h6 d-block my-3">發起時間</span>
-                    <Dropdown />
+                    <Dropdown 
+                    options={['最新>最舊','最舊>最新']} 
+                    type='time'
+                    filterDramas={filterDramas}
+                    setDramas={setDramas}
+                    getDramas={getDramas}
+                    />
                     <br />
                     <span className="h6 d-block my-3">出團情況</span>
-                    <Dropdown />
+                    <Dropdown options={['全部','我發起的','我跟團的']} />
                 </div>
                 <button className="btn btn-brand-core w-100 text-white rounded-0" data-bs-toggle="offcanvas" data-bs-target="#sortOffcanvas">
                     套用
