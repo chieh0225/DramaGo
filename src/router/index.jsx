@@ -21,26 +21,26 @@ import Design from "../plugin/Design";
 import ComponentsView from "../plugin/ComponentsView";
 
 const router = createHashRouter([
-  {
-    //前台主版
-    element: <FrontLayout />,
-    children: [
-      {
-        index: true, //首頁
-        element: <FrontHome />,
-      },
-      {
-        path: "dramaList", //劇會總覽頁
-        element: <DramaList />,
-      },
-      {
-        path: "dramaInfo", //劇會內頁
-        element: <DramaInfo />,
-      },
-      {
-        path: "profile", //個人主頁
-        element: <Profile />,
+    {
+        //前台主版
+        element: <FrontLayout />,
         children: [
+            {
+                index: true, //首頁
+                element: <FrontHome />,
+            },
+            {
+                path: "dramaList", //劇會總覽頁
+                element: <DramaList />,
+            },
+            {
+                path: "dramaInfo", //劇會內頁
+                element: <DramaInfo />,
+            },
+            {
+                path: "profile", //個人主頁
+                element: <Profile />,
+                children: [
                     {
                         path: "profileInfo", //個人主頁個人資訊頁
                         element: <ProfileInfo />,
@@ -63,7 +63,7 @@ const router = createHashRouter([
                         index: true,            //劇會管理頁
                         element: <DramaManage />,
                     },
-                    {   
+                    {
                         path: 'tag-manage',           //標籤管理頁
                         element: <TagManage />,
                     },
@@ -87,7 +87,7 @@ const router = createHashRouter([
         path: 'compView',
         element: <ComponentsView />
     }
-    ]
+]
 );
 
 export default router;

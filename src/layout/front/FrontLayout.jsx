@@ -4,7 +4,6 @@ import FrontHeader from "./FrontHeader";
 import FrontFooter from "./FrontFooter";
 import DramaToasts from "../../components/DramaToasts";
 import Loading from "../../components/Loading";
-import { useRef, useState } from "react";
 
 
 const FrontLayout = () => {
