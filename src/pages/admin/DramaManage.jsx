@@ -73,18 +73,22 @@ const DramaManage = () => {
                     Authorization: `${token}`
                 }
             }
-            await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${drama.id}`, updateData , config);
+            await axios.put(`${baseUrl}/api/${apiPath}/admin/product/${drama.id}`, updateData, config);
             dispatch(pushMsg({
                 text: '已修改劇會狀態',
                 status: 'success',
             }));
             getDramas();
+
             closeDramaForm();
+
         } catch (err) {
             const message = err.response.data;
             dispatch(pushMsg({
+
                 text: message.join('、'),
                 status: 'failed',
+
             }));
         } finally {
             dispatch(changeLoadingState(false));
@@ -101,7 +105,7 @@ const DramaManage = () => {
                     Authorization: `${token}`
                 }
             }
-            await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}` , config);
+            await axios.delete(`${baseUrl}/api/${apiPath}/admin/product/${id}`, config);
             dispatch(pushMsg({
                 text: '已刪除劇會',
                 status: 'success',
@@ -160,25 +164,25 @@ const DramaManage = () => {
                                     <select className="form-select d-none d-lg-block" name="is_enabled" value={drama.is_enabled ? '1' : '0'} onChange={(e) => editDrama(e, drama)}>
                                         <option value="1">顯示</option>
                                         <option value="0">隱藏</option>
-                                    </select> 
-                                    <button  onClick={(e) => editDrama(e, drama)}  name="is_enabled"  value= '0' style={{whiteSpace: `nowrap`}}  type="button" className={drama.is_enabled == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>顯示</button>
-                                    <button  onClick={(e) => editDrama(e, drama)}  name="is_enabled"  value= '1' style={{whiteSpace: `nowrap`}}  type="button" className={drama.is_enabled == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>隱藏</button>
+                                    </select>
+                                    <button onClick={(e) => editDrama(e, drama)} name="is_enabled" value='0' style={{ whiteSpace: `nowrap` }} type="button" className={drama.is_enabled == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>顯示</button>
+                                    <button onClick={(e) => editDrama(e, drama)} name="is_enabled" value='1' style={{ whiteSpace: `nowrap` }} type="button" className={drama.is_enabled == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>隱藏</button>
                                 </td>
                                 <td>
                                     <select className="form-select d-none d-lg-block" name="isHot" value={drama.isHot ? '1' : '0'} onChange={(e) => editDrama(e, drama)}>
                                         <option value="1">是</option>
                                         <option value="0">否</option>
                                     </select>
-                                     <button  onClick={(e) => editDrama(e, drama)}  name="isHot"  value= '0' style={{whiteSpace: `nowrap`}}  type="button" className={drama.isHot == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>是</button>
-                                     <button  onClick={(e) => editDrama(e, drama)}  name="isHot"  value= '1' style={{whiteSpace: `nowrap`}}  type="button" className={drama.isHot == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>否</button>
+                                    <button onClick={(e) => editDrama(e, drama)} name="isHot" value='0' style={{ whiteSpace: `nowrap` }} type="button" className={drama.isHot == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>是</button>
+                                    <button onClick={(e) => editDrama(e, drama)} name="isHot" value='1' style={{ whiteSpace: `nowrap` }} type="button" className={drama.isHot == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>否</button>
                                 </td>
                                 <td>
                                     <select className="form-select d-none d-lg-block" name="isFinish" value={drama.isFinish ? '1' : '0'} onChange={(e) => editDrama(e, drama)}>
                                         <option value="1">已出團</option>
                                         <option value="0">未出團</option>
-                                    </select> 
-                                     <button  onClick={(e) => editDrama(e, drama)}  name="isFinish"  value= '0' style={{whiteSpace: `nowrap`}}  type="button" className={drama.isFinish == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>已出團</button>
-                                     <button  onClick={(e) => editDrama(e, drama)}  name="isFinish"  value= '1' style={{whiteSpace: `nowrap`}}  type="button" className={drama.isFinish == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white" }>未出團</button>
+                                    </select>
+                                    <button onClick={(e) => editDrama(e, drama)} name="isFinish" value='0' style={{ whiteSpace: `nowrap` }} type="button" className={drama.isFinish == 0 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>已出團</button>
+                                    <button onClick={(e) => editDrama(e, drama)} name="isFinish" value='1' style={{ whiteSpace: `nowrap` }} type="button" className={drama.isFinish == 1 ? "btn btn-brand-400 text-white d-lg-none d-none" : "btn btn-brand-400 d-lg-none text-white"}>未出團</button>
                                 </td>
                                 <td>
                                     <button type="button" className="btn btn-brand-800 text-white mx-1 mb-2 mb-lg-0"
