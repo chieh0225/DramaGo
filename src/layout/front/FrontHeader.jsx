@@ -1,37 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import SearchBar from "../../components/SearchBar";
-import { changeLoadingState } from "../../redux/slice/loadingSlice";
+import { Collapse } from "bootstrap";
 //照片
 import logout from "../../assets/images/icon/24px/solid/logout.svg";
 import logo from "../../assets/images/Variant7.svg";
-import search from "../../assets/images/icon/24px/line/search.svg";
 import menber from "../../assets/images/icon/24px/solid/memember.svg"
 import ueser from "../../assets/images/icon/24px/solid/ueser.svg"
 import axios from "axios";
+import { text } from "framer-motion/client";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const FrontHeader = ({ state, setState, mymodal, dramas, setDramas }) => {
+const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
     const [filterDramas, setFilterDramas] = useState(null);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const [cccc , setText] =useState(false)
     // 渲染劇會列表
     useEffect(() => {
         (async () => {
-            dispatch(changeLoadingState(true));
             try {
                 const res = await axios.get(`${baseUrl}/api/${apiPath}/products`);
                 setFilterDramas(res.data.products);
             } catch (err) {
                 console.log(err);
-            } finally {
-                dispatch(changeLoadingState(false));
             }
         })()
     }, [])
@@ -57,13 +52,17 @@ const FrontHeader = ({ state, setState, mymodal, dramas, setDramas }) => {
         }
     }, [])
 
+    const text = ()=>{
+        setText(true)
+    }
+
     return (<>
         <header>
             {/* 手機板nav */}
             <div className="w-100 d-lg-none">
                 <nav className="navbar">
                     <Link className="ms-3 navbar-brand" to="/"><img style={{ width: "140px" }} src={logo} alt="" /></Link>
-                    <button className="navbar-toggler border-0 me-3" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button className="navbar-toggler border-0 me-3" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
                         <img className="nav-icon-1" src={menber} alt="" />
                     </button>
                     <div className=" dropdown-menu w-100 py-0" aria-labelledby="navbarDropdown">

@@ -3,27 +3,30 @@ import { useEffect, useState } from "react";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
-const Love = ({ id, state , mymodal }) => {
+
+
+const Love = ({ id, state, mymodal }) => {
+
     const [loveState, setloveState] = useState(false)
 
     //新增&刪除
     const add_del = () => {
-        if(state == true){
+        if (state == true) {
             (async () => {
                 try {
                     const resdata = await axios.get(`${baseUrl}/api/${apiPath}/cart`)
                     let delId = "null"
                     const product = resdata.data.data.carts
-    
+
                     product.map(e => {
                         if (id == e.product_id)
                             delId = e.id
                     })
-    
+
                     if (delId == "null") {
                         const res = await axios.post(`${baseUrl}/api/${apiPath}/cart`, {
                             "data": {
-                                "product_id": id,  //劇會ID(唯一值)
+                                "product_id": id,
                                 "qty": 1,
                             }
                         })
@@ -36,13 +39,13 @@ const Love = ({ id, state , mymodal }) => {
                     alert(`新增/刪除有錯誤`, err)
                 }
             })()
-        }else{
+        } else {
             mymodal.current.show();
         }
 
     }
 
-    //判斷最愛
+    //最愛
     useEffect(() => {
         if (state == true) {
             (async () => {

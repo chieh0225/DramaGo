@@ -1,8 +1,11 @@
 import axios from "axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
+import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
+
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -10,120 +13,150 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const TagManage = () => {
 
-    const [noteTags,setNoteTags] = useState([]);
-    const [tagInput,setTagInput] = useState('');
+    const [noteTags, setNoteTags] = useState([]);
+    const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
     const dispatch = useDispatch();
 
+    const onSubmit = () => {
+        addTag(watch(`name`));
+        reset();
+    }
 
-    const addTag = async(e) => {
-        e.preventDefault();
+    //新增
+    const addTag = async (input) => {
         const updateData = {
             data: {
-                title: tagInput,
+                title: input,
                 is_enabled: 1,
                 percent: 0,
                 due_date: 0,
-                code: tagInput,
+                code: input,
             }
         };
         dispatch(changeLoadingState(true));
         try {
-            await axios.post(`${baseUrl}/api/${apiPath}/admin/coupon`,updateData);
+            const token = Cookies.get(`token`);
+            const config = {
+                headers: {
+                    Authorization: `${token}`
+                }
+            }
+            const res = await axios.post(`${baseUrl}/api/${apiPath}/admin/coupon`, updateData, config);
+            dispatch(pushMsg({
+                text: '已新增標籤',
+                status: 'success',
+            }));
             getTags();
-            setTagInput('');
-            dispatch(pushMsg({
-                text:'已新增標籤',
-                status:'success',
-            }));
         } catch (err) {
-            const message = err.response.data;
+            let message = err.response.data;
+            message = Array.isArray(message) ? message : [message]
             dispatch(pushMsg({
-                text:message.join('、'),
-                status:'failed',
+                text: message.join('、'),
+                status: 'failed',
             }));
-        } finally{
+        } finally {
             dispatch(changeLoadingState(false));
         };
     };
-    const getTags = async() => {
+
+    //取得標籤
+    const getTags = async () => {
         dispatch(changeLoadingState(true));
         try {
-            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`);
+            const token = Cookies.get(`token`);
+            const config = {
+                headers: {
+                    Authorization: `${token}`
+                }
+            }
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons`, config);
             setNoteTags(res.data.coupons);
         } catch (err) {
             const message = err.response.data;
+            message = Array.isArray(message) ? message : [message]
             dispatch(pushMsg({
-                text:message.join('、'),
-                status:'failed',
+                text: message.join('、'),
+                status: 'failed',
             }));
-        } finally{
+        } finally {
             dispatch(changeLoadingState(false));
         };
     };
-    const deleteTags = async(id) => {
+
+    //刪除標籤
+    const deleteTags = async (id) => {
         dispatch(changeLoadingState(true));
         try {
-            await axios.delete(`${baseUrl}/api/${apiPath}/admin/coupon/${id}`);
-            getTags();
+            const token = Cookies.get(`token`);
+            const config = {
+                headers: {
+                    Authorization: `${token}`
+                }
+            }
+            await axios.delete(`${baseUrl}/api/${apiPath}/admin/coupon/${id}`, config);
             dispatch(pushMsg({
-                text:'已刪除標籤',
-                status:'success',
+                text: '已刪除標籤',
+                status: 'success',
             }));
+            getTags();
         } catch (err) {
             const message = err.response.data;
+            message = Array.isArray(message) ? message : [message]
             dispatch(pushMsg({
-                text:message.join('、'),
-                status:'failed',
+                text: message.join('、'),
+                status: 'failed',
             }));
-        } finally{
+        } finally {
             dispatch(changeLoadingState(false));
         };
-    };
+    }
 
-    useEffect(()=>{
-        const getToken = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,"$1",);
-        axios.defaults.headers.common['Authorization'] = getToken;
-    },[]);
-    useEffect(()=>{
+    //初始化
+    useEffect(() => {
         getTags();
-    },[]);
+    }, []);
 
-    return(<>
-        <div className="container w-50 py-10">
-            <h1 className="h4 my-4">劇會標籤庫</h1>
-            <form onSubmit={addTag}>
-                <div className="input-group mb-6">
+    return (<>
+        <div className="container py-10 pt-lg-0">
+            <h1 className="h4 my-5 my-lg-6">劇會標籤庫</h1>
+
+
+            <form className="mb-6" onSubmit={handleSubmit(onSubmit)}>
+                <div className="input-group mb-3">
                     <div className="form-floating">
-                        <input 
-                        type="text" 
-                        className="form-control" 
-                        id="tagAdd" 
-                        placeholder="標籤名稱"
-                        onChange={e=>setTagInput(e.target.value)}
-                        value={tagInput}
+                        <input
+                            {...register(`name`, {
+                                required: "請填寫標籤"
+                            })}
+                            type="text"
+                            className="form-control"
+                            id="tagAdd"
+                            placeholder="標籤名稱"
                         />
                         <label htmlFor="tagAdd" className="text-grey-400">輸入標籤名稱</label>
                     </div>
-                    <button 
-                    className="btn btn-brand-core text-white" 
-                    onClick={addTag}
+                    <button
+                        className="btn btn-brand-core text-white"
                     >新增</button>
                 </div>
+                {errors.name && <span className="text-danger">{errors.name.message}</span>}
             </form>
+
+
             <div className="mb-10">
                 {
-                    noteTags?.map((tag)=>
-                        <a 
-                        role="button" 
-                        className="my-1 mx-1 brandBtn-2-lg" 
-                        key={tag.id}
-                        onClick={()=>deleteTags(tag.id)}
+                    noteTags?.map((tag) =>
+                        <a
+                            role="button"
+                            className="my-1 mx-1 brandBtn-2-lg px-4 px-lg-5"
+                            key={tag.id}
+                            onClick={() => deleteTags(tag.id)}
                         >
-                        {tag.title}
-                        <i
-                        className="bi bi-x-circle-fill ms-2"
-                        style={{cursor:'pointer'}}
-                        ></i>
+                            {tag.title}
+                            <i
+                                className="bi bi-x-circle-fill ms-2"
+                                style={{ cursor: 'pointer' }}
+                            ></i>
                         </a>
                     )
                 }
