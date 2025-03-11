@@ -4,7 +4,7 @@ import NoteTagsModal from "./NoteTagsModal";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice"
 import { pushMsg } from "../../redux/slice/toastSlice";
 import Cookies from "js-cookie";
@@ -46,7 +46,8 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
     const genderTags = ['不限男女', '限男生', '限女生'];
     const ageTags = ['不限年齡', '限年齡'];
     const areaTags = ['不限居住地', '限居住地'];
-    const city = ['台北', '台中', '高雄'];
+    const city = useSelector(state=>state.defaultDataStore.city);
+    
 
     // 用戶自輸入值
     const [imageUrl, setImageUrl] = useState('');
@@ -123,7 +124,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
             return newNoteTags;
         });
     };
-
+    // 複製網址
     const copyWebsite = async () => {
         try {
             await navigator.clipboard.writeText(`${pageUrl}/${unitShareDrama.id}`);
@@ -137,6 +138,12 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 status: 'failed',
             }));
         }
+    };
+
+    // google地圖
+    const generateMapUrl = (mapLocation) => {
+        const encodedLocation = encodeURIComponent(mapLocation);
+        return `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
     };
 
     const onSubmitForm = async (data) => {
@@ -194,6 +201,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 closeDramaForm();
             } catch (err) {
                 const message = err.response.data;
+                message = Array.isArray(message) ? message : [message]
                 dispatch(pushMsg({
                     text: message.join('、'),
                     status: 'failed',
@@ -212,11 +220,12 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 getDramas();
                 closeDramaForm();
             } catch (err) {
-                // const message = err.response.data;
-                //  dispatch(pushMsg({
-                //      text: message.join('、'),
-                //      status: 'failed',
-                //  }));
+                const message = err.response.data;
+                message = Array.isArray(message) ? message : [message]
+                dispatch(pushMsg({
+                    text: message.join('、'),
+                    status: 'failed',
+                }));
                 console.log(err)
             } finally {
                 dispatch(changeLoadingState(false));
@@ -233,12 +242,6 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
     }, []);
 
     useEffect(() => {
-        const getToken = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
-        axios.defaults.headers.common['Authorization'] = getToken;
-    }, []);
-
-    useEffect(() => {
-
         if (modalMode === 'edit') {
             setImageUrl(unitDrama.imageUrl || '')
             setImagesUrl(unitDrama.imagesUrl || []);
@@ -489,26 +492,24 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                                                     {errors.location && ('⛔' + `${errors.location.message}`)}
                                                 </p>
                                             </div>
-                                            <div className="input-group mb-3">
-                                                <input
-                                                    {...register('location', {
-                                                        required: '請輸入地址',
-                                                    })}
-                                                    name="location"
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="輸入地址"
-                                                />
-                                                <span className="input-group-text bg-brand-600 text-white" style={{ cursor: 'pointer' }}>搜地圖</span>
-                                            </div>
-                                            <img src="https://images.unsplash.com/photo-1586449480558-33ae22ffc60d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="地圖" className=" d-block object-fit" style={{ height: '200px' }} />
-                                            <div className="d-flex mt-3">
-                                                <i className="bi bi-geo-alt-fill text-brand-600 fs-6 me-1"></i>
-                                                <div>
-                                                    <p className="h6 text-brand-600">衛武營 國家藝術文化中心</p>
-                                                    <p className="text-grey-500">{location}</p>
-                                                </div>
-                                            </div>
+                                            <input
+                                                {...register('location', {
+                                                    required: '請輸入詳細地址或地標',
+                                                })}
+                                                name="location"
+                                                type="text"
+                                                className="form-control my-2"
+                                                placeholder="請輸入詳細地址或地標"
+                                            />
+                                            <iframe
+                                                src={generateMapUrl(location)}
+                                                width="100%"
+                                                height="300"
+                                                style={{ border: 0, borderRadius: "8px" }}
+                                                allowFullScreen=""
+                                                loading="lazy"
+                                                >
+                                            </iframe>
                                         </div>
 
                                         {/* 劇會費用 */}
