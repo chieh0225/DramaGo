@@ -3,6 +3,9 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
 const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama}) => {
+    const randomNumber = Math.floor(Math.random() * 10);
+    const startDate = dayjs(drama.date.start);
+    const endDate = dayjs(drama.date.end);
 
     return(<>
     <div className="col">
@@ -13,8 +16,17 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                 </div>
             </div>
             <div className="badge-group position-absolute d-flex flex-column">
-                <span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">差一人出團</span>
-                <span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">三天內到期</span>
+                {
+                    drama.people-randomNumber===1?
+                    (<span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">差一人出團</span>   
+                    ):(
+                    drama.people-randomNumber<=0 &&(<span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">滿團</span>
+                    ))
+                }
+                {
+                    randomNumber<=3 &&
+                    <span className="fs-6 badge bg-brand-700 py-2 px-5 rounded-pill rounded-start my-1">三天內到期</span>
+                }
             </div>
             <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{drama.title}</h5>
@@ -27,7 +39,7 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                 </div>
                 <p className="card-text">
                     <i className="bi bi-clock text-grey-300 me-4 mb-3"></i>
-                    <time dateTime={drama.date.start} className="fs-b2 text-grey-700">{dayjs(drama.date.start).format('YYYY/MM/DD hh:mm A')}~{dayjs(drama.date.end).format('YYYY/MM/DD hh:mm A')}</time>
+                    <time dateTime={drama.date.start} className="fs-b2 text-grey-700">{startDate.format('YYYY/MM/DD hh:mm A')}~{endDate.format('YYYY/MM/DD hh:mm A')}</time>
                 </p>
                 <p className="card-text">
                     <i className="bi bi-geo-alt text-grey-300 me-4 mb-3"></i>
@@ -36,7 +48,7 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                 <p className="card-text">
                     <i className="bi bi-people text-grey-300 me-4 mb-3"></i>
                     <span className="text-grey-700 me-4">欲揪人數｜<span>{drama.people}</span></span>
-                    <span className="text-grey-700">已跟團者｜<span>2</span></span>
+                    <span className="text-grey-700">已跟團者｜<span>{randomNumber}</span></span>
                 </p>
                 <div className="mt-auto">
                     <hr />
