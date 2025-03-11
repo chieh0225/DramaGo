@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Modal, Offcanvas } from "bootstrap";
+import { useOutletContext,useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
+import { Modal, Offcanvas } from "bootstrap";
+
+import axios from "axios";
+import Cookies from "js-cookie";
+import Swal from "sweetAlert2";
 
 import Breadcrumb from "../../components/Breadcrumb";
 import SearchBar from "../../components/SearchBar";
 import Dropdown from "../../components/Dropdown";
 import DramaFormModal from "../../components/modal/DramaFormModal";
-import axios from "axios";
-import { useOutletContext } from "react-router-dom";
 import TagsFilter from "../../components/TagsFilter";
 import DramaListCard from "../../components/card/DramaListCard";
 import DramaListTab from "../../components/tab/DramaListTab";
-
-
+import LoginModal from "../../components/modal/LoginModal";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -38,13 +40,43 @@ const DramaList = () => {
     const searchOffcanvasInstance = useRef(null);
     const [modalMode, setModalMode] = useState('');
     const openButtonRef = useRef(null);
-    const { dramas, setDramas, members, setMembers } = useOutletContext();
+    const { dramas, setDramas, members, setMembers,mymodal } = useOutletContext();
     const [loveDramas, setLoveDramas] = useState([]);
     const [filterDramas, setFilterDramas] = useState([]);
     const [unitShareDrama, setUnitShareDrama] = useState({});
     const [dramaState, setDramaState] = useState('onGoing');
     const dispatch = useDispatch();
     const [phoneSearchState, setPhoneSearchState] = useState(false);
+    const token = Cookies.get(`token`);
+    const navigate = useNavigate();
+
+    // 彈跳視窗
+    const showAlert = () => {
+        let timerInterval;
+        Swal.fire({
+        title: '<span style="color: #FF8A20;"><i class="bi bi-person-fill-exclamation me-2 fs-2"></i>請先登入</span>',
+        html: "倒數<b></b>自動跳轉登入頁",
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+            timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+            mymodal.current.show();
+        },
+        customClass: {
+            title: "swal-title-color", 
+        }
+        }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+        }
+        });
+    };
 
     // 開關劇會modal
     const openDramaForm = () => {
@@ -188,7 +220,7 @@ const DramaList = () => {
 
     useEffect(() => {
         getDramas();
-    }, [modalMode]);
+    }, [modalMode,token]);
 
     const phoneSearch = () => {
         setPhoneSearchState(true)
@@ -209,8 +241,12 @@ const DramaList = () => {
                                 className="btn fs-5 text-white ms-9"
                                 style={{ "--bs-btn-border-color": "none" }}
                                 onClick={() => {
-                                    setModalMode('add');
-                                    openDramaForm();
+                                    if (token) {
+                                        setModalMode('add');
+                                        openDramaForm();
+                                    }else{
+                                        showAlert();
+                                    }
                                 }}
                             >
                                 <i className="bi bi-plus-circle-fill"></i>
@@ -270,6 +306,7 @@ const DramaList = () => {
                                         setModalMode={setModalMode}
                                         setUnitShareDrama={setUnitShareDrama}
                                         member={member}
+                                        showAlert={showAlert}
                                         />
                                     )
                                 })
@@ -321,6 +358,9 @@ const DramaList = () => {
                 closeDramaForm={closeDramaForm}
                 modalMode={modalMode}
                 unitShareDrama={unitShareDrama}
+            />
+            <LoginModal
+                mymodal={mymodal}
             />
 
 

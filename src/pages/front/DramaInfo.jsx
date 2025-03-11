@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { useParams } from "react-router-dom";
-import "../../assets/scss/pages/dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import AttendModal from "../../components/modal/AttendModal";
 import ShareModal from "../../components/modal/ShareModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
-import { useParams } from "react-router-dom";
 import Breadcrumb from "../../components/Breadcrumb";
 import "swiper/css";
 import "swiper/css/free-mode";

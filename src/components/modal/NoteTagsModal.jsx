@@ -9,6 +9,12 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 
 const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedNoteTag,setSelectedNoteTag}) => {
     const dispatch = useDispatch();
+    const token = Cookies.get(`token`)
+    const config = {
+        headers : {
+            Authorization : `${token}`
+        }
+        }
     const [noteTags,setNoteTags] = useState([]);
     const handleCheckbox = (tag) => {
         setSelectedNoteTag(prev=>{
@@ -26,12 +32,6 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
     };
 
     const getTags = async() => {
-        const token = Cookies.get(`token`)
-        const config = {
-            headers : {
-              Authorization : `${token}`
-            }
-          }
         try {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/coupons` , config);
             setNoteTags(res.data.coupons);
@@ -54,7 +54,10 @@ const NoteTagsModal = ({noteModalRef,closeNoteModal,setIsOpenNoteModal,selectedN
 
     
     useEffect(()=>{
-        getTags();
+        if (token) {
+            getTags();
+
+        }
     },[]);
 
 
