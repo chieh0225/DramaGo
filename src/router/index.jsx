@@ -34,7 +34,7 @@ const router = createHashRouter([
                 element: <DramaList />,
             },
             {
-                path: "dramaInfo", //劇會內頁
+                path: "dramaInfo/:id", //劇會內頁
                 element: <DramaInfo />,
             },
             {
@@ -79,14 +79,6 @@ const router = createHashRouter([
         path: '*', //404錯誤頁
         element: <NotFound />
     },
-    {
-        path: '/design',     //樣式檢視頁 (最後會刪掉)
-        element: <Design />
-    },
-    {
-        path: 'compView',
-        element: <ComponentsView />
-    }
 ]
 );
 

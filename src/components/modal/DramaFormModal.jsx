@@ -13,7 +13,7 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 const uid = localStorage.getItem('uid');
 const now = dayjs();
-const pageUrl = window.location.href;
+const pageUrl = window.location.href.replace("dramaList", "dramaInfo");
 
 const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, unitDrama, getDramas , unitShareDrama }) => {
 
@@ -64,9 +64,11 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
+
         dispatch(changeLoadingState(true));
         try {
             const token = Cookies.get(`token`);
+            
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -82,10 +84,10 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
             }));
         } catch (err) {
             const message = err.response.data;
-             dispatch(pushMsg({
-                 text: message.join('、'),
-                 status: 'failed',
-             }));
+            dispatch(pushMsg({
+                text: message.join('、'),
+                status: 'failed',
+            }));
         } finally {
             dispatch(changeLoadingState(false));
         };
@@ -130,9 +132,8 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 status: 'success',
             }));
         } catch (err) {
-            const message = err.response.data;
             dispatch(pushMsg({
-                text: message.join('、'),
+                text: '複製失敗',
                 status: 'failed',
             }));
         }
@@ -193,10 +194,10 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 closeDramaForm();
             } catch (err) {
                 const message = err.response.data;
-                 dispatch(pushMsg({
-                     text: message.join('、'),
-                     status: 'failed',
-                 }));
+                dispatch(pushMsg({
+                    text: message.join('、'),
+                    status: 'failed',
+                }));
             } finally {
                 dispatch(changeLoadingState(false));
             };
@@ -785,7 +786,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                                 />
                                 <button
                                     type="button"
-                                    className="btn bg-brand-core w-100 text-white"
+                                    className="btn brandBtn-1-lg w-100 text-white"
                                     onClick={copyWebsite}
                                 >複製網址</button>
                             </>

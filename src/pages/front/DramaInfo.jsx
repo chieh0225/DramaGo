@@ -8,12 +8,14 @@ import AttendModal from "../../components/modal/AttendModal";
 import ShareModal from "../../components/modal/ShareModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
+import { useParams } from "react-router-dom";
+import Breadcrumb from "../../components/Breadcrumb";
 import "swiper/css";
 import "swiper/css/free-mode";
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
-const DRAMA_ID = "-OKpYUNk8DZmOwsetHPD";
+
 
 // 設定 axios 預設值
 axios.defaults.headers.common["Authorization"] =
@@ -22,8 +24,17 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.put["Content-Type"] = "application/json";
 axios.defaults.withCredentials = false;
 
+
+
+
 const DramaInfo = () => {
   const navigate = useNavigate();
+
+  // 取得網址的劇會id
+  const params = useParams();
+  const {id:DRAMA_ID} = params;
+  
+  
   const [dramaData, setDramaData] = useState({
     title: "",
     participants: [
@@ -54,28 +65,44 @@ const DramaInfo = () => {
   const [remainingSpots, setRemainingSpots] = useState(0);
   const maxLength = 1000;
 
-  // 自動登入
-  const autoLogin = async () => {
-    try {
-      const response = await axios.post(`${BASE_URL}/admin/signin`, {
-        username: "dramaGo@gmail.com",
-        password: "dramago",
-      });
-
-      if (response.data.token) {
-        const { token, expired } = response.data;
-        document.cookie = `token=${token}; expires=${new Date(expired)}`;
-        axios.defaults.headers.common["Authorization"] = token;
-        console.log("登入成功，token 已儲存");
-      }
-    } catch (error) {
-      console.error("登入失敗：", error);
+  //麵包屑變數 
+  const pageLink = [
+    {
+        name: `首頁`,
+        link: `/`
+    },
+    {
+        name: `劇會總覽`,
+        link: `/dramaList`
+    },
+    {
+        name: `${dramaData.title}`,
+        link: `/dramaInfo`
     }
-  };
+]
 
-  useEffect(() => {
-    autoLogin();
-  }, []);
+  // // 自動登入
+  // const autoLogin = async () => {
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/admin/signin`, {
+  //       username: "dramaGo@gmail.com",
+  //       password: "dramago",
+  //     });
+
+  //     if (response.data.token) {
+  //       const { token, expired } = response.data;
+  //       document.cookie = `token=${token}; expires=${new Date(expired)}`;
+  //       axios.defaults.headers.common["Authorization"] = token;
+  //       console.log("登入成功，token 已儲存");
+  //     }
+  //   } catch (error) {
+  //     console.error("登入失敗：", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   autoLogin();
+  // }, []);
 
   const generateMapUrl = (location) => {
     const encodedLocation = encodeURIComponent(location);
@@ -399,11 +426,7 @@ const DramaInfo = () => {
               <div className="col-12">
                 <div className="drama-info__title-section mb-md-10 mb-6">
                   <p className="d-none d-md-block mb-6 ">
-                    <span className="text-grey-400">首頁</span> &gt;
-                    <span className="text-grey-400">聚會總覽</span> &gt;
-                    <span className="text-brand-300 fw-semibold">
-                      {dramaData.title}
-                    </span>
+                    <Breadcrumb pageLink={pageLink}/>
                   </p>
                   <p className="text-grey-950 fs-md-2 fs-5 fw-semibold mb-6">
                     {dramaData.title}
