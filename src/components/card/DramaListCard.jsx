@@ -1,12 +1,14 @@
 
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama,member}) => {
+const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama,member,showAlert}) => {
     
     const randomNumber = Math.floor(Math.random() * 10);
     const startDate = dayjs(drama.date.start);
     const endDate = dayjs(drama.date.end);
+    const token = Cookies.get(`token`);
 
 
     return(<>
@@ -70,7 +72,14 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                             type="button" 
                             className="btn p-0" 
                             style={{ "--bs-btn-border-color": "none" }}
-                            onClick = {()=>handleLoveClick(drama.id)}
+                            onClick = {()=>{
+                                if (token) {
+                                    handleLoveClick(drama.id);
+                                }else{
+                                    showAlert();
+                                }
+                            }}
+                                
                             >
                                 <i className={`bi text-brand-core fs-2 mx-1 ${loveDramas.some(item=>item.product.id===drama.id)?'bi-bookmark-heart-fill':'bi-bookmark-heart'}`}></i>
                             </button>

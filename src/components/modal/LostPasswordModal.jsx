@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect,useId } from "react";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 import PasswordReModal from "./PasswordReModal";
@@ -14,6 +14,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
     const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
     const timeIdRef = useRef(null)
     const mypasswordRef = useRef(null)
+    const id = useId();
 
     //表單
     const onSubmit = () => {
@@ -77,7 +78,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="lostemail" className="form-label">Email</label>
+                                        <label htmlFor={`lostemail${id}`} className="form-label">Email</label>
                                         <input {...register("lostemail", {
                                             required: "請正確填寫email",
                                             validate: {
@@ -89,7 +90,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
                                             name="lostemail"
                                             type="email"
                                             className="form-control"
-                                            id="lostemail"
+                                            id={`lostemail${id}`}
                                             aria-describedby="emailHelp"
                                             placeholder="請輸入會員信箱" />
                                         {errors.lostemail && <span className="text-danger">{errors.lostemail.message}</span>}

@@ -3,7 +3,11 @@
         @include rwd-lg-max {
             display: none;
         }
-}
+    }
+
+    .swal-title-color{
+        color: red;
+    }
 
     .addDrama-bg{
         height: 115px;
