@@ -1,9 +1,14 @@
 // Todo 更換圖片功能
 
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate,NavLink, Outlet,useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-import avatar from "/images/avatar-3.png";
+// import avatar from "/images/avatar-3.png";
 
+
+const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+const API_URL = import.meta.env.VITE_APP_API_PATH;
 const routes = [
   {
     path: "profileInfo",
@@ -73,9 +78,28 @@ const routes = [
   },
 ];
 
+
 const Profile = () => {
+  const params = useParams();
+  const {id:memberId} = params;
+  const [memberInfo,setMemberInfo] = useState({});
+
+  const getMember = async()=>{
+    try {
+      const res = await axios.get(`${BASE_URL}/api/${API_URL}/article/${memberId}`);
+      setMemberInfo(res.data.article);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(()=>{
+    getMember();
+  },[memberId]);
+  
   return (
     <>
+    <Navigate to={routes[0].path} replace />
       <div className="profile-container">
         <div className="container pt-13 pb-18">
           <div className="row">
@@ -85,7 +109,7 @@ const Profile = () => {
                   <div className="profile-pic-container position-relative d-inline-block">
                     <div className="flex-shrink-0">
                       <img
-                        src={avatar}
+                        src={memberInfo.image}
                         alt="正在COS的角色"
                         width="200"
                         height="200"
@@ -118,8 +142,8 @@ const Profile = () => {
                   <p className="fs-c mt-11 mb-3">
                     我正在COS  薛芳菲 (墨雨雲間)
                   </p>
-                  <p className="fs-3 fw-bold mb-3">樂樂</p>
-                  <p className="fs-6 mb-11">愛追劇的樂</p>
+                  <p className="fs-3 fw-bold mb-3">{memberInfo.author}</p>
+                  <p className="fs-6 mb-11">{memberInfo.title}</p>
                 </div>
                 <div className="profile-nav">
                   <ul className="nav nav-pills flex-column gap-5">

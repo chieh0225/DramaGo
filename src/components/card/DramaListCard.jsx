@@ -2,10 +2,12 @@
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
-const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama}) => {
+const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama,member}) => {
+    
     const randomNumber = Math.floor(Math.random() * 10);
     const startDate = dayjs(drama.date.start);
     const endDate = dayjs(drama.date.end);
+
 
     return(<>
     <div className="col">
@@ -53,15 +55,15 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                 <div className="mt-auto">
                     <hr />
                     <div className="d-flex justify-content-between">
-                        <div className="d-flex align-items-center cursor">
+                        <Link to={`/profile/${member&&member.id}`} role="button" className="d-flex align-items-center">
                             <div className="avatar me-2">
-                                <img src="https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="頭像" className="object-fit rounded-circle" />
+                                <img src={member&&member.image} alt="頭像" className="object-fit rounded-circle" />
                             </div>
                             <div className="d-flex flex-column">
-                                <span className="h6">樂樂</span>
+                                <span className="h6">{member&&member.author}</span>
                                 <span className="text-grey-400 fs-c">揪團主</span>
                             </div>
-                        </div>
+                        </Link>
                         <div className="d-flex align-items-center">
                             {/* 最愛按鈕 */}
                             <button 

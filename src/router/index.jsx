@@ -1,4 +1,4 @@
-import { createHashRouter, Navigate } from "react-router-dom";
+import { createHashRouter} from "react-router-dom";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -16,9 +16,6 @@ import TagManage from "../pages/admin/TagManage";
 import Chart from "../pages/admin/Chart";
 // 全域
 import NotFound from "../components/NotFound";
-// 套件
-import Design from "../plugin/Design";
-import ComponentsView from "../plugin/ComponentsView";
 
 const router = createHashRouter([
     {
@@ -38,7 +35,7 @@ const router = createHashRouter([
                 element: <DramaInfo />,
             },
             {
-                path: "profile", //個人主頁
+                path: "profile/:id", //個人主頁
                 element: <Profile />,
                 children: [
                     {
