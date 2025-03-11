@@ -1,5 +1,6 @@
 
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalMode,setUnitShareDrama}) => {
 
@@ -75,7 +76,12 @@ const DramaListCard = ({drama,loveDramas,handleLoveClick,openDramaForm,setModalM
                             </button>
 
                             {/* 查看按鈕 */}
-                            <button type="button" className="brandBtn-1-lg">劇會內容</button>
+                            <Link to={`/dramaInfo/${drama.id}`}>
+                            <button type="button" className="brandBtn-1-lg">
+                                劇會內容
+                            </button>
+                            </Link>
+                            
                         </div>
                     </div>
                 </div>
