@@ -11,8 +11,9 @@ import DramaFormModal from "../../components/modal/DramaFormModal";
 import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 import TagsFilter from "../../components/TagsFilter";
-import DramaListCard from "../../components/card/dramaListCard";
+import DramaListCard from "../../components/card/DramaListCard";
 import DramaListTab from "../../components/tab/DramaListTab";
+
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -37,13 +38,14 @@ const DramaList = () => {
     const searchOffcanvasInstance = useRef(null);
     const [modalMode, setModalMode] = useState('');
     const openButtonRef = useRef(null);
-    const { dramas, setDramas } = useOutletContext()
+    const { dramas, setDramas, members, setMembers } = useOutletContext();
     const [loveDramas, setLoveDramas] = useState([]);
     const [filterDramas, setFilterDramas] = useState([]);
     const [unitShareDrama, setUnitShareDrama] = useState({});
     const [dramaState, setDramaState] = useState('onGoing');
     const dispatch = useDispatch();
-    const [phoneSearchState, setPhoneSearchState] = useState(false)
+    const [phoneSearchState, setPhoneSearchState] = useState(false);
+
     // 開關劇會modal
     const openDramaForm = () => {
         dramaFormInstance.current.show();
@@ -65,13 +67,30 @@ const DramaList = () => {
             setDramas(res.data.products);
             setFilterDramas(res.data.products);
         } catch (err) {
-            const message = err.response.data;
+            const message = err.response?.data;
+            message = Array.isArray(message) ? message : [message]
             dispatch(pushMsg({
                 text: message.join('、'),
                 status: 'failed',
             }));
         } finally {
             dispatch(changeLoadingState(false));
+        }
+    };
+
+    // 取得會員列表
+    const getMember = async() =>{
+    try {
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
+            setMembers(res.data.articles);
+        } catch (err) {
+            console.log(err);
+            const message = err.response?.data;
+            message = Array.isArray(message) ? message : [message]
+            dispatch(pushMsg({
+                text: message.join('、'),
+                status: 'failed',
+            }));
         }
     };
 
@@ -164,6 +183,7 @@ const DramaList = () => {
     useEffect(()=>{
         getDramas();
         getLoveDramas();
+        getMember();
     },[]);
 
     useEffect(() => {
@@ -237,16 +257,22 @@ const DramaList = () => {
                             {
                                 
                                 dramas.filter(drama=>dramaState==='onGoing'?(drama.isFinish===0):(drama.isFinish===1)).map(drama=>
-                                    <DramaListCard 
-                                    key={drama.id} 
-                                    drama={drama}
-                                    loveDramas={loveDramas}
-                                    handleLoveClick={handleLoveClick}
-                                    openDramaForm={openDramaForm}
-                                    setModalMode={setModalMode}
-                                    setUnitShareDrama={setUnitShareDrama}
-                                    />
-                                )
+                                {
+                                    const randomIndex = Array.isArray(members)&& Math.floor(Math.random() * members.length);
+                                    const member = members && members[randomIndex];
+                                    return(
+                                        <DramaListCard 
+                                        key={drama.id} 
+                                        drama={drama}
+                                        loveDramas={loveDramas}
+                                        handleLoveClick={handleLoveClick}
+                                        openDramaForm={openDramaForm}
+                                        setModalMode={setModalMode}
+                                        setUnitShareDrama={setUnitShareDrama}
+                                        member={member}
+                                        />
+                                    )
+                                })
                             }
                             
                         </div>
