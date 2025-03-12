@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../../assets/scss/pages/dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
 import { useNavigate } from "react-router-dom";
@@ -13,16 +13,9 @@ import "swiper/css/free-mode";
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
-const DRAMA_ID = "-OKpYUNk8DZmOwsetHPD";
-
-// 設定 axios 預設值
-axios.defaults.headers.common["Authorization"] =
-  localStorage.getItem("token") || "";
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.put["Content-Type"] = "application/json";
-axios.defaults.withCredentials = false;
 
 const DramaInfo = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [dramaData, setDramaData] = useState({
     title: "",
@@ -114,9 +107,9 @@ const DramaInfo = () => {
       const bookmarkedItems = JSON.parse(
         localStorage.getItem("bookmarkedItems") || "[]"
       );
-      setIsBookmarked(bookmarkedItems.includes(dramaData.id));
+      setIsBookmarked(bookmarkedItems.includes(id));
     }
-  }, [dramaData]);
+  }, [dramaData, id]);
 
   // 處理收藏功能
   const handleBookmark = () => {
@@ -126,8 +119,8 @@ const DramaInfo = () => {
       localStorage.getItem("bookmarkedItems") || "[]"
     );
     const newBookmarkedItems = isBookmarked
-      ? bookmarkedItems.filter((id) => id !== dramaData.id)
-      : [...bookmarkedItems, dramaData.id];
+      ? bookmarkedItems.filter((itemId) => itemId !== id)
+      : [...bookmarkedItems, id];
 
     localStorage.setItem("bookmarkedItems", JSON.stringify(newBookmarkedItems));
     setIsBookmarked(!isBookmarked);
@@ -151,9 +144,7 @@ const DramaInfo = () => {
   // 取得聚會資料
   const getDramaData = async () => {
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/${API_URL}/product/${DRAMA_ID}`
-      );
+      const res = await axios.get(`${BASE_URL}/api/${API_URL}/product/${id}`);
       // 確保 participants 有值
       const productData = {
         ...res.data.product,
@@ -195,7 +186,7 @@ const DramaInfo = () => {
 
   useEffect(() => {
     getDramaData();
-  }, []);
+  }, [id]);
 
   // 計算剩餘名額
   const calculateRemainingSpots = async () => {
@@ -208,7 +199,7 @@ const DramaInfo = () => {
       const dramaOrders = orders.filter((order) => {
         // 遍歷訂單中的所有產品
         return Object.values(order.products).some(
-          (product) => product.product.id === DRAMA_ID
+          (product) => product.product.id === id
         );
       });
 
@@ -217,7 +208,7 @@ const DramaInfo = () => {
       const totalOrdered = dramaOrders.reduce((sum, order) => {
         // 遍歷訂單中的所有產品，找出當前戲劇的數量
         const dramaProduct = Object.values(order.products).find(
-          (product) => product.product.id === DRAMA_ID
+          (product) => product.product.id === id
         );
         return sum + (dramaProduct ? dramaProduct.qty : 0);
       }, 0);
@@ -251,7 +242,7 @@ const DramaInfo = () => {
 
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -283,7 +274,7 @@ const DramaInfo = () => {
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -306,7 +297,7 @@ const DramaInfo = () => {
   const handleDeleteReply = async (commentId, replyId) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -353,7 +344,7 @@ const DramaInfo = () => {
 
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -809,7 +800,7 @@ const DramaInfo = () => {
       </div>
 
       <AttendModal
-        dramaId={DRAMA_ID}
+        dramaId={id}
         remainingSpots={remainingSpots}
         dramaData={dramaData}
         userId={userId}
