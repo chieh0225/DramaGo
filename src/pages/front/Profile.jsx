@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Navigate, NavLink, Outlet, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { pushMsg } from "../../redux/slice/toastSlice";
@@ -86,6 +86,9 @@ const Profile = () => {
 
   const [avatarUrl, setAvatarUrl] = useState("");
   const [imageUpdated, setImageUpdated] = useState(false);
+
+  const state = true; // 假設是登入狀態
+  const mymodal = useRef(null);
 
   const getMember = async () => {
     const token = Cookies.get("token");
@@ -290,7 +293,7 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <Outlet />
+            <Outlet context={{ state, mymodal }} />
           </div>
         </div>
       </div>
