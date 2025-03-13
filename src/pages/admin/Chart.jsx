@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import * as c3 from "c3";
+import c3 from "c3";
 import "c3/c3.css";
+import "../../assets/scss/pages/_chart.scss";
 
 const Chart = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -316,7 +317,7 @@ const Chart = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="row align-items-center mb-4"
       >
-        <div className="col-6" action="">
+        <div className="col-12 col-md-6 mb-3">
           <div className="input-group align-items-center">
             <span className="me-4 fs-b1 fw-semibold">日期</span>
             <input
@@ -335,54 +336,67 @@ const Chart = () => {
           </div>
         </div>
 
-        <div className="col-3 d-flex flex-nowrap">
-          <span
-            style={{ whiteSpace: `nowrap` }}
-            className="me-4 fs-b1 fw-semibold"
-          >
-            類別
-          </span>
-          <select {...register("category")} className="form-select w-100">
-            {categoryTags.map((tag, index) => (
-              <option key={index} value={index}>
-                {tag}
-              </option>
-            ))}
-          </select>
+        <div className="col-12 col-md-3 mb-3">
+          <div className="d-flex flex-nowrap">
+            <span
+              style={{ whiteSpace: `nowrap` }}
+              className="me-4 fs-b1 fw-semibold"
+            >
+              類別
+            </span>
+            <select {...register("category")} className="form-select w-100">
+              {categoryTags.map((tag, index) => (
+                <option key={index} value={index}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="col-3 d-flex flex-nowrap">
-          <span
-            style={{ whiteSpace: `nowrap` }}
-            className="me-4 fs-b1 fw-semibold"
-          >
-            出團情況
-          </span>
-          <select {...register("status")} className="form-select w-100">
-            <option value="">全部</option>
-            <option value="已出團">已出團</option>
-            <option value="待確認出團">待確認出團</option>
-            <option value="取消出團">取消出團</option>
-          </select>
+        <div className="col-12 col-md-3 mb-3">
+          <div className="d-flex flex-nowrap">
+            <span
+              style={{ whiteSpace: `nowrap` }}
+              className="me-4 fs-b1 fw-semibold"
+            >
+              出團情況
+            </span>
+            <select {...register("status")} className="form-select w-100">
+              <option value="">全部</option>
+              <option value="已出團">已出團</option>
+              <option value="待確認出團">待確認出團</option>
+              <option value="取消出團">取消出團</option>
+            </select>
+          </div>
         </div>
 
-        <div className="col-12 mt-3 text-end">
+        <div className="col-12 text-end">
           <button type="submit" className="btn btn-primary">
             查詢
           </button>
         </div>
       </form>
-      <div className="row mb-4">
-        <div className="col-6">
-          <div id="pieChart"></div>
-        </div>
-        <div className="col-6">
-          <div id="barChart"></div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12">
-          <div id="lineChart"></div>
+      <div className="chart-container">
+        <div className="row">
+          <div className="col-12 col-md-6 mb-4">
+            <div className="chart-wrapper">
+              <h3 className="text-center mb-4">活動狀態分布</h3>
+              <div id="pieChart"></div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 mb-4">
+            <div className="chart-wrapper">
+              <h3 className="text-center mb-4">活動狀態趨勢</h3>
+              <div id="barChart"></div>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="chart-wrapper">
+              <h3 className="text-center mb-4">活動類別趨勢</h3>
+              <div id="lineChart"></div>
+            </div>
+          </div>
         </div>
       </div>
     </>
