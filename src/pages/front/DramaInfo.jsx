@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "../../assets/scss/pages/_dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AttendModal from "../../components/modal/AttendModal";
 import ShareModal from "../../components/modal/ShareModal";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,25 +14,10 @@ import "swiper/css/free-mode";
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
 
-
-// 設定 axios 預設值
-axios.defaults.headers.common["Authorization"] =
-  localStorage.getItem("token") || "";
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.put["Content-Type"] = "application/json";
-axios.defaults.withCredentials = false;
-
-
-
-
 const DramaInfo = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // 取得網址的劇會id
-  const params = useParams();
-  const {id:DRAMA_ID} = params;
-  
-  
   const [dramaData, setDramaData] = useState({
     title: "",
     participants: [
@@ -62,44 +48,44 @@ const DramaInfo = () => {
   const [remainingSpots, setRemainingSpots] = useState(0);
   const maxLength = 1000;
 
-  //麵包屑變數 
+  //麵包屑變數
   const pageLink = [
     {
-        name: `首頁`,
-        link: `/`
+      name: `首頁`,
+      link: `/`,
     },
     {
-        name: `劇會總覽`,
-        link: `/dramaList`
+      name: `劇會總覽`,
+      link: `/dramaList`,
     },
     {
-        name: `${dramaData.title}`,
-        link: `/dramaInfo`
+      name: `${dramaData.title}`,
+      link: `/dramaInfo`,
+    },
+  ];
+
+  // 自動登入
+  const autoLogin = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/admin/signin`, {
+        username: "dramaGo@gmail.com",
+        password: "dramago",
+      });
+
+      if (response.data.token) {
+        const { token, expired } = response.data;
+        document.cookie = `token=${token}; expires=${new Date(expired)}`;
+        axios.defaults.headers.common["Authorization"] = token;
+        console.log("登入成功，token 已儲存");
+      }
+    } catch (error) {
+      console.error("登入失敗：", error);
     }
-]
+  };
 
-  // // 自動登入
-  // const autoLogin = async () => {
-  //   try {
-  //     const response = await axios.post(`${BASE_URL}/admin/signin`, {
-  //       username: "dramaGo@gmail.com",
-  //       password: "dramago",
-  //     });
-
-  //     if (response.data.token) {
-  //       const { token, expired } = response.data;
-  //       document.cookie = `token=${token}; expires=${new Date(expired)}`;
-  //       axios.defaults.headers.common["Authorization"] = token;
-  //       console.log("登入成功，token 已儲存");
-  //     }
-  //   } catch (error) {
-  //     console.error("登入失敗：", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   autoLogin();
-  // }, []);
+  useEffect(() => {
+    autoLogin();
+  }, []);
 
   const generateMapUrl = (location) => {
     const encodedLocation = encodeURIComponent(location);
@@ -138,9 +124,9 @@ const DramaInfo = () => {
       const bookmarkedItems = JSON.parse(
         localStorage.getItem("bookmarkedItems") || "[]"
       );
-      setIsBookmarked(bookmarkedItems.includes(dramaData.id));
+      setIsBookmarked(bookmarkedItems.includes(id));
     }
-  }, [dramaData]);
+  }, [dramaData, id]);
 
   // 處理收藏功能
   const handleBookmark = () => {
@@ -150,8 +136,8 @@ const DramaInfo = () => {
       localStorage.getItem("bookmarkedItems") || "[]"
     );
     const newBookmarkedItems = isBookmarked
-      ? bookmarkedItems.filter((id) => id !== dramaData.id)
-      : [...bookmarkedItems, dramaData.id];
+      ? bookmarkedItems.filter((itemId) => itemId !== id)
+      : [...bookmarkedItems, id];
 
     localStorage.setItem("bookmarkedItems", JSON.stringify(newBookmarkedItems));
     setIsBookmarked(!isBookmarked);
@@ -175,9 +161,7 @@ const DramaInfo = () => {
   // 取得聚會資料
   const getDramaData = async () => {
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/${API_URL}/product/${DRAMA_ID}`
-      );
+      const res = await axios.get(`${BASE_URL}/api/${API_URL}/product/${id}`);
       // 確保 participants 有值
       const productData = {
         ...res.data.product,
@@ -219,7 +203,7 @@ const DramaInfo = () => {
 
   useEffect(() => {
     getDramaData();
-  }, []);
+  }, [id]);
 
   // 計算剩餘名額
   const calculateRemainingSpots = async () => {
@@ -232,7 +216,7 @@ const DramaInfo = () => {
       const dramaOrders = orders.filter((order) => {
         // 遍歷訂單中的所有產品
         return Object.values(order.products).some(
-          (product) => product.product.id === DRAMA_ID
+          (product) => product.product.id === id
         );
       });
 
@@ -241,7 +225,7 @@ const DramaInfo = () => {
       const totalOrdered = dramaOrders.reduce((sum, order) => {
         // 遍歷訂單中的所有產品，找出當前戲劇的數量
         const dramaProduct = Object.values(order.products).find(
-          (product) => product.product.id === DRAMA_ID
+          (product) => product.product.id === id
         );
         return sum + (dramaProduct ? dramaProduct.qty : 0);
       }, 0);
@@ -275,7 +259,7 @@ const DramaInfo = () => {
 
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -307,7 +291,7 @@ const DramaInfo = () => {
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -330,7 +314,7 @@ const DramaInfo = () => {
   const handleDeleteReply = async (commentId, replyId) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -377,7 +361,7 @@ const DramaInfo = () => {
 
     try {
       const response = await axios.put(
-        `${BASE_URL}/api/${API_URL}/admin/product/${DRAMA_ID}`,
+        `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
           data: {
             ...dramaData,
@@ -423,7 +407,7 @@ const DramaInfo = () => {
               <div className="col-12">
                 <div className="drama-info__title-section mb-md-10 mb-6">
                   <p className="d-none d-md-block mb-6 ">
-                    <Breadcrumb pageLink={pageLink}/>
+                    <Breadcrumb pageLink={pageLink} />
                   </p>
                   <p className="text-grey-950 fs-md-2 fs-5 fw-semibold mb-6">
                     {dramaData.title}
@@ -829,7 +813,7 @@ const DramaInfo = () => {
       </div>
 
       <AttendModal
-        dramaId={DRAMA_ID}
+        dramaId={id}
         remainingSpots={remainingSpots}
         dramaData={dramaData}
         userId={userId}

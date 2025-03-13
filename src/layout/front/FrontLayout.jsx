@@ -5,7 +5,6 @@ import FrontFooter from "./FrontFooter";
 import DramaToasts from "../../components/DramaToasts";
 import Loading from "../../components/Loading";
 
-
 const FrontLayout = () => {
   const [state, setState] = useState(false);
   const mymodal = useRef(null);
@@ -23,10 +22,10 @@ const FrontLayout = () => {
       <Outlet context={{ state, mymodal, setDramas, dramas,members, setMembers }} />
       <FrontFooter />
 
-            <Loading/>
-            <DramaToasts/>
-            </>
-            )
+      <Loading />
+      <DramaToasts />
+    </>
+  );
 };
 
 export default FrontLayout;
