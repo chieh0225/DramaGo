@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useOutletContext,useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
@@ -48,7 +48,6 @@ const DramaList = () => {
     const dispatch = useDispatch();
     const [phoneSearchState, setPhoneSearchState] = useState(false);
     const token = Cookies.get(`token`);
-    const navigate = useNavigate();
 
     // 彈跳視窗
     const showAlert = () => {
@@ -238,7 +237,7 @@ const DramaList = () => {
                         <div className="addDrama-bg rounded-5 rounded-bottom-0 d-flex align-items-center">
                             <button
                                 type="button"
-                                className="btn fs-5 text-white ms-9"
+                                className="btn fs-5 text-white ms-9 createDramaBtn"
                                 style={{ "--bs-btn-border-color": "none" }}
                                 onClick={() => {
                                     if (token) {
