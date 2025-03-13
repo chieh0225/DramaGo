@@ -8,7 +8,6 @@ import AttendModal from "../../components/modal/AttendModal";
 import ShareModal from "../../components/modal/ShareModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
-import Breadcrumb from "../../components/Breadcrumb";
 import "swiper/css";
 import "swiper/css/free-mode";
 
