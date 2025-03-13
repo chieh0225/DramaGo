@@ -17,6 +17,12 @@
         background-size: cover;
     }
 
+    .createDramaBtn{
+        &:hover{
+            text-shadow: 0 0 10px rgba($color: #ffffff, $alpha: .7);
+        }
+    }
+
     .sortBoard{
         @include rwd-lg-max {
             display: none;
