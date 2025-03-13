@@ -9,6 +9,7 @@ const FrontLayout = () => {
   const [state, setState] = useState(false);
   const mymodal = useRef(null);
   const [dramas, setDramas] = useState([]);
+  const [members, setMembers] = useState([]);
   return (
     <>
       <FrontHeader
@@ -18,7 +19,7 @@ const FrontLayout = () => {
         setDramas={setDramas}
         dramas={dramas}
       />
-      <Outlet context={{ state, mymodal, setDramas, dramas }} />
+      <Outlet context={{ state, mymodal, setDramas, dramas,members, setMembers }} />
       <FrontFooter />
 
       <Loading />

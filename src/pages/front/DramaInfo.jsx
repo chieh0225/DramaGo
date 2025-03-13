@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import "../../assets/scss/pages/dramaInfo.scss";
+import "../../assets/scss/pages/_dramaInfo.scss";
 import avatarImage from "../../assets/images/Frame 1000005391.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AttendModal from "../../components/modal/AttendModal";
 import ShareModal from "../../components/modal/ShareModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
+import Breadcrumb from "../../components/Breadcrumb";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -17,6 +17,7 @@ const API_URL = import.meta.env.VITE_APP_API_PATH;
 const DramaInfo = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [dramaData, setDramaData] = useState({
     title: "",
     participants: [
@@ -46,6 +47,22 @@ const DramaInfo = () => {
   const [replyingTo, setReplyingTo] = useState(null);
   const [remainingSpots, setRemainingSpots] = useState(0);
   const maxLength = 1000;
+
+  //麵包屑變數
+  const pageLink = [
+    {
+      name: `首頁`,
+      link: `/`,
+    },
+    {
+      name: `劇會總覽`,
+      link: `/dramaList`,
+    },
+    {
+      name: `${dramaData.title}`,
+      link: `/dramaInfo`,
+    },
+  ];
 
   // 自動登入
   const autoLogin = async () => {
@@ -390,11 +407,7 @@ const DramaInfo = () => {
               <div className="col-12">
                 <div className="drama-info__title-section mb-md-10 mb-6">
                   <p className="d-none d-md-block mb-6 ">
-                    <span className="text-grey-400">首頁</span> &gt;
-                    <span className="text-grey-400">聚會總覽</span> &gt;
-                    <span className="text-brand-300 fw-semibold">
-                      {dramaData.title}
-                    </span>
+                    <Breadcrumb pageLink={pageLink} />
                   </p>
                   <p className="text-grey-950 fs-md-2 fs-5 fw-semibold mb-6">
                     {dramaData.title}

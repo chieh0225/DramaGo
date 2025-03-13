@@ -34,7 +34,6 @@ const TagsFilter = ({filterDramas,setDramas,dramaState}) => {
     const genderTag = watch('genderTerm');
     const ageTag = watch('ageTerm');
     const areaTag = watch('areaTerm');
-    const stateTag = watch('state');
     
     // 系統標籤
     const categoryTags = ['全部','看電影','看表演','逛劇展','買劇品','上劇課','劇本殺','接劇龍','聽劇透','遊劇旅','追影星'];
@@ -43,7 +42,6 @@ const TagsFilter = ({filterDramas,setDramas,dramaState}) => {
     const genderTags = ['全部','不限男女','限男生','限女生'];
     const ageTags = ['全部','不限年齡','限年齡'];
     const areaTags = ['全部','不限居住地','限居住地'];
-    const stateTags = ['全部','差一人出團','三天內到期'];
 
     // 複選標籤劇會篩選
     const dramaFilter = () => {
@@ -216,33 +214,6 @@ const TagsFilter = ({filterDramas,setDramas,dramaState}) => {
                 }
             </div>
         </div>
-        {
-            dramaState==='onGoing'&&
-            <div className="my-4">
-                <span className="h5 mb-4">劇會狀態</span>
-                <br />
-                {
-                    stateTags.map((tag,index)=>
-                        <a role="button" className="my-1 mx-1" key={index}>
-                            <input
-                            {...register('state')}
-                            type="radio"
-                            name="state" 
-                            className="btn-check"
-                            value={tag}
-                            id={`${uniqueId}-stateTag-${tag}`}
-                            checked={stateTag===tag}
-                            />
-                            <label
-                            className={`brandBtn-3 ${stateTag===tag&&'active'}`} 
-                            htmlFor={`${uniqueId}-stateTag-${tag}`}
-                            style={{cursor:'pointer'}}
-                            >{tag}</label>
-                        </a>
-                    )
-                }
-            </div>
-        }
     </form>
     
     </>)

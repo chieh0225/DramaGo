@@ -1,6 +1,6 @@
 import RegisterModal from "./RegisterModal";
 import LostPasswordModal from "./LostPasswordModal";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef ,useId} from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,7 @@ const LoginModal = ({ mymodal , setState}) => {
     const myRegisterModal = useRef(null);
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
     const navigate = useNavigate();
+    const id = useId();
 
     //表單登入
     const onSubmit = () => {
@@ -28,7 +29,7 @@ const LoginModal = ({ mymodal , setState}) => {
                 mymodal.current.hide();
                 navigate('/');
                 reset();
-                setState(true)
+                setState(true);
             })
             .catch((err) => {
                 console.error(`登入失敗`, err.response)
@@ -65,7 +66,7 @@ const LoginModal = ({ mymodal , setState}) => {
     return (
         <>
             {/* <!-- Modal --> */}
-            <div className="modal fade" ref={modalRef} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-hidden="true">
+            <div className="modal fade" ref={modalRef} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content bg-brand-50">
                         <div className="row">
@@ -285,7 +286,7 @@ const LoginModal = ({ mymodal , setState}) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="LoginEmail1" className="form-label">Email</label>
+                                        <label htmlFor={`LoginEmail${id}`} className="form-label">Email</label>
                                         <input
                                             {...register('email', {
                                                 required: "請填寫Eamil",
@@ -297,14 +298,14 @@ const LoginModal = ({ mymodal , setState}) => {
                                             name="email"
                                             autoComplete="email"
                                             className="form-control"
-                                            id="LoginEmail1"
+                                            id={`LoginEmail${id}`}
                                             aria-describedby="emailHelp"
                                             placeholder="信箱"
                                         />
                                         {errors.email && <span className="text-danger">{errors.email.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="LogihPassword1" className="form-label">Password</label>
+                                        <label htmlFor={`LoginPassword${id}`} className="form-label">Password</label>
                                         <input
                                             {...register('password', {
                                                 required: "請填寫密碼"
@@ -312,7 +313,7 @@ const LoginModal = ({ mymodal , setState}) => {
                                             autoComplete="current-password"
                                             type="password"
                                             className="form-control"
-                                            id="LogihPassword1"
+                                            id={`LoginPassword${id}`}
                                             placeholder="密碼"
                                         />
                                         {errors.password && <span className="text-danger">{errors.password.message}</span>}

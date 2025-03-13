@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Modal, Offcanvas } from "bootstrap";
+import { useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
+import { Modal, Offcanvas } from "bootstrap";
+
+import axios from "axios";
+import Cookies from "js-cookie";
+import Swal from "sweetAlert2";
 
 import Breadcrumb from "../../components/Breadcrumb";
 import SearchBar from "../../components/SearchBar";
 import Dropdown from "../../components/Dropdown";
 import DramaFormModal from "../../components/modal/DramaFormModal";
-import axios from "axios";
-import { useOutletContext } from "react-router-dom";
 import TagsFilter from "../../components/TagsFilter";
-import DramaListCard from "../../components/card/dramaListCard";
+import DramaListCard from "../../components/card/DramaListCard";
 import DramaListTab from "../../components/tab/DramaListTab";
+import LoginModal from "../../components/modal/LoginModal";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -35,13 +39,45 @@ const DramaList = () => {
   const searchOffcanvasInstance = useRef(null);
   const [modalMode, setModalMode] = useState("");
   const openButtonRef = useRef(null);
-  const { dramas, setDramas } = useOutletContext();
+  const { dramas, setDramas, members, setMembers, mymodal } =
+    useOutletContext();
   const [loveDramas, setLoveDramas] = useState([]);
   const [filterDramas, setFilterDramas] = useState([]);
   const [unitShareDrama, setUnitShareDrama] = useState({});
   const [dramaState, setDramaState] = useState("onGoing");
   const dispatch = useDispatch();
   const [phoneSearchState, setPhoneSearchState] = useState(false);
+  const token = Cookies.get(`token`);
+
+  // 彈跳視窗
+  const showAlert = () => {
+    let timerInterval;
+    Swal.fire({
+      title:
+        '<span style="color: #FF8A20;"><i class="bi bi-person-fill-exclamation me-2 fs-2"></i>請先登入</span>',
+      html: "倒數<b></b>自動跳轉登入頁",
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector("b");
+        timerInterval = setInterval(() => {
+          timer.textContent = `${Swal.getTimerLeft()}`;
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+        mymodal.current.show();
+      },
+      customClass: {
+        title: "swal-title-color",
+      },
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+      }
+    });
+  };
+
   // 開關劇會modal
   const openDramaForm = () => {
     dramaFormInstance.current.show();
@@ -63,7 +99,8 @@ const DramaList = () => {
       setDramas(res.data.products);
       setFilterDramas(res.data.products);
     } catch (err) {
-      const message = err.response.data;
+      const message = err.response?.data;
+      message = Array.isArray(message) ? message : [message];
       dispatch(
         pushMsg({
           text: message.join("、"),
@@ -72,6 +109,24 @@ const DramaList = () => {
       );
     } finally {
       dispatch(changeLoadingState(false));
+    }
+  };
+
+  // 取得會員列表
+  const getMember = async () => {
+    try {
+      const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
+      setMembers(res.data.articles);
+    } catch (err) {
+      console.log(err);
+      const message = err.response?.data;
+      message = Array.isArray(message) ? message : [message];
+      dispatch(
+        pushMsg({
+          text: message.join("、"),
+          status: "failed",
+        })
+      );
     }
   };
 
@@ -176,11 +231,12 @@ const DramaList = () => {
   useEffect(() => {
     getDramas();
     getLoveDramas();
+    getMember();
   }, []);
 
   useEffect(() => {
     getDramas();
-  }, [modalMode]);
+  }, [modalMode, token]);
 
   const phoneSearch = () => {
     setPhoneSearchState(true);
@@ -198,11 +254,15 @@ const DramaList = () => {
               <div className="addDrama-bg rounded-5 rounded-bottom-0 d-flex align-items-center">
                 <button
                   type="button"
-                  className="btn fs-5 text-white ms-9"
+                  className="btn fs-5 text-white ms-9 createDramaBtn"
                   style={{ "--bs-btn-border-color": "none" }}
                   onClick={() => {
-                    setModalMode("add");
-                    openDramaForm();
+                    if (token) {
+                      setModalMode("add");
+                      openDramaForm();
+                    } else {
+                      showAlert();
+                    }
                   }}
                 >
                   <i className="bi bi-plus-circle-fill"></i>
@@ -258,17 +318,25 @@ const DramaList = () => {
                       ? drama.isFinish === 0
                       : drama.isFinish === 1
                   )
-                  .map((drama) => (
-                    <DramaListCard
-                      key={drama.id}
-                      drama={drama}
-                      loveDramas={loveDramas}
-                      handleLoveClick={handleLoveClick}
-                      openDramaForm={openDramaForm}
-                      setModalMode={setModalMode}
-                      setUnitShareDrama={setUnitShareDrama}
-                    />
-                  ))}
+                  .map((drama) => {
+                    const randomIndex =
+                      Array.isArray(members) &&
+                      Math.floor(Math.random() * members.length);
+                    const member = members && members[randomIndex];
+                    return (
+                      <DramaListCard
+                        key={drama.id}
+                        drama={drama}
+                        loveDramas={loveDramas}
+                        handleLoveClick={handleLoveClick}
+                        openDramaForm={openDramaForm}
+                        setModalMode={setModalMode}
+                        setUnitShareDrama={setUnitShareDrama}
+                        member={member}
+                        showAlert={showAlert}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -329,6 +397,7 @@ const DramaList = () => {
           modalMode={modalMode}
           unitShareDrama={unitShareDrama}
         />
+        <LoginModal mymodal={mymodal} />
 
         {/* Offcanvas */}
         {/* 篩選 */}

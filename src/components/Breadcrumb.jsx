@@ -4,7 +4,7 @@ const Breadcrumb = ({pageLink}) => {
 
     return(<>
         <nav aria-label="breadcrumb">
-           <ol className="breadcrumb">
+            <ol className="breadcrumb">
                 {
                     pageLink&&
                     pageLink.map((page,index)=>

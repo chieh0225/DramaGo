@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect,useId } from "react";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 //照片
@@ -7,6 +7,7 @@ import Forgot from "../../assets/images/Forgot-password-cuate.png"
 const PasswordReModal = ({ mymodal, mypasswordRef }) => {
     const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
     const passwordReModal = useRef(null);
+    const id = useId();
 
     //表單
     const onSubmit = () => {
@@ -15,7 +16,6 @@ const PasswordReModal = ({ mymodal, mypasswordRef }) => {
         else{
             login();
         }
-           
     }
     //返回登入
     const login = ()=>{
@@ -50,7 +50,7 @@ const PasswordReModal = ({ mymodal, mypasswordRef }) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="passwordRe" className="form-label">請輸入舊密碼</label>
+                                        <label htmlFor={`PasswordRe${id}`} className="form-label">請輸入舊密碼</label>
                                         <input {...register("numOld", {
                                             required: "請填寫舊密碼",
                                         })}
@@ -58,13 +58,13 @@ const PasswordReModal = ({ mymodal, mypasswordRef }) => {
                                             name="numOld"
                                             type="password"
                                             className="form-control"
-                                            id="passwordRe"
+                                            id={`PasswordRe${id}`}
                                             aria-describedby="emailHelp"
                                             placeholder="請輸入舊密碼" />
                                         {errors.numOld && <span className="text-danger">{errors.numOld.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="passwordNew" className="form-label">請輸入新密碼</label>
+                                        <label htmlFor={`PasswordNew${id}`} className="form-label">請輸入新密碼</label>
                                         <input
                                             {...register('numNew',  {
                                                 required: "請填寫新密碼",
@@ -79,7 +79,7 @@ const PasswordReModal = ({ mymodal, mypasswordRef }) => {
                                         name='numNew'
                                         autoComplete="text"
                                         className="form-control"
-                                        id="passwordNew"
+                                        id={`PasswordNew${id}`}
                                         aria-describedby="emailHelp"
                                             placeholder="請輸入新密碼" />
                                         {errors.numNew && <span className="text-danger">{errors.numNew.message}</span>}

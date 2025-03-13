@@ -1,4 +1,4 @@
-import { createHashRouter, Navigate } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 
 // 前台
 import FrontLayout from "../layout/front/FrontLayout";
@@ -17,9 +17,6 @@ import TagManage from "../pages/admin/TagManage";
 import Chart from "../pages/admin/Chart";
 // 全域
 import NotFound from "../components/NotFound";
-// 套件
-import Design from "../plugin/Design";
-import ComponentsView from "../plugin/ComponentsView";
 
 const router = createHashRouter([
   {
@@ -43,7 +40,7 @@ const router = createHashRouter([
         element: <AttendSuccess />,
       },
       {
-        path: "profile", //個人主頁
+        path: "profile/:id", //個人主頁
         element: <Profile />,
         children: [
           {
@@ -83,14 +80,6 @@ const router = createHashRouter([
   {
     path: "*", //404錯誤頁
     element: <NotFound />,
-  },
-  {
-    path: "/design", //樣式檢視頁 (最後會刪掉)
-    element: <Design />,
-  },
-  {
-    path: "compView",
-    element: <ComponentsView />,
   },
 ]);
 

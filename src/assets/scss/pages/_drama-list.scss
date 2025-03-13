@@ -3,7 +3,11 @@
         @include rwd-lg-max {
             display: none;
         }
-}
+    }
+
+    .swal-title-color{
+        color: red;
+    }
 
     .addDrama-bg{
         height: 115px;
@@ -11,6 +15,12 @@
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
+    }
+
+    .createDramaBtn{
+        &:hover{
+            text-shadow: 0 0 10px rgba($color: #ffffff, $alpha: .7);
+        }
     }
 
     .sortBoard{

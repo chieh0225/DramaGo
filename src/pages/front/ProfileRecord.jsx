@@ -1,11 +1,12 @@
-// Todo 狀態跟類別排版
+// TODO: 狀態跟類別排版
 
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import Loading from "../../components/Loading";
+
+import { useOutletContext } from "react-router-dom";
 
 const records = [
   // {
