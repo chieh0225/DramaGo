@@ -4,11 +4,9 @@ import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
 import { Modal, Offcanvas } from "bootstrap";
-
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetAlert2";
-
 import Breadcrumb from "../../components/Breadcrumb";
 import SearchBar from "../../components/SearchBar";
 import Dropdown from "../../components/Dropdown";
@@ -237,22 +235,6 @@ const DramaList = () => {
   useEffect(() => {
     getDramas();
   }, [modalMode, token]);
-
-                {/* 平板/手機版 */}
-                {/* 下拉選單 */}            
-                <div className="d-flex d-lg-none align-items-center justify-content-between mb-4">
-                    <button type="button" className="btn btn-brand-400 rounded-pill fs-5 text-white"
-                        onClick={() => {
-                            setModalMode('add');
-                            openDramaForm();
-                        }}
-                    >
-                        <i className="bi bi-plus-circle-fill"></i>
-                        <span className="ms-1 fs-6">我要發起劇會</span>
-                    </button>
-                    <div className="h4" >
-                        <span type="button" onClick={phoneSearch} data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"></span>
-                        <span type="button" data-bs-toggle="offcanvas" data-bs-target="#sortOffcanvas" aria-controls="sortOffcanvas"><i className="bi bi-sort-down ms-4"></i></span>
   const phoneSearch = () => {
     setPhoneSearchState(true);
   };
