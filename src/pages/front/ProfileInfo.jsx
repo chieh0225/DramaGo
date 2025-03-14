@@ -52,13 +52,10 @@ const ProfileInfo = () => {
     dispatch(changeLoadingState(true));
     const token = Cookies.get("token");
     axios.defaults.headers.common["Authorization"] = token;
-    console.log("發送 API 請求中...");
     try {
       const res = await axios.get(
         `${baseUrl}/api/${apiPath}/admin/article/${memberId}`
       );
-
-      console.log("API 回應成功：", res);
 
       setInfo(res.data.article);
 
@@ -120,7 +117,6 @@ const ProfileInfo = () => {
     } catch (error) {
       alert("更新個人資料失敗");
       console.error(error);
-      console.log(data);
     }
   };
 

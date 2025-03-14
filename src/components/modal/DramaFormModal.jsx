@@ -226,7 +226,6 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                     text: message.join('、'),
                     status: 'failed',
                 }));
-                console.log(err)
             } finally {
                 dispatch(changeLoadingState(false));
             };

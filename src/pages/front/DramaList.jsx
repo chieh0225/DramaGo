@@ -15,6 +15,7 @@ import TagsFilter from "../../components/TagsFilter";
 import DramaListCard from "../../components/card/DramaListCard";
 import DramaListTab from "../../components/tab/DramaListTab";
 import LoginModal from "../../components/modal/LoginModal";
+import { h2 } from "framer-motion/client";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -116,7 +117,6 @@ const DramaList = () => {
       const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
       setMembers(res.data.articles);
     } catch (err) {
-      console.log(err);
       const message = err.response?.data;
       message = Array.isArray(message) ? message : [message];
       dispatch(
@@ -308,33 +308,41 @@ const DramaList = () => {
                 </div>
               </div>
               {/* 卡片區 */}
-              <div className="row row-cols-md-2 gy-4">
-                {dramas
-                  .filter((drama) =>
-                    dramaState === "onGoing"
-                      ? drama.isFinish === 0
-                      : drama.isFinish === 1
-                  )
-                  .map((drama) => {
-                    const randomIndex =
-                      Array.isArray(members) &&
-                      Math.floor(Math.random() * members.length);
-                    const member = members && members[randomIndex];
-                    return (
-                      <DramaListCard
-                        key={drama.id}
-                        drama={drama}
-                        loveDramas={loveDramas}
-                        handleLoveClick={handleLoveClick}
-                        openDramaForm={openDramaForm}
-                        setModalMode={setModalMode}
-                        setUnitShareDrama={setUnitShareDrama}
-                        member={member}
-                        showAlert={showAlert}
-                      />
-                    );
-                  })}
-              </div>
+                {
+                dramas.length ===0?(
+                  <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
+                    <h2 className="h5">目前沒有劇會資料</h2>
+                  </div>
+                ):(
+                  <div className="row row-cols-md-2 gy-4">
+                    {dramas.filter((drama) =>
+                      dramaState === "onGoing"
+                        ? drama.isFinish === 0
+                        : drama.isFinish === 1
+                    )
+                    .map((drama) => {
+                      const randomIndex =
+                        Array.isArray(members) &&
+                        Math.floor(Math.random() * members.length);
+                      const member = members && members[randomIndex];
+                      return (
+                        <DramaListCard
+                          key={drama.id}
+                          drama={drama}
+                          loveDramas={loveDramas}
+                          handleLoveClick={handleLoveClick}
+                          openDramaForm={openDramaForm}
+                          setModalMode={setModalMode}
+                          setUnitShareDrama={setUnitShareDrama}
+                          member={member}
+                          showAlert={showAlert}
+                        />
+                      );
+                    })
+                    }
+                  </div>
+                )
+                }
             </div>
           </div>
 
@@ -372,19 +380,27 @@ const DramaList = () => {
               </span>
             </div>
           </div>
-          <div className="row row-cols-md-2 d-lg-none gy-4">
-            {dramas.map((drama) => (
-              <DramaListCard
-                key={drama.id}
-                drama={drama}
-                loveDramas={loveDramas}
-                handleLoveClick={handleLoveClick}
-                openDramaForm={openDramaForm}
-                setModalMode={setModalMode}
-                setUnitShareDrama={setUnitShareDrama}
-              />
-            ))}
-          </div>
+              {
+                dramas.length ===0?(
+                  <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
+                    <h2 className="h5">目前沒有劇會資料</h2>
+                  </div>
+                ):(
+                <div className="row row-cols-md-2 d-lg-none gy-4">
+                  {dramas.map((drama) => (
+                    <DramaListCard
+                      key={drama.id}
+                      drama={drama}
+                      loveDramas={loveDramas}
+                      handleLoveClick={handleLoveClick}
+                      openDramaForm={openDramaForm}
+                      setModalMode={setModalMode}
+                      setUnitShareDrama={setUnitShareDrama}
+                    />
+                  ))}
+                </div>
+                )
+              }
         </div>
 
         {/* Modal */}
