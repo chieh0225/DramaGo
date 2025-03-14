@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
-
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
 
 function AttendModal({ dramaId, userId }) {
   const [peopleCount, setPeopleCount] = useState(1);
   const [ticketCount, setTicketCount] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const modal = document.getElementById("exampleModal");
@@ -72,18 +74,16 @@ function AttendModal({ dramaId, userId }) {
               },
             }
           );
+          // 清空狀態
+          setPeopleCount(1);
+          setTicketCount(1);
 
           // 關閉 modal
           const modal = document.getElementById("exampleModal");
           const modalInstance = Modal.getInstance(modal);
           modalInstance.hide();
 
-          // 清空狀態
-          setPeopleCount(1);
-          setTicketCount(1);
-
-          // 刷新頁面
-          window.location.reload();
+          navigate(`/attendSuccess/${dramaId}`);
         }
       }
     } catch (error) {

@@ -24,10 +24,14 @@
 @import "./scss/xiang/img.scss";
 @import "./scss/xiang/border.scss";
 
+// Layout
+@import "./scss//layout/frontHeader";
+
 // 頁面
 @import "./scss/pages/profile";
 @import "./scss/pages/drama-list";
-
+@import "./scss/pages/notFound";
+@import "./scss/pages/dramaInfo";
 
 
 

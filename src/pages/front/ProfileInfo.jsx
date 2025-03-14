@@ -2,8 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import Loading from "../../components/Loading";
 import { pushMsg } from "../../redux/slice/toastSlice";
@@ -11,38 +12,16 @@ import { pushMsg } from "../../redux/slice/toastSlice";
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const leId = "-OKxd94Su2SMB1GKkzqL";
-
-const area = [
-  "臺北市",
-  "新北市",
-  "基隆市",
-  "桃園市",
-  "新竹縣",
-  "新竹市",
-  "苗栗縣",
-  "台中市",
-  "南投縣",
-  "彰化縣",
-  "雲林縣",
-  "嘉義縣",
-  "嘉義市",
-  "台南市",
-  "高雄市",
-  "屏東縣",
-  "宜蘭縣",
-  "花蓮縣",
-  "台東縣",
-  "澎湖縣",
-  "金門縣",
-  "連江縣",
-];
-
 const loginMethod = ["Facebook", "Instagram"];
 
 const ProfileInfo = () => {
   const dispatch = useDispatch();
+
+  const params = useParams();
+  const { id: memberId } = params;
   const [info, setInfo] = useState([]);
+
+  const area = useSelector((state) => state.defaultDataStore.city);
 
   // 會員資訊表單
   const {
@@ -76,7 +55,7 @@ const ProfileInfo = () => {
     console.log("發送 API 請求中...");
     try {
       const res = await axios.get(
-        `${baseUrl}/api/${apiPath}/admin/article/${leId}`
+        `${baseUrl}/api/${apiPath}/admin/article/${memberId}`
       );
 
       console.log("API 回應成功：", res);
@@ -107,7 +86,7 @@ const ProfileInfo = () => {
 
   useEffect(() => {
     getInfo();
-  }, [reset]);
+  }, [memberId]);
 
   const onSubmit = handleSubmit((data) => {
     updateInfo(data);
@@ -117,16 +96,18 @@ const ProfileInfo = () => {
     const data = {
       title: info.title || "預設暱稱",
       description: info.description || "這是預設簡介",
-      image: "test.testtest",
+      image:
+        info.image ||
+        "https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop",
       tag: ["tag1"],
-      create_at: 1712238900,
+      create_at: info.create_at || 1712238900,
       author: info.author || "預設姓名",
       isPublic: true,
       content: "這是內容",
       ...info,
     };
     try {
-      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${leId}`, {
+      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${memberId}`, {
         data,
       });
       await getInfo();
@@ -141,10 +122,6 @@ const ProfileInfo = () => {
       console.error(error);
       console.log(data);
     }
-  };
-
-  const handleUpdateInfo = () => {
-    updateInfo();
   };
 
   // 提交重設密碼表單
@@ -183,7 +160,7 @@ const ProfileInfo = () => {
         password: data.newPassword, // 更新密碼欄位
       };
 
-      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${leId}`, {
+      await axios.put(`${baseUrl}/api/${apiPath}/admin/article/${memberId}`, {
         data: updatedData,
       });
 
@@ -248,6 +225,10 @@ const ProfileInfo = () => {
                     maxLength="16"
                     {...register("title", {
                       required: "暱稱欄位必填",
+                      maxLength: {
+                        value: 16,
+                        message: "暱稱字數上限 16 個字",
+                      },
                     })}
                   />
                   {errors.title && (
@@ -502,7 +483,6 @@ const ProfileInfo = () => {
                       type="submit"
                       className="btn btn-brand text-white w-100 text-nowrap"
                       disabled={!isDirty} // 當表單未被修改時禁用按鈕
-                      onClick={handleUpdateInfo}
                     >
                       確認修改
                     </button>
@@ -575,7 +555,7 @@ const ProfileInfo = () => {
                         validate: async (value) => {
                           try {
                             const response = await axios.get(
-                              `${baseUrl}/api/${apiPath}/admin/article/${leId}`
+                              `${baseUrl}/api/${apiPath}/admin/article/${memberId}`
                             );
                             const currentPassword =
                               response.data.article.password;

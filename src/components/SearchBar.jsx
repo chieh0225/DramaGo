@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useId } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSearchState }) => {
+    const searchId1 = useId();
+    const searchId2 = useId();
     const [keyword, setKeyword] = useState('');
     const [isFirstRender, setIsFirstRender] = useState(true);
     const navigate = useNavigate();
@@ -41,7 +43,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
             <div className="position-relative w-100">
                 <form>
                     <label
-                        htmlFor="searchBar"
+                        htmlFor={searchId1}
                         className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
                         <button
                             type="submit"
@@ -55,7 +57,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
                     <input
                         type="text"
                         className="form-control rounded-pill py-3 ps-6"
-                        id="searchBar"
+                        id={searchId1}
                         placeholder="搜尋劇會"
                         onChange={e => setKeyword(e.target.value)}
                         value={keyword}
@@ -67,7 +69,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
             <div className="mb-3 position-relative w-100">
                 <form>
                     <label
-                        htmlFor="searchBar"
+                        htmlFor={searchId2}
                         className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
                         <button
                             type="submit"
@@ -81,7 +83,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
                     <input
                         type="text"
                         className="form-control rounded-pill "
-                        id="searchBar"
+                        id={searchId2}
                         placeholder="搜尋劇會"
                         onChange={e => setKeyword(e.target.value)}
                         value={keyword}

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { changeLoadingState } from "../../redux/slice/loadingSlice";
 import { pushMsg } from "../../redux/slice/toastSlice";
 import Cookies from "js-cookie";
+import Pagination from "../../components/Pagination";
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -15,6 +16,8 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 const DramaManage = () => {
 
     const [dramas, setDramas] = useState([]);
+    const [pages,setPages] = useState({});
+    const [pageNum,setPageNum] = useState(1);
     const dramaFormRef = useRef(null);
     const dramaFormInstance = useRef(null);
     const openButtonRef = useRef(null);
@@ -40,8 +43,9 @@ const DramaManage = () => {
                     Authorization: `${token}`
                 }
             }
-            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/products`, config);
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/products?page=${pageNum}`, config);
             setDramas(res.data.products);
+            setPages(res.data.pagination);
         } catch (err) {
             let message = err.response.data;
             message = Array.isArray(message) ? message : [message]
@@ -134,13 +138,19 @@ const DramaManage = () => {
             }
         };
         dramaFormRef.current.addEventListener("hidden.bs.modal", handleModalHidden);
-        getDramas();
     }, []);
+
+    useEffect(()=>{
+        getDramas();
+    },[pageNum]);
 
 
     return (<>
         <div className="container py-10">
-            <h1 className="h4 my-4">劇會管理</h1>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h1 className="h4 my-4">劇會管理</h1>
+                <Pagination pages={pages} setPageNum={setPageNum}/>
+            </div>
             <table className="table table-hover table-brand-400 table-sm align-middle">
                 <thead>
                     <tr>

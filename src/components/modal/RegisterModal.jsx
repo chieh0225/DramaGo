@@ -1,15 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Cookies from "js-cookie";
+
+
 //照片
 import sing from "../../assets/images/Sign-up-cuate.png"
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
+    const id=useId();
     const registerModal = useRef(null)
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const navigate = useNavigate();
@@ -51,7 +54,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
     return (
         <>
             {/* <!-- Modal --> */}
-            <div className="modal fade" ref={registerModal} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-hidden="true">
+            <div className="modal fade" ref={registerModal} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content bg-brand-50">
                         <div className="row">
@@ -86,7 +89,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
-                                        <label htmlFor="registerName" className="form-label">name</label>
+                                        <label htmlFor={`registerName${id}`} className="form-label">name</label>
                                         <input
                                             {...register('registerName', {
                                                 required: "請填寫名稱"
@@ -95,13 +98,13 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
                                             autoComplete="username"
                                             name="registerName"
                                             className="form-control"
-                                            id="registerName"
+                                            id={`registerName${id}`}
                                             aria-describedby="registerName"
                                             placeholder="使用者名稱" />
                                         {errors.registerName && <span className="text-danger">{errors.registerName.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="registerEmail" className="form-label">Email</label>
+                                        <label htmlFor={`registerEmail${id}`} className="form-label">Email</label>
                                         <input
                                             {...register('registerEmail', {
                                                 required: "請填寫Email",
@@ -113,13 +116,13 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
                                             autoComplete="email"
                                             name="registerEmail"
                                             className="form-control"
-                                            id="registerEmail"
+                                            id={`registerEmail${id}`}
                                             aria-describedby="registerEmail"
                                             placeholder="信箱" />
                                         {errors.registerEmail && <span className="text-danger">{errors.registerEmail.message}</span>}
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="registerPassword" className="form-label">Password</label>
+                                        <label htmlFor={`registerPassword${id}`} className="form-label">Password</label>
                                         <input
                                             {...register('registerPassword', {
                                                 required: "請正確填寫密碼",
@@ -134,7 +137,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
                                             type="password"
                                             name="registerPassword"
                                             className="form-control"
-                                            id="registerPassword"
+                                            id={`registerPassword${id}`}
                                             placeholder="密碼" />
                                         {errors.registerPassword && <span className="text-danger">{errors.registerPassword.message}</span>}
                                         <ul className="fs-c text-grey-600 my-3">

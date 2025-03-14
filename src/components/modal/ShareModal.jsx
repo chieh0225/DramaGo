@@ -1,7 +1,13 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { pushMsg } from "../../redux/slice/toastSlice";
 
 const ShareModal = () => {
-  const shareUrl = "https://www.dramago.com/drama/123"; // 示例 URL
+
+  const dispatch = useDispatch();
+  
+  // 取得當前頁面網址
+  const pageUrl = window.location.href;
 
   const socialMedias = [
     {
@@ -31,10 +37,22 @@ const ShareModal = () => {
     console.log(`分享到 ${platform}`);
   };
 
-  const copyUrl = () => {
-    navigator.clipboard.writeText(shareUrl);
-    // 這裡可以加入複製成功的提示
-  };
+  // 取得當前
+  const copyWebsite = async () => {
+        try {
+            await navigator.clipboard.writeText(pageUrl);
+            dispatch(pushMsg({
+                text: '已複製網址',
+                status: 'success',
+            }));
+        } catch (err) {
+            dispatch(pushMsg({
+                text: '複製失敗',
+                status: 'failed',
+            }));
+        }
+    };
+    
 
   return (
     <div
@@ -83,13 +101,13 @@ const ShareModal = () => {
               <input
                 type="text"
                 className="form-control"
-                value={shareUrl}
+                defaultValue={pageUrl}
                 readOnly
               />
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={copyUrl}
+                onClick={copyWebsite}
               >
                 複製
               </button>
