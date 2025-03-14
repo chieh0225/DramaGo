@@ -191,7 +191,6 @@ const DramaInfo = () => {
           }
         });
       }
-      console.log("聚會資料：", res.data.product);
     } catch (error) {
       console.log(error);
       alert("此聚會不存在");
@@ -210,7 +209,6 @@ const DramaInfo = () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${API_URL}/orders`);
       const orders = response.data.orders;
-      console.log("訂單資料：", orders);
 
       // 找出當前戲劇的訂單
       const dramaOrders = orders.filter((order) => {

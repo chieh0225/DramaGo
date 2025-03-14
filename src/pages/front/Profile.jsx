@@ -167,8 +167,6 @@ const Profile = () => {
         }
       );
 
-      console.log("圖片上傳成功，獲取的 URL: ", data.imageUrl);
-
       // 更新個人資料 (將新的圖片 URL 存回)
       await axios.put(
         `${baseUrl}/api/${apiPath}/admin/article/${memberId}`,
@@ -183,7 +181,6 @@ const Profile = () => {
       setAvatarUrl(data.imageUrl);
 
       const newMemberInfo = await getMember();
-      console.log("更新後的資訊：", newMemberInfo);
 
       setImageUpdated(true);
     } catch (error) {
