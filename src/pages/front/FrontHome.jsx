@@ -26,7 +26,7 @@ import decorate992 from "../../assets/images/Let_s have a great time together..s
 import banner from "../../assets/images/Frame-1000005399.svg"
 import banner992 from "../../assets/images/heroSection.svg"
 import axios from 'axios';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 
 // 串接Google 登入 API 文件
 
@@ -84,24 +84,23 @@ const SwiperModalType = () => {
         </SwiperSlide>
       </Swiper>
       <div className='d-flex d-lg-none mt-6 mb-15'>
-        <a onClick={prev} className='border border-brand-300 rounded-circle me-4'>
+        <button onClick={prev} className='border border-brand-300 rounded-circle me-4'>
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path d="M9.56054 12.1002L14.2417 6.83932C14.2749 6.80544 14.3066 6.79756 14.3275 6.79786C14.3493 6.79818 14.3829 6.80765 14.4172 6.84622C14.4534 6.88682 14.4823 6.95284 14.4832 7.0324C14.4841 7.11014 14.4581 7.17634 14.4237 7.21887L10.2057 11.9594L9.90996 12.2918L10.2057 12.6242L14.429 17.3708C14.4658 17.4122 14.4947 17.4791 14.4946 17.5598C14.4946 17.6405 14.4654 17.7081 14.4287 17.7494C14.3934 17.789 14.3593 17.7979 14.3382 17.7979C14.3169 17.7978 14.2826 17.7888 14.2474 17.7492L14.2473 17.749L9.56054 12.4819C9.56038 12.4817 9.56021 12.4815 9.56005 12.4813C9.52333 12.4394 9.49463 12.372 9.49463 12.2913C9.49463 12.2103 9.52356 12.1424 9.56008 12.1008C9.56023 12.1006 9.56039 12.1004 9.56054 12.1002Z" fill="#ffa13c" stroke="#ffa13c" />
           </svg>
-        </a>
-        <a onClick={next} className='border border-brand-300 rounded-circle'>
+        </button>
+        <button onClick={next} className='border border-brand-300 rounded-circle'>
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path d="M14.82 13.0555L15.1125 12.7244L14.82 12.3934L10.6062 7.62443C10.4985 7.50252 10.4985 7.37179 10.6062 7.24988C10.6516 7.19853 10.6808 7.18765 10.6895 7.18567C10.6982 7.18765 10.7275 7.19853 10.7728 7.24988L15.4446 12.5371C15.5523 12.6591 15.5523 12.7898 15.4446 12.9117L10.8144 18.1519C10.7379 18.1951 10.6506 18.1967 10.5733 18.1566C10.4999 18.0471 10.5108 17.9323 10.6062 17.8244L14.82 13.0555ZM10.6922 7.1853C10.6922 7.18537 10.6915 7.18551 10.6901 7.18554L10.6922 7.1853ZM10.6889 7.18554C10.6875 7.18551 10.6868 7.18537 10.6868 7.1853L10.6889 7.18554Z" fill="#ffa13c" stroke="#ffa13c" />
           </svg>
-        </a>
+        </button>
       </div>
     </>
   )
 }
 const Card = () => {
   const [recommend, setRecommend] = useState([]);
-  const { state, mymodal } = useOutletContext();
-
+  const { state, mymodal, members, setMembers } = useOutletContext();
   //取得產品資訊
   useEffect(() => {
     const fetchData = async () => {
@@ -112,16 +111,16 @@ const Card = () => {
         let length = 0
 
         products.forEach(data => {
-           if(data.isHot){
-             product.push(data)
-           }
-           length = product.length
+          if (data.isHot) {
+            product.push(data)
+          }
+          length = product.length
         });
 
-          for (length; length >= 5; length--) {
-            const a = (Math.ceil(Math.random() * (length)));
-            product.splice(a - 1, 1)
-          }
+        for (length; length >= 5; length--) {
+          const a = (Math.ceil(Math.random() * (length)));
+          product.splice(a - 1, 1)
+        }
 
         setRecommend(product)
 
@@ -130,7 +129,26 @@ const Card = () => {
       }
     }
     fetchData();
+    getMember();
   }, [])
+
+  // 取得會員列表
+  const getMember = async () => {
+    try {
+      const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
+      setMembers(res.data.articles);
+    } catch (err) {
+      console.log(err);
+      const message = err.response?.data;
+      message = Array.isArray(message) ? message : [message];
+      dispatch(
+        pushMsg({
+          text: message.join("、"),
+          status: "failed",
+        })
+      );
+    }
+  };
   return (
     <>
       <div className='container'>
@@ -139,12 +157,15 @@ const Card = () => {
           {
             recommend.map((product, index) => {
               const { date, people, title, imageUrl, id } = product;
-
+              const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
+              const member = members && members[randomIndex];
               return (
                 <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
-                  <img src={imageUrl} className="imgcard card-img-top" alt="..." />
+                  <Link to={`/dramaInfo/${id}`} >
+                    <img src={imageUrl}  className="object-fit imgcard card-img-top"  alt="..." />
+                  </Link>
                   <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
-                    <div>
+                    <Link to={`/dramaInfo/${id}`}>
                       <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
                       <div className='d-flex mb-1'>
                         <p className='text-grey-700 pe-4'>出團時間</p>
@@ -154,12 +175,28 @@ const Card = () => {
                         <p className='text-grey-700 pe-4'>參加人數</p>
                         <p className='text-grey-700 pe-4'>{people}</p>
                       </div>
-                    </div>
+                    </Link>
 
                     <div className='border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center'>
                       <div className='d-flex align-items-center'>
-                        <img className='img-l me-4' src={cardUser} alt="" />
-                        <p className='fw-semibold text-grey-950'>xiang</p>
+                        <Link
+                          to={`/profile/${member && member.id}`}
+                          role="button"
+                          className="d-flex align-items-center"
+                        >
+                          <div className="avatar me-2">
+                            <img
+                              style={{ height: `40px`, width: `40px` }}
+                              src={member && member.image}
+                              alt="頭像"
+                              className="object-fit rounded-circle"
+                            />
+                          </div>
+                          <div className="d-flex flex-column">
+                            <span className="h6">{member && member.author}</span>
+                            <span className="text-grey-400 fs-c">揪團主</span>
+                          </div>
+                        </Link>
                       </div>
                       <Love id={id} state={state} mymodal={mymodal} />
                     </div>
@@ -225,16 +262,16 @@ const SwiperModalimg = () => {
         </SwiperSlide>
       </Swiper>
       <div className='d-flex mt-10 mt-lg-8 mb-6 mb-lg-0'>
-        <a onClick={prev} className='border border-brand-300 rounded-circle me-4'>
+        <button onClick={prev} className='btn btn-white border border-brand-300 rounded-circle me-4'>
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path d="M9.56054 12.1002L14.2417 6.83932C14.2749 6.80544 14.3066 6.79756 14.3275 6.79786C14.3493 6.79818 14.3829 6.80765 14.4172 6.84622C14.4534 6.88682 14.4823 6.95284 14.4832 7.0324C14.4841 7.11014 14.4581 7.17634 14.4237 7.21887L10.2057 11.9594L9.90996 12.2918L10.2057 12.6242L14.429 17.3708C14.4658 17.4122 14.4947 17.4791 14.4946 17.5598C14.4946 17.6405 14.4654 17.7081 14.4287 17.7494C14.3934 17.789 14.3593 17.7979 14.3382 17.7979C14.3169 17.7978 14.2826 17.7888 14.2474 17.7492L14.2473 17.749L9.56054 12.4819C9.56038 12.4817 9.56021 12.4815 9.56005 12.4813C9.52333 12.4394 9.49463 12.372 9.49463 12.2913C9.49463 12.2103 9.52356 12.1424 9.56008 12.1008C9.56023 12.1006 9.56039 12.1004 9.56054 12.1002Z" fill="#ffa13c" stroke="#ffa13c" />
           </svg>
-        </a>
-        <a onClick={next} className='border border-brand-300 rounded-circle'>
+        </button>
+        <button onClick={next} className='btn btn-white border border-brand-300 rounded-circle'>
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path d="M14.82 13.0555L15.1125 12.7244L14.82 12.3934L10.6062 7.62443C10.4985 7.50252 10.4985 7.37179 10.6062 7.24988C10.6516 7.19853 10.6808 7.18765 10.6895 7.18567C10.6982 7.18765 10.7275 7.19853 10.7728 7.24988L15.4446 12.5371C15.5523 12.6591 15.5523 12.7898 15.4446 12.9117L10.8144 18.1519C10.7379 18.1951 10.6506 18.1967 10.5733 18.1566C10.4999 18.0471 10.5108 17.9323 10.6062 17.8244L14.82 13.0555ZM10.6922 7.1853C10.6922 7.18537 10.6915 7.18551 10.6901 7.18554L10.6922 7.1853ZM10.6889 7.18554C10.6875 7.18551 10.6868 7.18537 10.6868 7.1853L10.6889 7.18554Z" fill="#ffa13c" stroke="#ffa13c" />
           </svg>
-        </a>
+        </button>
       </div>
     </>
   )
