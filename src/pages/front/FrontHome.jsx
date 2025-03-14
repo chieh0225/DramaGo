@@ -29,7 +29,9 @@ import axios from 'axios';
 import { useOutletContext } from 'react-router-dom';
 
 // 串接Google 登入 API 文件
+
 // 串接Facebook 登入 API 文件
+
 // 後台所有功能
 
 
@@ -96,7 +98,6 @@ const SwiperModalType = () => {
     </>
   )
 }
-
 const Card = () => {
   const [recommend, setRecommend] = useState([]);
   const { state, mymodal } = useOutletContext();
@@ -106,14 +107,24 @@ const Card = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
-        let length = res.data.products.length;
-        const product = res.data.products
-        for (length; length >= 5; length--) {
-          const a = (Math.ceil(Math.random() * (length)));
-          product.splice(a - 1, 1)
-        }
+        const products = res.data.products
+        const product = []
+        let length = 0
+
+        products.forEach(data => {
+           if(data.isHot){
+             product.push(data)
+           }
+           length = product.length
+        });
+
+          for (length; length >= 5; length--) {
+            const a = (Math.ceil(Math.random() * (length)));
+            product.splice(a - 1, 1)
+          }
 
         setRecommend(product)
+
       } catch (error) {
         console.log(error)
       }

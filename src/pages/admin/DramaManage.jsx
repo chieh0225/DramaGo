@@ -47,7 +47,7 @@ const DramaManage = () => {
             setDramas(res.data.products);
             setPages(res.data.pagination);
         } catch (err) {
-            const message = err.response.data;
+            let message = err.response.data;
             message = Array.isArray(message) ? message : [message]
             dispatch(pushMsg({
                 text: message.join('、'),
