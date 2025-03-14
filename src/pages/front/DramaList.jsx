@@ -266,7 +266,7 @@ const DramaList = () => {
                         <span className="ms-1 fs-6">我要發起劇會</span>
                     </button>
                     <div className="h4" >
-                        <span type="button" onClick={phoneSearch} data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"><i className="bi bi-funnel"></i></span>
+                        <span type="button" onClick={phoneSearch} data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas"></span>
                         <span type="button" data-bs-toggle="offcanvas" data-bs-target="#sortOffcanvas" aria-controls="sortOffcanvas"><i className="bi bi-sort-down ms-4"></i></span>
 
                     </div>

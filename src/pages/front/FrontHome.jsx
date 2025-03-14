@@ -106,14 +106,24 @@ const Card = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
-        let length = res.data.products.length;
-        const product = res.data.products
-        for (length; length >= 5; length--) {
-          const a = (Math.ceil(Math.random() * (length)));
-          product.splice(a - 1, 1)
-        }
+        const products = res.data.products
+        const product = []
+        let length = 0
+
+        products.forEach(data => {
+           if(data.isHot){
+             product.push(data)
+           }
+           length = product.length
+        });
+
+          for (length; length >= 5; length--) {
+            const a = (Math.ceil(Math.random() * (length)));
+            product.splice(a - 1, 1)
+          }
 
         setRecommend(product)
+
       } catch (error) {
         console.log(error)
       }
