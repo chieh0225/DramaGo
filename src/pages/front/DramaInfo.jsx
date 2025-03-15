@@ -65,27 +65,27 @@ const DramaInfo = () => {
   ];
 
   // 自動登入
-  const autoLogin = async () => {
-    try {
-      const response = await axios.post(`${BASE_URL}/admin/signin`, {
-        username: "dramaGo@gmail.com",
-        password: "dramago",
-      });
+  // const autoLogin = async () => {
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/admin/signin`, {
+  //       username: "dramaGo@gmail.com",
+  //       password: "dramago",
+  //     });
 
-      if (response.data.token) {
-        const { token, expired } = response.data;
-        document.cookie = `token=${token}; expires=${new Date(expired)}`;
-        axios.defaults.headers.common["Authorization"] = token;
-        console.log("登入成功，token 已儲存");
-      }
-    } catch (error) {
-      console.error("登入失敗：", error);
-    }
-  };
+  //     if (response.data.token) {
+  //       const { token, expired } = response.data;
+  //       document.cookie = `token=${token}; expires=${new Date(expired)}`;
+  //       axios.defaults.headers.common["Authorization"] = token;
+  //       console.log("登入成功，token 已儲存");
+  //     }
+  //   } catch (error) {
+  //     console.error("登入失敗：", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    autoLogin();
-  }, []);
+  // useEffect(() => {
+  //   autoLogin();
+  // }, [condition]);
 
   const generateMapUrl = (location) => {
     const encodedLocation = encodeURIComponent(location);

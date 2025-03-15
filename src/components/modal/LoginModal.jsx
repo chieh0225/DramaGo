@@ -25,7 +25,7 @@ const LoginModal = ({ mymodal , setState}) => {
             "password": watch('password')
         })
             .then((res) => {
-                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                Cookies.set('token', res.data.token, { expires: 1,  path: '/', domain: 'localhost' });
                 mymodal.current.hide();
                 navigate('/');
                 reset();
