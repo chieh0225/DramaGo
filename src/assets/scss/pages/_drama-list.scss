@@ -1,81 +1,82 @@
-.dramaList{
-    .breadcrumb{
-        @include rwd-lg-max {
-            display: none;
-        }
+.dramaList {
+  .breadcrumb {
+    @include rwd-lg-max {
+      display: none;
     }
+  }
 
-    .swal-title-color{
-        color: red;
-    }
+  .swal-title-color {
+    color: red;
+  }
 
-    .addDrama-bg{
-        height: 115px;
-        background-image: url(./images/inner/Frame%201000005422.svg);
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
+  .addDrama-bg {
+    height: 115px;
+    background-image: url(./images/inner/Frame%201000005422.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
-    .createDramaBtn{
-        &:hover{
-            text-shadow: 0 0 10px rgba($color: #ffffff, $alpha: .7);
-        }
+  .createDramaBtn {
+    &:hover {
+      text-shadow: 0 0 10px rgba($color: #ffffff, $alpha: 0.7);
     }
+  }
 
-    .sortBoard{
-        @include rwd-lg-max {
-            display: none;
-        }
+  .sortBoard {
+    @include rwd-lg-max {
+      display: none;
     }
+  }
 
-    .nav-enable .nav-link{
-        &.active{
-            color:#460902 ;
-            font-weight: 600;
-        }
+  .nav-enable .nav-link {
+    &.active {
+      color: #460902;
+      font-weight: 600;
     }
-    
-    .badge-group{
-        margin-top: 24px;
-    }
+  }
 
-    .badge{
-        border-radius: 0;
-    }
-    .avatar{
-        width: 40px;
-        height: 40px;
-    }
+  .badge-group {
+    margin-top: 24px;
+  }
 
-    .img-scale:hover{
-        transform: scale(1.1);
-        transition: 1s;
-    }
+  .badge {
+    border-radius: 0;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
 
-    .offcanvas.offcanvas-filter{
-        height: 85vh;
-    }
+  .img-scale:hover {
+    transform: scale(1.1);
+    transition: 1s;
+  }
 
-    .offcanvas.offcanvas-sort {
-        height: 75vh;
-    }
+  .offcanvas.offcanvas-filter {
+    height: 85vh;
+  }
 
-    .dramaWrap {
-        margin: 0 auto;
-        width: 300px;
-        height: 300px;
-        background-image:
-            linear-gradient(rgba(255, 246, 235, 0.8), rgba(255, 246, 235, 1)),
-            url('./images/Component 2.svg');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
+  .offcanvas.offcanvas-sort {
+    height: 75vh;
+  }
 
-        h2 {
-            color: $grey-300;
-            z-index: 2;
-        }
+  .dramaWrap {
+    margin: 0 auto;
+    width: 300px;
+    height: 300px;
+    background-image: linear-gradient(
+        rgba(255, 246, 235, 0.8),
+        rgba(255, 246, 235, 1)
+      ),
+      url("./images/Component 2.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    h2 {
+      color: $grey-300;
+      z-index: 2;
     }
-    
+  }
 }
