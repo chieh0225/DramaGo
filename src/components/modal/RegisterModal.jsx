@@ -1,18 +1,17 @@
-import { useEffect, useRef,useId } from "react";
+import { useEffect, useRef, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Cookies from "js-cookie";
-
-
 //照片
 import sing from "../../assets/images/Sign-up-cuate.png"
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
-    const id=useId();
+const RegisterModal = ({ myRegisterModal, mymodal, setState}) => {
+    const id = useId();
     const registerModal = useRef(null)
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const navigate = useNavigate();
@@ -29,10 +28,10 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
             "password": 'dramago'
         })
             .then((res) => {
-                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                Cookies.set('token', res.data.token, { expires: 1, path: '/', domain: 'localhost' })
                 myRegisterModal.current.hide();
                 reset();
-                navigate('/profile')
+                getMember();
                 setState(true)
             })
             .catch((err) => {
@@ -50,6 +49,27 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
         myRegisterModal.current.hide();
         mymodal.current.show();
     }
+
+    // 取得會員列表
+    const getMember = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
+            const randomIndex = Array.isArray(res.data.articles) && Math.floor(Math.random() * res.data.articles.length);
+            const member = res.data.articles && res.data.articles[randomIndex];
+            navigate(`/profile/${member && member.id}`)
+        } catch (err) {
+            console.log(err);
+            const message = err.response?.data;
+            message = Array.isArray(message) ? message : [message];
+            dispatch(
+                pushMsg({
+                    text: message.join("、"),
+                    status: "failed",
+                })
+            );
+        }
+    };
+
 
     return (
         <>

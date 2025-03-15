@@ -10,18 +10,12 @@ const FrontLayout = () => {
   const mymodal = useRef(null);
   const [dramas, setDramas] = useState([]);
   const [members, setMembers] = useState([]);
+
   return (
     <>
-      <FrontHeader
-        setState={setState}
-        state={state}
-        mymodal={mymodal}
-        setDramas={setDramas}
-        dramas={dramas}
-      />
-      <Outlet context={{ state, mymodal, setDramas, dramas,members, setMembers }} />
+      <FrontHeader setState={setState} state={state} mymodal={mymodal} setDramas={setDramas} dramas={dramas}/>
+      <Outlet context={{ state, mymodal, setDramas, dramas, members, setMembers }} />
       <FrontFooter />
-
       <Loading />
       <DramaToasts />
     </>

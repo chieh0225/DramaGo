@@ -17,7 +17,7 @@ const LoginModal = ({ mymodal , setState}) => {
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
     const navigate = useNavigate();
     const id = useId();
-
+    
     //表單登入
     const onSubmit = () => {
         axios.post(`${baseUrl}/admin/signin`, {
@@ -25,11 +25,11 @@ const LoginModal = ({ mymodal , setState}) => {
             "password": watch('password')
         })
             .then((res) => {
-                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                Cookies.set('token', res.data.token, { expires: 1,  path: '/', domain: 'localhost' });
                 mymodal.current.hide();
+                setState(true);
                 navigate('/');
                 reset();
-                setState(true);
             })
             .catch((err) => {
                 console.error(`登入失敗`, err.response)

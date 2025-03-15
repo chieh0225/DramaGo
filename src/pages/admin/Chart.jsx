@@ -1,406 +1,573 @@
-import { useForm } from "react-hook-form";
-import dayjs from "dayjs";
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import c3 from "c3";
-import "c3/c3.css";
-import "../../assets/scss/pages/_chart.scss";
+import * as c3 from 'c3';
+import 'c3/c3.css';
+import React, { useRef, useEffect, useState } from 'react';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import Select from 'react-select';
+import axios from 'axios';
 
-const Chart = () => {
-  const [filteredData, setFilteredData] = useState([]);
-  const [apiData, setApiData] = useState([]);
-  const categoryTags = [
-    "全部",
-    "看電影",
-    "看表演",
-    "逛劇展",
-    "買劇品",
-    "上劇課",
-    "劇本殺",
-    "接劇龍",
-    "聽劇透",
-    "遊劇旅",
-    "追影星",
-  ];
 
-  const { register, handleSubmit } = useForm();
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-  // 獲取 API 數據
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://ec-course-api.hexschool.io/v2/api/dramago/products"
-        );
-        setApiData(response.data.products);
-        setFilteredData(response.data.products);
-      } catch (error) {
-        console.error("獲取數據失敗:", error);
-      }
-    };
-    fetchData();
-  }, []);
+//取API值， 依照需要加入各data
+// finsh data
+//lable : 出團 /未出團
+//data : [9 , 10]
 
-  // 生成圓餅圖
-  const generatePieChart = (data) => {
-    // 計算類別占比
-    const categoryCount = data.reduce((acc, product) => {
-      acc[product.category] = (acc[product.category] || 0) + 1;
-      return acc;
-    }, {});
+// tag : tag
+// lable : [數量]
+// 標籤為選隱藏chart 主元件建立個元件data並判斷是否有值 有 = display-block 否 = display-none
+// 會員管理頁面 有X軸
+const MyChart = ({ legendPosi, plugin, day, isWidth }) => {
+    const canvasRef = useRef(null);
+    const chartRef = useRef(null);
 
-    // 轉換為 c3 數據格式
-    const chartData = Object.entries(categoryCount);
-
-    // 生成圓餅圖
-    c3.generate({
-      bindto: "#pieChart",
-      data: {
-        columns: chartData,
-        type: "pie",
-      },
-      pie: {
-        label: {
-          format: function (value) {
-            return value + "個";
-          },
+    const data = [
+        {
+            label: "1",  // 標籤
+            data: [10, 20, 30],  //標籤數據(Y軸資料)
+            barThickness: isWidth ? 4 : 12,
+            borderSkipped: `boolean`,
+            borderRadius: 100,
         },
-      },
-    });
-  };
-
-  // 生成柱狀圖
-  const generateBarChart = (data) => {
-    // 按日期分組並統計不同狀態的數量
-    const dateStats = data.reduce((acc, product) => {
-      const date = dayjs(product.date.start).format("MM/DD");
-      if (!acc[date]) {
-        acc[date] = {
-          pending: 0, // 待確認出團 (isFinish: 0, is_enabled: 1)
-          completed: 0, // 已出團 (isFinish: 1 && is_enabled: 1)
-          cancelled: 0, // 取消出團 (is_enabled: 0)
-        };
-      }
-
-      if (product.isFinish === 1 && product.is_enabled) {
-        acc[date].completed++;
-      } else if (product.isFinish === 0 && product.is_enabled) {
-        acc[date].pending++;
-      } else if (!product.is_enabled) {
-        acc[date].cancelled++;
-      }
-
-      return acc;
-    }, {});
-
-    // 準備圖表數據
-    const dates = Object.keys(dateStats).sort();
-    const chartData = {
-      dates: ["x", ...dates],
-      pending: ["待確認出團"],
-      completed: ["已出團"],
-      cancelled: ["取消出團"],
-    };
-
-    // 填充數據
-    dates.forEach((date) => {
-      chartData.pending.push(dateStats[date].pending);
-      chartData.completed.push(dateStats[date].completed);
-      chartData.cancelled.push(dateStats[date].cancelled);
-    });
-
-    // 生成圖表
-    c3.generate({
-      bindto: "#barChart",
-      data: {
-        x: "x",
-        columns: [
-          chartData.dates,
-          chartData.pending,
-          chartData.completed,
-          chartData.cancelled,
-        ],
-        type: "bar",
-        groups: [["待確認出團", "已出團", "取消出團"]],
-        colors: {
-          待確認出團: "#36A2EB", // 藍色
-          已出團: "#4BC0C0", // 綠色
-          取消出團: "#FF6384", // 紅色
+        {},
+        {
+            label: "2",
+            data: [15, 25, 10],
+            barThickness: isWidth ? 4 : 12,
+            borderSkipped: `boolean`,
+            borderRadius: 100,
         },
-      },
-      axis: {
-        x: {
-          type: "category",
-          label: {
-            text: "日期",
-            position: "outer-center",
-          },
-        },
-        y: {
-          label: {
-            text: "團數",
-            position: "outer-middle",
-          },
-          padding: {
-            bottom: 0,
-          },
-          tick: {
-            values: [0, 3, 6, 9],
-          },
-        },
-      },
-      grid: {
-        y: {
-          show: true,
-        },
-      },
-      legend: {
-        position: "right",
-      },
-    });
-  };
-
-  // 生成折線圖
-  const generateLineChart = (data) => {
-    // 按日期和類別分組統計數量
-    const dateStats = data.reduce((acc, product) => {
-      const date = dayjs(product.date.start).format("YYYY-MM-DD");
-      if (!acc[date]) {
-        acc[date] = {};
-        categoryTags.forEach((tag) => {
-          if (tag !== "全部") {
-            acc[date][tag] = 0;
-          }
-        });
-      }
-
-      if (product.category) {
-        acc[date][product.category]++;
-      }
-
-      return acc;
-    }, {});
-
-    // 準備圖表數據
-    const dates = Object.keys(dateStats).sort();
-    const chartData = {
-      dates: ["x", ...dates],
-    };
-
-    // 為每個類別創建數據數組
-    categoryTags.forEach((tag) => {
-      if (tag !== "全部") {
-        chartData[tag] = [tag];
-        dates.forEach((date) => {
-          chartData[tag].push(dateStats[date][tag]);
-        });
-      }
-    });
-
-    // 轉換為c3所需的數據格式
-    const columns = [chartData.dates];
-    categoryTags.forEach((tag) => {
-      if (tag !== "全部") {
-        columns.push(chartData[tag]);
-      }
-    });
-
-    // 生成圖表
-    c3.generate({
-      bindto: "#lineChart",
-      data: {
-        x: "x",
-        columns: columns,
-        type: "line",
-      },
-      axis: {
-        x: {
-          type: "timeseries",
-          tick: {
-            format: "%Y-%m-%d",
-            count: 7,
-          },
-          label: {
-            text: "日期",
-            position: "outer-center",
-          },
-        },
-        y: {
-          label: {
-            text: "活動數量",
-            position: "outer-middle",
-          },
-          padding: {
-            bottom: 0,
-          },
-          tick: {
-            values: [0, 2, 4, 6, 8, 10],
-          },
-        },
-      },
-      grid: {
-        y: {
-          show: true,
-        },
-      },
-      point: {
-        show: true,
-        r: 4,
-      },
-      legend: {
-        position: "right",
-      },
-      tooltip: {
-        format: {
-          title: function (d) {
-            return dayjs(d).format("YYYY-MM-DD");
-          },
-        },
-      },
-    });
-  };
-
-  const onSubmit = async (data) => {
-    const { startDate, endDate, category, status } = data;
-    const start = dayjs(startDate).format("YYYY-MM-DDT00:00");
-    const end = dayjs(endDate).format("YYYY-MM-DDT23:59");
-
-    // 篩選日期範圍內的數據
-    let filtered = apiData.filter((product) => {
-      const eventDate = dayjs(product.date.start);
-      const eventDateStr = eventDate.format("YYYY-MM-DDT00:00");
-      return eventDateStr >= start && eventDateStr <= end;
-    });
-
-    // 根據類別篩選
-    if (category !== "0") {
-      // "0" 代表 "全部"
-      filtered = filtered.filter(
-        (product) => product.category === categoryTags[Number(category)]
-      );
-    }
-
-    // 根據出團狀況篩選
-    if (status) {
-      filtered = filtered.filter((product) => {
-        switch (status) {
-          case "已出團":
-            return product.isFinish === 1 && product.is_enabled;
-          case "待確認出團":
-            return product.isFinish === 0 && product.is_enabled;
-          case "取消出團":
-            return !product.is_enabled;
-          default:
-            return true;
+        {},
+        {
+            label: "3",
+            data: [15, 25, 10],
+            barThickness: isWidth ? 4 : 12,
+            borderSkipped: `boolean`,
+            borderRadius: 100,
         }
-      });
-    }
+    ];
 
-    setFilteredData(filtered);
-    generatePieChart(filtered);
-    generateBarChart(filtered);
-    generateLineChart(filtered);
-  };
+    // 創建或更新圖表
+    useEffect(() => {
+        const ctx = canvasRef.current.getContext('2d');
 
-  // 初始化時生成圖表
-  useEffect(() => {
-    if (filteredData.length > 0) {
-      generatePieChart(filteredData);
-      generateBarChart(filteredData);
-      generateLineChart(filteredData);
-    }
-  }, [filteredData]);
+        // 創建新的圖表
+        chartRef.current = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: day,
+                datasets: data,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: isWidth ? 12 : 14,
+                            },
+                            stepSize: 3,
+                        },
+                    },
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'M/d',
+                            },
+                        },
+                        ticks: {
+                            font: {
+                                size: isWidth ? 12 : 14,
+                            },
+                        },
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+                layout: {
+                    padding: {
+                        top: isWidth ? 40 : 100,
+                        right: isWidth ? 16 : 160,
+                        left: isWidth ? 16 : 48,
+                        bottom: isWidth ? 40 : 40,
+                    },
+                },
+            },
+            plugins: [legendPosi, plugin],
+        });
 
-  return (
-    <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="row align-items-center mb-4"
-      >
-        <div className="col-12 col-md-6 mb-3">
-          <div className="input-group align-items-center">
-            <span className="me-4 fs-b1 fw-semibold">日期</span>
-            <input
-              {...register("startDate", { required: true })}
-              type="date"
-              className="form-control rounded-end rounded-pill"
-              placeholder="開始時間"
-            />
-            <span className="input-group-text">~</span>
-            <input
-              {...register("endDate", { required: true })}
-              type="date"
-              className="form-control rounded-start rounded-pill"
-              placeholder="結束時間"
-            />
-          </div>
-        </div>
+        return () => {
+            if (chartRef.current) {
+                chartRef.current.destroy();
+            }
+        };
+    }, [day, isWidth])
 
-        <div className="col-12 col-md-3 mb-3">
-          <div className="d-flex flex-nowrap">
-            <span
-              style={{ whiteSpace: `nowrap` }}
-              className="me-4 fs-b1 fw-semibold"
-            >
-              類別
-            </span>
-            <select {...register("category")} className="form-select w-100">
-              {categoryTags.map((tag, index) => (
-                <option key={index} value={index}>
-                  {tag}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
 
-        <div className="col-12 col-md-3 mb-3">
-          <div className="d-flex flex-nowrap">
-            <span
-              style={{ whiteSpace: `nowrap` }}
-              className="me-4 fs-b1 fw-semibold"
-            >
-              出團情況
-            </span>
-            <select {...register("status")} className="form-select w-100">
-              <option value="">全部</option>
-              <option value="已出團">已出團</option>
-              <option value="待確認出團">待確認出團</option>
-              <option value="取消出團">取消出團</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="col-12 text-end">
-          <button type="submit" className="btn btn-primary">
-            查詢
-          </button>
-        </div>
-      </form>
-      <div className="chart-container">
-        <div className="row">
-          <div className="col-12 col-md-6 mb-4">
-            <div className="chart-wrapper">
-              <h3 className="text-center mb-4">活動狀態分布</h3>
-              <div id="pieChart"></div>
-            </div>
-          </div>
-          <div className="col-12 col-md-6 mb-4">
-            <div className="chart-wrapper">
-              <h3 className="text-center mb-4">活動狀態趨勢</h3>
-              <div id="barChart"></div>
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="chart-wrapper">
-              <h3 className="text-center mb-4">活動類別趨勢</h3>
-              <div id="lineChart"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+    return (
+        <canvas ref={canvasRef}></canvas>
+    );
 };
 
-export default Chart;
+// //線條
+// const MyChartLine = ({ legendPosi, plugin, day, isWidth }) => {
+//     const canvasRef = useRef(null);
+//     const chartRef = useRef(null);
+//     const data = [
+//         {
+//             label: "1",  // 標籤
+//             data: [10, 20, 30],  //標籤數據(Y軸資料)
+//             backgroundColor: 'rgba(75, 192, 192, 0.5)',
+//             borderColor: '#66AEDA',
+//         },
+//         {
+//             label: "2",
+//             data: [15, 25, 10],
+//             backgroundColor: '#F96307',
+//             borderColor: '#9BD579',
+//         },
+//         {
+//             label: "3",
+//             data: [15, 25, 10],
+//             backgroundColor: 'rgba(255, 99, 132, 0.5)',
+//             borderColor: 'rgba(255, 99, 132, 1)',
+//         }
+//     ];
+
+//     //chart
+//     // 創建或更新圖表
+//     useEffect(() => {
+//         const ctx = canvasRef.current.getContext('2d');
+
+//         // 創建新的圖表
+//         chartRef.current = new Chart(ctx, {
+//             type: 'line',
+//             data: {
+//                 labels: day,
+//                 datasets: data,
+//             },
+//             options: {
+//                 responsive: true,
+//                 maintainAspectRatio: false,
+//                 scales: {
+//                     y: {
+//                         beginAtZero: true,
+//                         ticks: {
+//                             font: {
+//                                 size: isWidth ? 12 : 14,
+//                             },
+//                             stepSize: 2,
+//                         },
+//                     },
+//                     x: {
+//                         type: 'time',
+//                         time: {
+//                             unit: 'day',
+//                             displayFormats: {
+//                                 day: 'M/d',
+//                             },
+//                         },
+//                         ticks: {
+//                             font: {
+//                                 size: isWidth ? 12 : 14,
+//                             },
+//                         },
+//                     },
+//                 },
+//                 plugins: {
+//                     legend: {
+//                         display: false,
+//                     },
+//                 },
+//                 layout: {
+//                     padding: {
+//                         top: isWidth ? 40 : 100,
+//                         right: isWidth ? 16 : 160,
+//                         left: isWidth ? 16 : 48,
+//                         bottom: isWidth ? 40 : 40,
+//                     },
+//                 },
+//             },
+//             plugins: [legendPosi, plugin],
+//         });
+
+//         return () => {
+//             if (chartRef.current) {
+//                 chartRef.current.destroy();
+//             }
+//         };
+//     }, [day, isWidth])
+
+//     return (
+//         <canvas ref={canvasRef}></canvas>
+//     );
+// };
+
+//派
+
+const BarChartComponent = () => {
+    useEffect(() => {
+        c3.generate({
+            bindto: '#chart',
+            data: {
+                columns: [
+                    ['美劇', 20],
+                    ['韓劇', 30],
+                    ['日劇', 50],
+                ],
+                type: 'pie',
+            },
+            pie: {
+                label: {
+                    show: true,
+                    format: function (value, ratio, id) {
+                        return `${id} ${(ratio * 100).toFixed(1)}%`;
+                    },
+                },
+            },
+            legend: {
+                show: false,
+            },
+        });
+    }, []);
+
+    return <div className='my-lg-19x my-4' id="chart"></div>
+
+};
+
+//標籤出團
+const Option = ({ setSelectedOptions, selectedOptions }) => {
+    const options = [
+        { value: '全部', label: '全部' },
+        { value: '出團', label: '出團' },
+        { value: '未出團', label: '未出團' },
+    ];
+
+    const optionAll = [
+        { value: '出團', label: '出團' },
+        { value: '未出團', label: '未出團' },
+    ]
+
+    const [optionState, setOptionState] = useState(false)
+
+    const handleChange = (selected) => {
+
+        const hasAll = selected.some((e) => e.value === '全部');
+
+        if (hasAll) {
+            setSelectedOptions(optionAll)
+            setOptionState(true)
+        }
+        else {
+            setSelectedOptions(selected);
+            setOptionState(false)
+        }
+
+    };
+
+    return (
+        <div style={{ whiteSpace: `nowrap` }} className=" w-100 fs-b1 fw-semibold">
+            <Select
+                isMulti
+                options={options}
+                value={selectedOptions}
+                onChange={handleChange}
+                placeholder="請選擇"
+            />
+        </div>
+    );
+};
+
+//標籤tag
+const OptionTag = ({ optiontag, setOptionTag }) => {
+    const options = [
+        { value: '全部', label: '全部' },
+        { value: '看電影', label: '看電影' },
+        { value: '看表演', label: '看表演' },
+        { value: '逛劇展', label: '逛劇展' },
+        { value: '買劇品', label: '買劇品' },
+        { value: '上劇課', label: '上劇課' },
+        { value: '劇本殺', label: '劇本殺' },
+        { value: '接劇龍', label: '接劇龍' },
+        { value: '聽劇透', label: '聽劇透' },
+        { value: '遊劇旅', label: '遊劇旅' },
+        { value: '追影星', label: '追影星' },
+    ];
+
+    const optionAll = [
+        { value: '看電影', label: '看電影' },
+        { value: '看表演', label: '看表演' },
+        { value: '逛劇展', label: '逛劇展' },
+        { value: '買劇品', label: '買劇品' },
+        { value: '上劇課', label: '上劇課' },
+        { value: '劇本殺', label: '劇本殺' },
+        { value: '接劇龍', label: '接劇龍' },
+        { value: '聽劇透', label: '聽劇透' },
+        { value: '遊劇旅', label: '遊劇旅' },
+        { value: '追影星', label: '追影星' },
+    ]
+
+    const [optionState, setOptionState] = useState(false)
+
+    const handleChange = (selected) => {
+
+        const hasAll = selected.some((e) => e.value === '全部');
+
+        if (hasAll) {
+            setOptionTag(optionAll)
+            setOptionState(true)
+        }
+        else {
+            setOptionTag(selected);
+            setOptionState(false)
+        }
+
+    };
+
+    return (
+        <div style={{ whiteSpace: `nowrap` }} className=" w-100 fs-b1 fw-semibold">
+            <Select
+                isMulti
+                options={options}
+                value={optiontag}
+                onChange={handleChange}
+                placeholder="請選擇"
+            />
+        </div>
+    );
+}
+
+
+const ChartOutlet = () => {
+    const [day, setDay] = useState([])
+    const [inday, setInDay] = useState(null)
+    const [outday, setOutDay] = useState(null)
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [optiontag, setOptionTag] = useState([])
+    const [isWidth, setIsWidth] = useState(window.innerWidth <= 992);
+    const [isFinish, setIsFinsh] = useState([])
+    const [category, setCategory] = useState([])
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsWidth(window.innerWidth <= 992);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const inputDay = (e) => {
+        const timestamp = new Date(e.target.value).getTime()
+        setInDay(timestamp)
+    }
+    const outputDay = (e) => {
+        const timestamp = new Date(e.target.value).getTime()
+        setOutDay(timestamp)
+    }
+
+    const legendPosi = {
+        id: 'legendPosi',
+        afterDraw: (chart) => {
+            const ctx = chart.ctx;
+            const legendItems = chart.legend.legendItems;
+            const startX = isWidth ? 119 : 834;
+            const startY = isWidth ? 16 : 40;
+            let itemX;
+            let itemY;
+            const lineHeight = isWidth ? 50 : 20;
+            let validIndex = 0;
+            ctx.save();
+            ctx.font = isWidth ? `14px` : '16px';
+            ctx.textAlign = 'left';
+            legendItems.forEach((item) => {
+                if (!item.text || item.text.trim() === '') {
+                    return;
+                }
+                if (isWidth) {
+                    itemX = startX + validIndex * lineHeight;;
+                    itemY = startY;
+                } else {
+                    itemX = startX;
+                    itemY = startY + validIndex * lineHeight;
+                }
+
+                ctx.beginPath();
+                ctx.roundRect(itemX, itemY, 10, 10, 10);
+                ctx.fillStyle = item.fillStyle;
+                ctx.fill();
+
+                ctx.fillStyle = item.fontColor || '#000';
+                ctx.fillText(item.text, itemX + 18, itemY + 10);
+                validIndex++;
+            });
+            ctx.restore();
+        }
+    };
+
+    const plugin = {
+        id: 'customYAxisTitle',
+        afterDraw(chart) {
+            const { ctx, scales } = chart;
+            const yAxis = scales.y;
+            const title = '圖數';
+            const x = isWidth ? 3 : 5
+            const y = isWidth ? 16 : 36
+            ctx.save();
+            ctx.font = isWidth ? `14px` : '16px';
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'left';
+            ctx.fillText(title, yAxis.left - x, yAxis.top - y);
+            ctx.restore();
+        }
+    };
+
+    useEffect(() => {
+
+        const chang = (timestamp) => {
+            return new Date(timestamp).toISOString().split('T')[0];
+        }
+
+        const b = 24 * 60 * 60 * 1000;
+        if (!inday || !outday) return;
+        const a = [];
+
+
+        for (let timestamp = inday; timestamp <= outday; timestamp += b) {
+            a.push(chang(timestamp));
+        }
+
+        for (let timestamp = outday; timestamp <= inday; timestamp += b) {
+            a.push(chang(timestamp));
+        }
+        if (a.length > 9 && !isWidth) {
+            alert(`日期不可超過10天`);
+            setDay([]);
+        } else if (a.length > 6 && isWidth) {
+            alert(`日期不可超過6天`);
+            setDay([]);
+        } else {
+            setDay(a)
+        }
+    }, [inday, outday])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const a = {}
+                const b = {}
+                const res = await axios.get(`${baseUrl}/api/${apiPath}/products/all`)
+                res.data.products.map((e) => {
+                    console.log(`我是product`,e.category)
+                    optiontag.map((e)=>{
+                        console.log(e.value)
+                    })
+                })
+
+            } catch (error) {
+
+            }
+        })()
+    },[optiontag])
+    return (<>
+        {isWidth &&
+            <div className='d-flex justify-content-end'>
+                <button className="btn btn-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#Lable" aria-controls="staticBackdrop">
+                    <i className="bi bi-funnel"></i>
+                </button>
+            </div>
+        }
+        {!isWidth &&
+            <>
+                <form className="row align-items-center">
+                    <div className="col-4 " action="">
+                        <div className="input-group align-items-center">
+                            <span className="me-4 fs-b1 fw-semibold">日期</span>
+                            <input
+                                onChange={inputDay}
+                                type="date"
+                                className=" form-control rounded-end rounded-pill"
+                                placeholder="開始時間" />
+                            <span className="input-group-text">~</span>
+                            <input
+                                onChange={outputDay}
+                                type="date"
+                                className=" form-control rounded-start rounded-pill"
+                                placeholder="結束時間" />
+                        </div>
+                    </div>
+
+                    <div className="col-4 d-flex flex-nowrap align-items-center">
+                        <span style={{ whiteSpace: `nowrap` }} className="me-4  fs-b1 fw-semibold">標籤</span>
+                        <OptionTag optiontag={optiontag} setOptionTag={setOptionTag} />
+                    </div>
+
+                    <div className="col-4 d-flex flex-nowrap align-items-center">
+                        <span style={{ whiteSpace: `nowrap` }} className="me-4  fs-b1 fw-semibold">出團情況</span>
+                        <Option setSelectedOptions={setSelectedOptions} selectedOptions={selectedOptions} />
+                    </div>
+                </form >
+            </>}
+
+        <div style={{ height: '80vh' }} className="offcanvas offcanvas-bottom rounded-6 rounded-bottom" data-bs-backdrop="static" tabIndex="-1" id="Lable" aria-labelledby="Label">
+            <form className='px-3 py-8 offcanvas-body'>
+                <div className='mb-4'>
+                    <div className='d-flex justify-content-between'>
+                        <span className="me-4 fs-b1 mb-1 fw-semibold">日期</span>
+                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div className="input-group">
+                        <input
+                            onChange={inputDay}
+                            type="date"
+                            className=" form-control rounded-end rounded-pill"
+                            placeholder="開始時間" />
+                        <span className="input-group-text">~</span>
+                        <input
+                            onChange={outputDay}
+                            type="date"
+                            className=" form-control rounded-start rounded-pill"
+                            placeholder="結束時間" />
+                    </div>
+                </div>
+
+                <div className='mb-4'>
+                    <span style={{ whiteSpace: `nowrap` }} className="me-4 mb-1  fs-b1 fw-semibold">標籤</span>
+                    <OptionTag optiontag={optiontag} setOptionTag={setOptionTag} />
+                </div>
+
+                <div className='mb-6'>
+                    <span style={{ whiteSpace: `nowrap` }} className="me-4  mb-1 fs-b1 fw-semibold">出團情況</span>
+                    <Option setSelectedOptions={setSelectedOptions} selectedOptions={selectedOptions} />
+                </div>
+                <button className='btn btn-brand-400 rounded-4 w-100 text-white' type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                    套用
+                </button>
+            </form >
+        </div>
+
+
+
+        <div style={{ width: '100%', height: isWidth ? '300px' : '480px' }} className='shadow border rounded-4 my-lg-6 my-5'>
+            <MyChart legendPosi={legendPosi} plugin={plugin} day={day} isWidth={isWidth} />
+        </div>
+        {/* <div style={{ width: '100%', height: isWidth ? '300px' : '480px' }} className='shadow border rounded-4 mb-lg-6 mb-5'>
+            <MyChartLine legendPosi={legendPosi} plugin={plugin} day={day} isWidth={isWidth} />
+        </div> */}
+        <div className='shadow border rounded-4'>
+            <BarChartComponent />
+        </div>
+    </>)
+};
+
+export default ChartOutlet;

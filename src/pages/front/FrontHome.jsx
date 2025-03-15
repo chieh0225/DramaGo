@@ -10,7 +10,6 @@ import swiper1 from "../../assets/images/Frame 1000005334.png";
 import swiper2 from "../../assets/images/Frame 1000005334-1.png";
 import swiper3 from "../../assets/images/Frame 1000005334-2.png";
 import swiper4 from "../../assets/images/Frame 1000005334-3.png";
-import cardUser from "../../assets/images/inner/Frame 1000005423.png"
 import SwiperModalimg1 from "../../assets/images/Frame 1000005367.png"
 import SwiperModalimg2 from "../../assets/images/Frame 1000005366.png"
 import SwiperModalimg3 from "../../assets/images/Frame 1000005390.png"
@@ -29,10 +28,7 @@ import axios from 'axios';
 import { Link, useOutletContext } from 'react-router-dom';
 
 // 串接Google 登入 API 文件
-
 // 串接Facebook 登入 API 文件
-
-// 後台所有功能
 
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -98,6 +94,7 @@ const SwiperModalType = () => {
     </>
   )
 }
+
 const Card = () => {
   const [recommend, setRecommend] = useState([]);
   const { state, mymodal, members, setMembers } = useOutletContext();
@@ -223,7 +220,7 @@ const SwiperModalimg = () => {
   const prev = () => {
     swiperRef.current.slidePrev()
   }
-  //抓取投影片位置調整pb/pt
+
   return (
     <>
       <Swiper

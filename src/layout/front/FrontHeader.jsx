@@ -1,24 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import SearchBar from "../../components/SearchBar";
-import { Collapse } from "bootstrap";
 //照片
 import logout from "../../assets/images/icon/24px/solid/logout.svg";
 import logo from "../../assets/images/Variant7.svg";
 import menber from "../../assets/images/icon/24px/solid/memember.svg"
 import ueser from "../../assets/images/icon/24px/solid/ueser.svg"
 import axios from "axios";
-import { text } from "framer-motion/client";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
-
 const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
     const [filterDramas, setFilterDramas] = useState(null);
     const navigate = useNavigate();
-    const [cccc , setText] =useState(false)
     // 渲染劇會列表
     useEffect(() => {
         (async () => {
@@ -38,23 +34,22 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
 
     //登出
     const logoutUser = () => {
-        setState(false)
-        Cookies.remove('token');
-        navigate('/')
+        console.log('執行登出');
+        const token = Cookies.get(`token`)
+        Cookies.remove('token', { path: '/', domain: 'localhost' });
+        setState(false);
+        navigate('/');
     }
 
-    useEffect(() => {
-        const token = Cookies.get('token')
-        if (token) {
-            setState(true)
-        } else {
-            setState(false)
-        }
-    }, [])
+     useEffect(() => {
+         const token = Cookies.get('token')
+         if (token) {
+             setState(true)
+         } else {
+             setState(false)
+         }
+     }, [])
 
-    const text = ()=>{
-        setText(true)
-    }
 
     return (<>
         <header className="header">
@@ -62,7 +57,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
             <div className="w-100 d-lg-none">
                 <nav className="navbar">
                     <Link className="ms-3 navbar-brand" to="/"><img style={{ width: "140px" }} src={logo} alt="" /></Link>
-                    <button className="navbar-toggler border-0 me-3" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
+                    <button className="navbar-toggler border-0 me-3" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img className="nav-icon-1" src={menber} alt="" />
                     </button>
                     <div className=" dropdown-menu w-100 py-0" aria-labelledby="navbarDropdown">

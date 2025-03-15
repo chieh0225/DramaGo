@@ -14,7 +14,6 @@ import DramaFormModal from "../../components/modal/DramaFormModal";
 import TagsFilter from "../../components/TagsFilter";
 import DramaListCard from "../../components/card/DramaListCard";
 import DramaListTab from "../../components/tab/DramaListTab";
-import LoginModal from "../../components/modal/LoginModal";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -394,8 +393,6 @@ const DramaList = () => {
           modalMode={modalMode}
           unitShareDrama={unitShareDrama}
         />
-        <LoginModal mymodal={mymodal} />
-
         {/* Offcanvas */}
         {/* 篩選 */}
         <div
