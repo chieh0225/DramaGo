@@ -257,6 +257,13 @@ const DramaInfo = () => {
     }
 
     try {
+      const token = Cookies.get(`token`);
+      const config = {
+        headers: {
+          Authorization: `${token}`,
+        },
+      };
+
       const response = await axios.put(
         `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
@@ -274,7 +281,8 @@ const DramaInfo = () => {
               },
             ],
           },
-        }
+        },
+        config
       );
 
       if (response.status === 200) {
@@ -289,6 +297,13 @@ const DramaInfo = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
+      const token = Cookies.get(`token`);
+      const config = {
+        headers: {
+          Authorization: `${token}`,
+        },
+      };
+
       const response = await axios.put(
         `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
@@ -298,7 +313,8 @@ const DramaInfo = () => {
               (comment) => comment.commentId !== commentId
             ),
           },
-        }
+        },
+        config
       );
 
       if (response.status === 200) {
@@ -312,6 +328,13 @@ const DramaInfo = () => {
 
   const handleDeleteReply = async (commentId, replyId) => {
     try {
+      const token = Cookies.get(`token`);
+      const config = {
+        headers: {
+          Authorization: `${token}`,
+        },
+      };
+
       const response = await axios.put(
         `${BASE_URL}/api/${API_URL}/admin/product/${id}`,
         {
@@ -329,7 +352,8 @@ const DramaInfo = () => {
               return comment;
             }),
           },
-        }
+        },
+        config
       );
 
       if (response.status === 200) {
