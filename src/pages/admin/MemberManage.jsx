@@ -28,7 +28,7 @@ const MemberManage = () => {
             const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/articles`, config);
             setMemberInfo(res.data.articles);
         } catch (err) {
-            const message = err.response.data;
+            let message = err.response.data;
             message = Array.isArray(message) ? message : [message];
             dispatch(pushMsg({
                 text: message.join('、'),
@@ -58,7 +58,7 @@ const MemberManage = () => {
             }));
             getMembers();
         } catch (err) {
-            const message = err.response.data;
+            let message = err.response.data;
             message = Array.isArray(message) ? message : [message];
             dispatch(pushMsg({
                 text: message.join('、'),

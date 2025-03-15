@@ -139,7 +139,7 @@ const Card = () => {
       setMembers(res.data.articles);
     } catch (err) {
       console.log(err);
-      const message = err.response?.data;
+      let message = err.response?.data;
       message = Array.isArray(message) ? message : [message];
       dispatch(
         pushMsg({

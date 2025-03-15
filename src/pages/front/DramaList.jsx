@@ -97,7 +97,7 @@ const DramaList = () => {
       setDramas(res.data.products);
       setFilterDramas(res.data.products);
     } catch (err) {
-      const message = err.response?.data;
+      let message = err.response?.data;
       message = Array.isArray(message) ? message : [message];
       dispatch(
         pushMsg({
@@ -116,7 +116,7 @@ const DramaList = () => {
       const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
       setMembers(res.data.articles);
     } catch (err) {
-      const message = err.response?.data;
+      let message = err.response?.data;
       message = Array.isArray(message) ? message : [message];
       dispatch(
         pushMsg({
@@ -146,7 +146,7 @@ const DramaList = () => {
       );
       getLoveDramas();
     } catch (err) {
-      const message = err.response.data;
+      let message = err.response.data;
       dispatch(
         pushMsg({
           text: message.join("、"),
@@ -164,7 +164,7 @@ const DramaList = () => {
       const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
       setLoveDramas(res.data.data.carts);
     } catch (err) {
-      const message = err.response.data;
+      let message = err.response.data;
       dispatch(
         pushMsg({
           text: message.join("、"),
@@ -187,7 +187,7 @@ const DramaList = () => {
       );
       getLoveDramas();
     } catch (err) {
-      const message = err.response.data;
+      let message = err.response.data;
       dispatch(
         pushMsg({
           text: message.join("、"),
