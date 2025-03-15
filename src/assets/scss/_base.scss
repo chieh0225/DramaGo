@@ -5,6 +5,13 @@
   //  outline: 1px solid red;
 }
 
+body {
+  ::selection {
+    color: white; /* 選取文字的顏色 */
+    background-color: $brand-400; /* 選取文字的背景顏色 */
+  }
+}
+
 picture {
   max-width: 100%;
   height: auto;

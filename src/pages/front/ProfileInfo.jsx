@@ -74,8 +74,8 @@ const ProfileInfo = () => {
       // 重設密碼表單不需要預設值
       resetPassword();
     } catch (error) {
-      console.error("取得個人資料失敗：", error);
       alert("取得個人資料失敗");
+      console.error("取得個人資料失敗：", error);
     } finally {
       dispatch(changeLoadingState(false));
     }
@@ -189,7 +189,7 @@ const ProfileInfo = () => {
           <h2 className="fs-md-1m fs-4 mb-8">個人資訊</h2>
           <section className="my-info-section">
             <div className="d-md-flex flex-md-row flex-column align-items-baseline gap-5 mb-md-0 mb-5">
-              <h3 className="fs-md-2 fs-5 mb-md-5">會員資訊</h3>
+              <h3 className="fs-md-2 fs-5 mb-md-5 mb-2">會員資訊</h3>
               <p className="text-danger">
                 <span className="fs-5">*</span>
                 必填項目，填寫完整資訊開始參加劇會
@@ -279,7 +279,7 @@ const ProfileInfo = () => {
                   <input
                     type="date"
                     id="birthday"
-                    className={`form-control ${
+                    className={`form-control cursor ${
                       touchedFields.birthday
                         ? errors.birthday
                           ? "is-invalid"
@@ -314,7 +314,7 @@ const ProfileInfo = () => {
                 <div className="col-auto position-relative">
                   <div className="form-check form-check-inline">
                     <input
-                      className={`form-check-input ${
+                      className={`form-check-input cursor ${
                         touchedFields.gender
                           ? errors.gender
                             ? "is-invalid"
@@ -333,7 +333,7 @@ const ProfileInfo = () => {
                   </div>
                   <div className="form-check form-check-inline">
                     <input
-                      className={`form-check-input ${
+                      className={`form-check-input cursor ${
                         touchedFields.gender
                           ? errors.gender
                             ? "is-invalid"
@@ -365,10 +365,10 @@ const ProfileInfo = () => {
                   <input
                     type="email"
                     id="email"
-                    className="form-control-plaintext"
+                    className="form-control"
                     {...register("email")}
-                    readOnly
                     title="若需要修改請聯絡我們"
+                    disabled
                   />
                 </div>
               </div>
@@ -430,7 +430,7 @@ const ProfileInfo = () => {
                 <div className="col-auto position-relative">
                   <select
                     id="area"
-                    className="form-select"
+                    className="form-select cursor"
                     {...register("area", {
                       required: "地區欄位必填",
                     })}
