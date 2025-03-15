@@ -65,7 +65,7 @@ const DramaInfo = () => {
     },
   ];
 
-  // // 自動登入
+  // 自動登入
   // const autoLogin = async () => {
   //   try {
   //     const response = await axios.post(`${BASE_URL}/admin/signin`, {
@@ -86,7 +86,7 @@ const DramaInfo = () => {
 
   // useEffect(() => {
   //   autoLogin();
-  // }, []);
+  // }, [condition]);
 
   const generateMapUrl = (location) => {
     const encodedLocation = encodeURIComponent(location);

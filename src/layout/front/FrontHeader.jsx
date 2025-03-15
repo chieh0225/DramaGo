@@ -38,9 +38,10 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
 
     //登出
     const logoutUser = () => {
-        setState(false)
-        Cookies.remove('token');
-        navigate('/')
+        Cookies.remove('token', { path: '/'}); 
+        Cookies.remove('token', { path: '/DramaGo'}); 
+        setState(false);
+        navigate('/');
     }
 
     useEffect(() => {

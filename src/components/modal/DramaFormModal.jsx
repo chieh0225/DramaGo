@@ -9,11 +9,14 @@ import { changeLoadingState } from "../../redux/slice/loadingSlice"
 import { pushMsg } from "../../redux/slice/toastSlice";
 import Cookies from "js-cookie";
 
+
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 const uid = localStorage.getItem('uid');
 const now = dayjs();
-const pageUrl = window.location.href.replace("dramaList", "dramaInfo");
+
+
+
 
 const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, unitDrama, getDramas , unitShareDrama }) => {
 
@@ -21,6 +24,8 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
     const noteModalInstance = useRef(null);
     const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
     const dispatch = useDispatch();
+    const pageUrl = window.location.href.replace("dramaList", "dramaInfo");
+
 
     // 功能：表單
     const {
@@ -84,7 +89,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 status: 'success',
             }));
         } catch (err) {
-            const message = err.response.data;
+            let message = err.response.data;
             dispatch(pushMsg({
                 text: message.join('、'),
                 status: 'failed',
@@ -200,7 +205,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 setImagesUrl([]);
                 closeDramaForm();
             } catch (err) {
-                const message = err.response.data;
+                let message = err.response.data;
                 message = Array.isArray(message) ? message : [message]
                 dispatch(pushMsg({
                     text: message.join('、'),
@@ -220,7 +225,7 @@ const DramaFormModal = ({ dramaFormRef, closeDramaForm, deleteDrama, modalMode, 
                 getDramas();
                 closeDramaForm();
             } catch (err) {
-                const message = err.response.data;
+                let message = err.response.data;
                 message = Array.isArray(message) ? message : [message]
                 dispatch(pushMsg({
                     text: message.join('、'),
