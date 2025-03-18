@@ -62,7 +62,7 @@
   @media (min-width: 992px) {
     background-repeat: no-repeat;
     background-position: center;
-    width: 1824px;
+    max-width: 1824px;
     height: 936px;
     background-size: cover;
   }
@@ -92,3 +92,13 @@
     height: 192px;
   }
 }
+
+.side-img img {
+  max-width:40vw;
+  height: auto;
+  
+  @media (min-width: 992px) {
+      max-width: 20vw;
+    }
+}
+

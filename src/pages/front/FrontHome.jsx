@@ -10,7 +10,6 @@ import swiper1 from "../../assets/images/Frame 1000005334.png";
 import swiper2 from "../../assets/images/Frame 1000005334-1.png";
 import swiper3 from "../../assets/images/Frame 1000005334-2.png";
 import swiper4 from "../../assets/images/Frame 1000005334-3.png";
-import cardUser from "../../assets/images/inner/Frame 1000005423.png"
 import SwiperModalimg1 from "../../assets/images/Frame 1000005367.png"
 import SwiperModalimg2 from "../../assets/images/Frame 1000005366.png"
 import SwiperModalimg3 from "../../assets/images/Frame 1000005390.png"
@@ -325,38 +324,40 @@ const FrontHome = () => {
           </div>
         </div>
 
-        <div className="container">
-
-          {/* 當我們劇在一起能做什麼 */}
-          <section className="position-relative d-flex flex-column align-items-center justify-content-center pt-lg-18 pt-15 ">
-            <h1 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">當我們<span className="text-brand-300">劇</span>在一起<br className="d-lg-none" />能做什麼</h1>
-            <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
-            <div className="row mb-lg-17 ">
-              <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
-                <img className="mb-6" src={component1} alt="" />
-                <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
-                <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
+        <div className="wrap position-relative">
+          <div className="container">
+            {/* 當我們劇在一起能做什麼 */}
+            <section className="d-flex flex-column align-items-center justify-content-center pt-lg-18 pt-15" >
+              <h1 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">當我們<span className="text-brand-300">劇</span>在一起<br className="d-lg-none" />能做什麼</h1>
+              <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
+              <div className="row mb-lg-17 ">
+                <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
+                  <img className="mb-6" src={component1} alt="" />
+                  <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
+                  <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
+                </div>
+                <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
+                  <img className="mb-6" src={component2} alt="" />
+                  <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
+                  <p className="text-center">沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會</p>
+                </div>
+                <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
+                  <img className="mb-6" src={component3} alt="" />
+                  <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
+                  <p className="text-center">除了線上劇會，也可以選擇參加線下的劇會，<br />例如: 參加博覽會</p>
+                </div>
               </div>
-              <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                <img className="mb-6" src={component2} alt="" />
-                <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
-                <p className="text-center">沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會</p>
-              </div>
-              <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                <img className="mb-6" src={component3} alt="" />
-                <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
-                <p className="text-center">除了線上劇會，也可以選擇參加線下的劇會，<br />例如: 參加博覽會</p>
-              </div>
+            </section>
+            <div style={{ marginTop: "118px" }} className='position-absolute top-0 start-0 d-none d-lg-block side-img'>
+                <img src={img1} alt="" />
             </div>
-            <div style={{ marginTop: "118px", transform: "translate(-100%)" }} className='position-absolute top-0 start-0 d-none d-lg-block'>
-              <img src={img1} alt="" />
+            <div style={{ marginTop: "49px"}} className='position-absolute top-0 end-0 d-none d-lg-block side-img'>
+              <img src={img2} alt=""/>
             </div>
-            <div style={{ marginTop: "49px", transform: "translate(75%)" }} className='position-absolute top-0 end-0 d-none d-lg-block'>
-              <img src={img2} alt="" />
-            </div>
-          </section>
-
+          </div>
         </div>
+
+
         <div className='position-relative'>
           <div className="container">
             {/* 劇會類型 */}

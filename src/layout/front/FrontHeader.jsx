@@ -38,8 +38,8 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
 
     //登出
     const logoutUser = () => {
-        Cookies.remove('token', { path: '/'}); 
-        Cookies.remove('token', { path: '/DramaGo'}); 
+        console.log('執行登出');
+            Cookies.remove('token', { path: '/', domain: 'chieh0225.github.io' });
         setState(false);
         navigate('/');
     }

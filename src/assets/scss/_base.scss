@@ -1,14 +1,8 @@
-// [嚼勁]網線排版用
-*,
-*::before,
-*::after {
-  //  outline: 1px solid red;
-}
 
 body {
   ::selection {
-    color: white; /* 選取文字的顏色 */
-    background-color: $brand-400; /* 選取文字的背景顏色 */
+    color: white; 
+    background-color: $brand-400; 
   }
 }
 
@@ -22,7 +16,6 @@ img {
 }
 
 a {
-  // text-decoration: none; //已設定 $link-decoration: none
   color: inherit;
   display: inline-block;
 }
@@ -48,15 +41,14 @@ input:focus {
   caret-color: $brand-500;
 }
 .form-control:focus {
-  border-color: $brand-200 !important; // 邊框顏色
-  box-shadow: 0 0 8px $brand-200 !important; // 外陰影顏色
+  border-color: $brand-200 !important; 
+  box-shadow: 0 0 8px $brand-200 !important; 
 }
 
 .form-check-input:checked {
   background-color: $brand-core;
-  /* 修改選中時的背景顏色 */
   border-color: $brand-core;
-  /* 修改選中時的邊框顏色 */
+
 }
 
 .breadcrumb-item {
@@ -68,13 +60,11 @@ input:focus {
   font-size: 14px;
 }
 
-//[嚼勁]bootstrap內建icon系統
 i {
   display: inline-block;
   line-height: 0;
 }
 
-//[嚼勁]span預設inline不太好排版，所以改成inline-block比較好用
 span {
   display: inline-block;
 }

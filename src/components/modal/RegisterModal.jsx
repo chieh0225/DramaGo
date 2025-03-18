@@ -29,7 +29,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
             "password": 'dramago'
         })
             .then((res) => {
-                Cookies.set('token', res.data.token, { expires: 1, secure: true })
+                Cookies.set('token', res.data.token, { expires: 1,  path: '/', domain: 'chieh0225.github.io' });
                 myRegisterModal.current.hide();
                 reset();
                 navigate('/profile')
