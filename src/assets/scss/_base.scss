@@ -1,3 +1,10 @@
+body {
+  ::selection {
+    color: white; 
+    background-color: $brand-400; 
+  }
+}
+
 picture {
   max-width: 100%;
   height: auto;
@@ -22,11 +29,42 @@ li {
 
 .object-fit {
   object-fit: cover;
+  object-position: center center;
+  width: 100%;
+  height: 100%;
+}
+.cursor {
+  cursor: pointer;
 }
 
 input:focus {
   caret-color: $brand-500;
 }
+.form-control:focus {
+  border-color: $brand-200 !important; 
+  box-shadow: 0 0 8px $brand-200 !important; 
+}
+
+.form-check-input:checked {
+  background-color: $brand-core;
+  border-color: $brand-core;
+
+}
+
+.breadcrumb-item {
+  color: $grey-400;
+}
+
 ::placeholder {
   color: $grey-400;
+  font-size: 14px;
+}
+
+i {
+  display: inline-block;
+  line-height: 0;
+}
+
+span {
+  display: inline-block;
 }

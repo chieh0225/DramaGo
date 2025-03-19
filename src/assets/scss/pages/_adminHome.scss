@@ -1,0 +1,6 @@
+.adminLink-hover{
+    transition: background-color .3s;
+    &:hover{
+        background-color: $brand-50;
+    }
+}

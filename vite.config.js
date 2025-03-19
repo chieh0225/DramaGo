@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   // base 的寫法：
-  // base: '/Repository 的名稱/'
-  base: "/DramaGo/",
+  base: '/DramaGo/',
+
   plugins: [react()],
 });
