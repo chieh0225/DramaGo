@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { Navigate, NavLink, Outlet, useParams } from "react-router-dom";
 import { useRef, useEffect, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { pushMsg } from "../../redux/slice/toastSlice";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -81,7 +81,7 @@ const Profile = () => {
   const { id: memberId } = params;
   const [memberInfo, setMemberInfo] = useState({});
 
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [, setAvatarUrl] = useState("");
   const [imageUpdated, setImageUpdated] = useState(false);
 
   const state = true; // 假設是登入狀態
@@ -177,7 +177,7 @@ const Profile = () => {
 
       setAvatarUrl(data.imageUrl);
 
-      const newMemberInfo = await getMember();
+      await getMember();
 
       setImageUpdated(true);
     } catch (error) {

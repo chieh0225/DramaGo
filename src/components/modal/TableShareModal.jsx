@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { pushMsg } from "../../redux/slice/toastSlice";
 
@@ -35,7 +35,7 @@ const TableShareModal = ({ unitShareDrama }) => {
           status: "success",
         })
       );
-    } catch (err) {
+    } catch {
       dispatch(
         pushMsg({
           text: "複製失敗",
