@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import "../../assets/scss/pages/_dramaInfo.scss";
-import avatarImage from "../../assets/images/Frame 1000005391.png";
-import { useNavigate, useParams } from "react-router-dom";
-import AttendModal from "../../components/modal/AttendModal";
-import ShareModal from "../../components/modal/ShareModal";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode } from "swiper/modules";
-import Breadcrumb from "../../components/Breadcrumb";
-import "swiper/css";
-import "swiper/css/free-mode";
-import Cookies from "js-cookie";
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import '../../assets/scss/pages/_dramaInfo.scss';
+import avatarImage from '../../assets/images/Frame 1000005391.png';
+import { useNavigate, useParams } from 'react-router-dom';
+import AttendModal from '../../components/modal/AttendModal';
+import ShareModal from '../../components/modal/ShareModal';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode } from 'swiper/modules';
+import Breadcrumb from '../../components/Breadcrumb';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import Cookies from 'js-cookie';
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
@@ -20,31 +20,31 @@ const DramaInfo = () => {
   const navigate = useNavigate();
 
   const [dramaData, setDramaData] = useState({
-    title: "",
+    title: '',
     participants: [
       {
         image: avatarImage,
-        name: "主辦人",
-        status: "Host",
+        name: '主辦人',
+        status: 'Host',
       },
     ],
-    imageUrl: "",
-    content: "",
+    imageUrl: '',
+    content: '',
     noteTag: [],
     imagesUrl: [],
     comments: [],
-    date: { start: "" },
-    location: "",
-    url: "",
+    date: { start: '' },
+    location: '',
+    url: '',
     people: 0,
   });
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState('');
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [userImage, setUserImage] = useState("");
-  const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState('');
+  const [userImage, setUserImage] = useState('');
+  const [userName, setUserName] = useState('');
   const [commentImages, setCommentImages] = useState({});
-  const [replyText, setReplyText] = useState("");
+  const [replyText, setReplyText] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
   const [remainingSpots, setRemainingSpots] = useState(0);
   const maxLength = 1000;
@@ -104,9 +104,7 @@ const DramaInfo = () => {
       setUserId(selectedUserId);
 
       // 獲取用戶信息
-      const userRes = await axios.get(
-        `${BASE_URL}/api/${API_URL}/article/${selectedUserId}`
-      );
+      const userRes = await axios.get(`${BASE_URL}/api/${API_URL}/article/${selectedUserId}`);
 
       setUserImage(userRes.data.article.image);
       setUserName(userRes.data.article.author);
@@ -122,9 +120,7 @@ const DramaInfo = () => {
   // 檢查是否已收藏
   useEffect(() => {
     if (dramaData) {
-      const bookmarkedItems = JSON.parse(
-        localStorage.getItem("bookmarkedItems") || "[]"
-      );
+      const bookmarkedItems = JSON.parse(localStorage.getItem('bookmarkedItems') || '[]');
       setIsBookmarked(bookmarkedItems.includes(id));
     }
   }, [dramaData, id]);
@@ -133,23 +129,19 @@ const DramaInfo = () => {
   const handleBookmark = () => {
     if (!dramaData) return;
 
-    const bookmarkedItems = JSON.parse(
-      localStorage.getItem("bookmarkedItems") || "[]"
-    );
+    const bookmarkedItems = JSON.parse(localStorage.getItem('bookmarkedItems') || '[]');
     const newBookmarkedItems = isBookmarked
       ? bookmarkedItems.filter((itemId) => itemId !== id)
       : [...bookmarkedItems, id];
 
-    localStorage.setItem("bookmarkedItems", JSON.stringify(newBookmarkedItems));
+    localStorage.setItem('bookmarkedItems', JSON.stringify(newBookmarkedItems));
     setIsBookmarked(!isBookmarked);
   };
 
   // 獲取留言作者頭像
   const getCommentUserImage = async (userId) => {
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/${API_URL}/article/${userId}`
-      );
+      const res = await axios.get(`${BASE_URL}/api/${API_URL}/article/${userId}`);
       setCommentImages((prev) => ({
         ...prev,
         [userId]: res.data.article.image,
@@ -160,7 +152,7 @@ const DramaInfo = () => {
   };
 
   // 取得聚會資料
-  const getDramaData = async () => {
+  const getDramaData = useCallback(async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/${API_URL}/product/${id}`);
       // 確保 participants 有值
@@ -169,8 +161,8 @@ const DramaInfo = () => {
         participants: res.data.product.participants || [
           {
             image: avatarImage,
-            name: "主辦人",
-            status: "Host",
+            name: '主辦人',
+            status: 'Host',
           },
         ],
       };
@@ -194,19 +186,19 @@ const DramaInfo = () => {
       }
     } catch (error) {
       console.log(error);
-      alert("此聚會不存在");
+      alert('此聚會不存在');
       setTimeout(() => {
-        navigate("/");
+        navigate('/');
       }, 3000);
     }
-  };
+  }, [id, navigate]);
 
   useEffect(() => {
     getDramaData();
-  }, [id]);
+  }, [id, getDramaData]);
 
   // 計算剩餘名額
-  const calculateRemainingSpots = async () => {
+  const calculateRemainingSpots = useCallback(async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${API_URL}/orders`);
       const orders = response.data.orders;
@@ -214,34 +206,30 @@ const DramaInfo = () => {
       // 找出當前戲劇的訂單
       const dramaOrders = orders.filter((order) => {
         // 遍歷訂單中的所有產品
-        return Object.values(order.products).some(
-          (product) => product.product.id === id
-        );
+        return Object.values(order.products).some((product) => product.product.id === id);
       });
 
       // 計算總人數和已訂購數量
       const totalPeople = dramaData?.people || 0;
       const totalOrdered = dramaOrders.reduce((sum, order) => {
         // 遍歷訂單中的所有產品，找出當前戲劇的數量
-        const dramaProduct = Object.values(order.products).find(
-          (product) => product.product.id === id
-        );
+        const dramaProduct = Object.values(order.products).find((product) => product.product.id === id);
         return sum + (dramaProduct ? dramaProduct.qty : 0);
       }, 0);
 
       // 計算剩餘名額
       setRemainingSpots(totalPeople - totalOrdered);
     } catch (error) {
-      console.error("獲取訂單失敗：", error);
+      console.error('獲取訂單失敗：', error);
     }
-  };
+  }, [id, dramaData?.people]);
 
   // 當 dramaData 改變時重新計算剩餘名額
   useEffect(() => {
     if (dramaData) {
       calculateRemainingSpots();
     }
-  }, [dramaData]);
+  }, [dramaData, calculateRemainingSpots]);
 
   const handleCommentChange = (e) => {
     const text = e.target.value;
@@ -252,7 +240,7 @@ const DramaInfo = () => {
 
   const handlePublishComment = async () => {
     if (!commentText.trim()) {
-      alert("請輸入留言內容");
+      alert('請輸入留言內容');
       return;
     }
 
@@ -282,16 +270,16 @@ const DramaInfo = () => {
             ],
           },
         },
-        config
+        config,
       );
 
       if (response.status === 200) {
-        setCommentText("");
+        setCommentText('');
         getDramaData();
       }
     } catch (error) {
-      console.error("發布評論時出錯：", error);
-      alert("留言發布失敗，請稍後再試");
+      console.error('發布評論時出錯：', error);
+      alert('留言發布失敗，請稍後再試');
     }
   };
 
@@ -309,20 +297,18 @@ const DramaInfo = () => {
         {
           data: {
             ...dramaData,
-            comments: dramaData.comments.filter(
-              (comment) => comment.commentId !== commentId
-            ),
+            comments: dramaData.comments.filter((comment) => comment.commentId !== commentId),
           },
         },
-        config
+        config,
       );
 
       if (response.status === 200) {
         getDramaData();
       }
     } catch (error) {
-      console.error("刪除評論時出錯：", error);
-      alert("刪除留言失敗，請稍後再試");
+      console.error('刪除評論時出錯：', error);
+      alert('刪除留言失敗，請稍後再試');
     }
   };
 
@@ -344,24 +330,22 @@ const DramaInfo = () => {
               if (comment.commentId === commentId) {
                 return {
                   ...comment,
-                  replies: comment.replies.filter(
-                    (reply) => reply.replyId !== replyId
-                  ),
+                  replies: comment.replies.filter((reply) => reply.replyId !== replyId),
                 };
               }
               return comment;
             }),
           },
         },
-        config
+        config,
       );
 
       if (response.status === 200) {
         getDramaData();
       }
     } catch (error) {
-      console.error("刪除回覆時出錯：", error);
-      alert("刪除回覆失敗，請稍後再試");
+      console.error('刪除回覆時出錯：', error);
+      alert('刪除回覆失敗，請稍後再試');
     }
   };
 
@@ -378,7 +362,7 @@ const DramaInfo = () => {
 
   const handlePublishReply = async (commentId) => {
     if (!replyText.trim()) {
-      alert("請輸入回覆內容");
+      alert('請輸入回覆內容');
       return;
     }
 
@@ -415,17 +399,17 @@ const DramaInfo = () => {
             }),
           },
         },
-        config
+        config,
       );
 
       if (response.status === 200) {
-        setReplyText("");
+        setReplyText('');
         setReplyingTo(null);
         getDramaData();
       }
     } catch (error) {
-      console.error("發布回覆時出錯：", error);
-      alert("回覆發布失敗，請稍後再試");
+      console.error('發布回覆時出錯：', error);
+      alert('回覆發布失敗，請稍後再試');
     }
   };
 
@@ -438,9 +422,7 @@ const DramaInfo = () => {
               <div className="breadcrumb-wrapper">
                 <Breadcrumb pageLink={pageLink} />
               </div>
-              <p className="text-grey-950 fs-md-2 fs-5 fw-semibold mb-6">
-                {dramaData.title}
-              </p>
+              <p className="text-grey-950 fs-md-2 fs-5 fw-semibold mb-6">{dramaData.title}</p>
               <p className="mb-4">
                 <img
                   src={dramaData.participants?.[0]?.image || avatarImage}
@@ -448,11 +430,9 @@ const DramaInfo = () => {
                   width="40"
                   height="40"
                   className="me-4"
-                  style={{ borderRadius: "1000px" }}
+                  style={{ borderRadius: '1000px' }}
                 />
-                <span className="fw-semibold poppins-font">
-                  {dramaData.participants?.[0]?.name || "主辦人"}
-                </span>
+                <span className="fw-semibold poppins-font">{dramaData.participants?.[0]?.name || '主辦人'}</span>
               </p>
             </div>
           </div>
@@ -461,9 +441,9 @@ const DramaInfo = () => {
               src={dramaData.imageUrl}
               alt="主圖"
               className="w-100 mb-md-12 mb-8 "
-              style={{ borderRadius: "20px" }}
+              style={{ borderRadius: '20px' }}
             />
-            <p className="mb-8" style={{ whiteSpace: "pre-line" }}>
+            <p className="mb-8" style={{ whiteSpace: 'pre-line' }}>
               {dramaData.content}
             </p>
             <div className="d-inline-flex gap-2 mb-md-12 mb-8">
@@ -474,31 +454,26 @@ const DramaInfo = () => {
               ))}
             </div>
 
-            <div
-              className="attendent pb-8 drama-info__divider"
-              style={{ borderBottom: "1px solid #FFCA88" }}
-            >
+            <div className="attendent pb-8 drama-info__divider" style={{ borderBottom: '1px solid #FFCA88' }}>
               <div className="justify-content-between d-flex mb-8">
-                <p className="fw-semibold">
-                  與會者({dramaData.participants?.length || 0})
-                </p>
+                <p className="fw-semibold">與會者({dramaData.participants?.length || 0})</p>
               </div>
-              <div style={{ marginTop: "32px" }}>
+              <div style={{ marginTop: '32px' }}>
                 <Swiper
                   modules={[FreeMode]}
                   spaceBetween={8}
                   slidesPerView="auto"
                   freeMode={true}
                   style={{
-                    width: "100%",
-                    padding: "24px 0 0 0",
+                    width: '100%',
+                    padding: '24px 0 0 0',
                   }}
                 >
                   {dramaData.participants?.[0] && (
                     <SwiperSlide
                       style={{
-                        width: "auto",
-                        height: "auto",
+                        width: 'auto',
+                        height: 'auto',
                       }}
                     >
                       <div className="attendent-card">
@@ -509,14 +484,12 @@ const DramaInfo = () => {
                           className="card-img"
                           width="40"
                           height="40"
-                          style={{ borderRadius: "1000px" }}
+                          style={{ borderRadius: '1000px' }}
                         />
                         <p className="card-text text-grey-950 fw-semibold">
-                          {dramaData.participants[0].name || "主辦人"}
+                          {dramaData.participants[0].name || '主辦人'}
                         </p>
-                        <p className="card-text fs-12 text-brand-500">
-                          {dramaData.participants[0].status || "Host"}
-                        </p>
+                        <p className="card-text fs-12 text-brand-500">{dramaData.participants[0].status || 'Host'}</p>
                       </div>
                     </SwiperSlide>
                   )}
@@ -524,8 +497,8 @@ const DramaInfo = () => {
                     <SwiperSlide
                       key={index}
                       style={{
-                        width: "auto",
-                        height: "auto",
+                        width: 'auto',
+                        height: 'auto',
                       }}
                     >
                       <div className="attendent-card">
@@ -535,14 +508,10 @@ const DramaInfo = () => {
                           className="card-img"
                           width="40"
                           height="40"
-                          style={{ borderRadius: "1000px" }}
+                          style={{ borderRadius: '1000px' }}
                         />
-                        <p className="card-text text-grey-950 fw-semibold">
-                          {member.name || "參與者"}
-                        </p>
-                        <p className="card-text fs-12 text-brand-500">
-                          {member.status || "成員"}
-                        </p>
+                        <p className="card-text text-grey-950 fw-semibold">{member.name || '參與者'}</p>
+                        <p className="card-text fs-12 text-brand-500">{member.status || '成員'}</p>
                       </div>
                     </SwiperSlide>
                   ))}
@@ -550,14 +519,9 @@ const DramaInfo = () => {
               </div>
             </div>
 
-            <div
-              className="photos pb-8 mt-12 drama-info__divider"
-              style={{ borderBottom: "1px solid #FFCA88" }}
-            >
+            <div className="photos pb-8 mt-12 drama-info__divider" style={{ borderBottom: '1px solid #FFCA88' }}>
               <div className="justify-content-between d-flex mb-4">
-                <p className="fw-semibold">
-                  照片({dramaData.imagesUrl.length})
-                </p>
+                <p className="fw-semibold">照片({dramaData.imagesUrl.length})</p>
               </div>
               <Swiper
                 modules={[FreeMode]}
@@ -565,22 +529,18 @@ const DramaInfo = () => {
                 slidesPerView="auto"
                 freeMode={true}
                 style={{
-                  width: "100%",
+                  width: '100%',
                 }}
               >
                 {dramaData.imagesUrl.map((image, index) => (
                   <SwiperSlide
                     key={index}
                     style={{
-                      width: "auto",
-                      height: "auto",
+                      width: 'auto',
+                      height: 'auto',
                     }}
                   >
-                    <img
-                      src={image}
-                      alt={`聚會照片${index + 1}`}
-                      className="sub-images"
-                    />
+                    <img src={image} alt={`聚會照片${index + 1}`} className="sub-images" />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -588,16 +548,14 @@ const DramaInfo = () => {
 
             <div className="comment mt-12">
               <div className="justify-content-between d-flex mb-4">
-                <p className="fw-semibold">
-                  留言({dramaData.comments?.length || 0})
-                </p>
+                <p className="fw-semibold">留言({dramaData.comments?.length || 0})</p>
               </div>
               <div className="comment-board px-md-8 px-4">
-                {dramaData.comments?.map((comment, index) => (
+                {dramaData.comments?.map((comment) => (
                   <div
                     key={comment.commentId}
                     className="comment-content py-md-8 py-4 drama-info__comment-content"
-                    style={{ borderBottom: "1px solid white" }}
+                    style={{ borderBottom: '1px solid white' }}
                   >
                     <div className="message d-flex flex-column flex-md-row">
                       <div className="message-header">
@@ -606,15 +564,12 @@ const DramaInfo = () => {
                           alt="留言人"
                           width="40"
                           height="40"
-                          style={{ borderRadius: "1000px" }}
+                          style={{ borderRadius: '1000px' }}
                         />
                         <p>{comment.userName}</p>
                       </div>
                       <div className="message-content-wrapper d-flex flex-column flex-md-row justify-content-between">
-                        <div
-                          className="message-content"
-                          style={{ fontSize: "14px" }}
-                        >
+                        <div className="message-content" style={{ fontSize: '14px' }}>
                           {comment.content}
                         </div>
                         <div className="time d-flex align-items-center gap-6 mt-2">
@@ -635,7 +590,7 @@ const DramaInfo = () => {
                                 e.preventDefault();
                                 handleDeleteComment(comment.commentId);
                               }}
-                              style={{ color: "red" }}
+                              style={{ color: 'red' }}
                             >
                               刪除
                             </a>
@@ -646,26 +601,20 @@ const DramaInfo = () => {
 
                     {comment.replies && comment.replies.length > 0 && (
                       <div className="replies pt-5 d-flex flex-column">
-                        {comment.replies.map((reply, index) => (
-                          <div
-                            key={reply.replyId}
-                            className="message d-flex flex-column flex-md-row"
-                          >
+                        {comment.replies.map((reply) => (
+                          <div key={reply.replyId} className="message d-flex flex-column flex-md-row">
                             <div className="message-header">
                               <img
                                 src={commentImages[reply.user] || avatarImage}
                                 alt="留言人"
                                 width="40"
                                 height="40"
-                                style={{ borderRadius: "1000px" }}
+                                style={{ borderRadius: '1000px' }}
                               />
                               <p>{reply.userName}</p>
                             </div>
                             <div className="d-flex flex-column flex-md-row justify-content-between w-100">
-                              <div
-                                className="message-content"
-                                style={{ fontSize: "14px" }}
-                              >
+                              <div className="message-content" style={{ fontSize: '14px' }}>
                                 {reply.content}
                               </div>
                               <div className="time d-flex align-items-center gap-6 mt-2">
@@ -676,12 +625,9 @@ const DramaInfo = () => {
                                     href="#"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      handleDeleteReply(
-                                        comment.commentId,
-                                        reply.replyId
-                                      );
+                                      handleDeleteReply(comment.commentId, reply.replyId);
                                     }}
-                                    style={{ color: "red" }}
+                                    style={{ color: 'red' }}
                                   >
                                     刪除
                                   </a>
@@ -702,28 +648,21 @@ const DramaInfo = () => {
                         alt="留言人"
                         width="40"
                         height="40"
-                        style={{ borderRadius: "1000px" }}
+                        style={{ borderRadius: '1000px' }}
                       />
                     </div>
                     <div className="form-floating">
                       <textarea
                         className="form-control"
-                        placeholder={
-                          replyingTo ? "請輸入回覆內容" : "請輸入留言內容"
-                        }
+                        placeholder={replyingTo ? '請輸入回覆內容' : '請輸入留言內容'}
                         id="floatingTextarea2"
                         value={replyingTo ? replyText : commentText}
-                        onChange={
-                          replyingTo ? handleReplyChange : handleCommentChange
-                        }
+                        onChange={replyingTo ? handleReplyChange : handleCommentChange}
                         maxLength={maxLength}
                       ></textarea>
-                      <label htmlFor="floatingTextarea2">
-                        {replyingTo ? "請輸入回覆內容" : "請輸入留言內容"}
-                      </label>
+                      <label htmlFor="floatingTextarea2">{replyingTo ? '請輸入回覆內容' : '請輸入留言內容'}</label>
                       <div className="character-count">
-                        {(replyingTo ? replyText : commentText).length}/
-                        {maxLength}
+                        {(replyingTo ? replyText : commentText).length}/{maxLength}
                       </div>
                     </div>
                   </div>
@@ -733,7 +672,7 @@ const DramaInfo = () => {
                         className="btn btn-outline-secondary"
                         onClick={() => {
                           setReplyingTo(null);
-                          setReplyText("");
+                          setReplyText('');
                         }}
                       >
                         取消
@@ -741,13 +680,9 @@ const DramaInfo = () => {
                     )}
                     <button
                       className="publish-btn"
-                      onClick={
-                        replyingTo
-                          ? () => handlePublishReply(replyingTo)
-                          : handlePublishComment
-                      }
+                      onClick={replyingTo ? () => handlePublishReply(replyingTo) : handlePublishComment}
                     >
-                      {replyingTo ? "發布回覆" : "發布"}
+                      {replyingTo ? '發布回覆' : '發布'}
                       <i className="bi bi-send ms-2"></i>
                     </button>
                   </div>
@@ -760,60 +695,42 @@ const DramaInfo = () => {
             <div className="event-info d-flex flex-column gap-4">
               <div className="d-flex gap-4">
                 <i className="bi bi-clock text-brand-core fs-4"></i>
-                <p className="fw-semibold fs-14 text-grey-700">
-                  {dramaData.date.start}
-                </p>
+                <p className="fw-semibold fs-14 text-grey-700">{dramaData.date.start}</p>
               </div>
 
               {dramaData.url ? (
                 <div className="d-flex gap-4">
                   <i className="bi bi-globe2 text-brand-core fs-4"></i>
-                  <p className="fw-semibold fs-14 text-grey-700">
-                    {dramaData.url}
-                  </p>
+                  <p className="fw-semibold fs-14 text-grey-700">{dramaData.url}</p>
                 </div>
               ) : (
-                ""
+                ''
               )}
 
               <div className="d-flex gap-4">
                 <i className="bi bi-geo-alt text-brand-core fs-4"></i>
-                <p className="fw-semibold fs-14 text-grey-700">
-                  {dramaData.location}
-                </p>
+                <p className="fw-semibold fs-14 text-grey-700">{dramaData.location}</p>
               </div>
               <div className="drama-info__map d-none d-md-block">
                 <iframe
                   src={generateMapUrl(dramaData.location)}
                   width="100%"
                   height="300"
-                  style={{ border: 0, borderRadius: "8px" }}
+                  style={{ border: 0, borderRadius: '8px' }}
                   allowFullScreen=""
                   loading="lazy"
                 ></iframe>
               </div>
               <div className="d-flex w-100 gap-2 align-items-center">
                 <i
-                  className={`bi ${
-                    isBookmarked ? "bi-bookmark-fill" : "bi-bookmark"
-                  } text-brand-core fs-4`}
-                  style={{ cursor: "pointer" }}
+                  className={`bi ${isBookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'} text-brand-core fs-4`}
+                  style={{ cursor: 'pointer' }}
                   onClick={handleBookmark}
                 ></i>
-                <button
-                  type="button"
-                  className="share-btn ms-auto"
-                  data-bs-toggle="modal"
-                  data-bs-target="#shareModal"
-                >
+                <button type="button" className="share-btn ms-auto" data-bs-toggle="modal" data-bs-target="#shareModal">
                   分享
                 </button>
-                <button
-                  type="button"
-                  className="attend-btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
+                <button type="button" className="attend-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                   參加
                 </button>
               </div>
@@ -821,9 +738,9 @@ const DramaInfo = () => {
                 className="ms-auto drama-info__available-slots"
                 style={{
                   fontWeight: 400,
-                  width: "154px",
-                  fontSize: "12px",
-                  textAlign: "center",
+                  width: '154px',
+                  fontSize: '12px',
+                  textAlign: 'center',
                 }}
               >
                 還有{remainingSpots}個名額
@@ -833,12 +750,7 @@ const DramaInfo = () => {
         </div>
       </div>
 
-      <AttendModal
-        dramaId={id}
-        remainingSpots={remainingSpots}
-        dramaData={dramaData}
-        userId={userId}
-      />
+      <AttendModal dramaId={id} remainingSpots={remainingSpots} dramaData={dramaData} userId={userId} />
       <ShareModal />
     </div>
   );

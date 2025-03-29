@@ -25,7 +25,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
   // 初始化模態框
   useEffect(() => {
     myRegisterModal.current = new Modal(registerModal.current);
-  }, []);
+  }, [myRegisterModal]);
 
   //表單註冊
   const onSubmit = () => {
