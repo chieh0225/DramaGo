@@ -1,42 +1,42 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import axios from 'axios';
+import { useState, useEffect, useCallback } from 'react';
+import { NavLink } from 'react-router-dom';
 
-import TableShareModal from "../../components/modal/TableShareModal";
+import TableShareModal from '../../components/modal/TableShareModal';
 
-import Love from "../../components/modal/Love";
-import { useOutletContext } from "react-router-dom";
+import Love from '../../components/modal/Love';
+import { useOutletContext } from 'react-router-dom';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-import { useDispatch } from "react-redux";
-import { changeLoadingState } from "../../redux/slice/loadingSlice";
-import Loading from "../../components/Loading";
+import { useDispatch } from 'react-redux';
+import { changeLoadingState } from '../../redux/slice/loadingSlice';
+import Loading from '../../components/Loading';
 
 const ProfileCollection = () => {
   const dispatch = useDispatch();
   const [collection, setCollection] = useState([]);
-  const [sortOrder, setSortOrder] = useState("desc");
-  const [shareItemId, setShareItemId] = useState("");
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [shareItemId, setShareItemId] = useState('');
   const { state, mymodal } = useOutletContext();
 
-  const getCollection = async () => {
+  const getCollection = useCallback(async () => {
     try {
       dispatch(changeLoadingState(true));
       const res = await axios.get(`${baseUrl}/api/${apiPath}/cart`);
       const sortedData = sortCollection(res.data.data.carts, sortOrder);
       setCollection(sortedData);
     } catch {
-      alert("取得收藏列表失敗");
+      alert('取得收藏列表失敗');
     } finally {
       dispatch(changeLoadingState(false));
     }
-  };
+  }, [dispatch, sortOrder]);
 
   useEffect(() => {
     getCollection();
-  }, [state, sortOrder]);
+  }, [state, sortOrder, getCollection]);
 
   const refreshCollection = () => {
     setTimeout(getCollection, 1000);
@@ -47,13 +47,13 @@ const ProfileCollection = () => {
     return [...data].sort((a, b) => {
       const dateA = new Date(a.product.date.start);
       const dateB = new Date(b.product.date.start);
-      return order === "desc" ? dateB - dateA : dateA - dateB;
+      return order === 'desc' ? dateB - dateA : dateA - dateB;
     });
   };
 
   // 切換排序方式
   const toggleSortOrder = () => {
-    setSortOrder((prevOrder) => (prevOrder === "desc" ? "asc" : "desc"));
+    setSortOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
   };
 
   return (
@@ -67,14 +67,8 @@ const ProfileCollection = () => {
               className="btn d-flex align-items-center fs-b2 text-grey-400 px-md-3 px-0 mb-md-0 mb-3"
               onClick={toggleSortOrder}
             >
-              劇會日期：{sortOrder === "desc" ? "最新到最舊" : "最舊到最新"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="ms-2"
-              >
+              劇會日期：{sortOrder === 'desc' ? '最新到最舊' : '最舊到最新'}
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="ms-2">
                 <g id="sort_descending_line" fill="none">
                   <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                   <path
@@ -86,11 +80,7 @@ const ProfileCollection = () => {
             </button>
           </div>
           <div className="table-responsive">
-            <table
-              className={`table align-middle ${
-                collection?.length > 0 ? "table-hover" : ""
-              }`}
-            >
+            <table className={`table align-middle ${collection?.length > 0 ? 'table-hover' : ''}`}>
               <thead>
                 <tr>
                   <th>劇會日期 / 名稱</th>
@@ -106,13 +96,9 @@ const ProfileCollection = () => {
                   collection?.map((collectionItem) => (
                     <tr key={collectionItem.id}>
                       <th scope="row">
-                        <small className="date">
-                          {collectionItem.product.date.start.split("T")[0]}
-                        </small>
+                        <small className="date">{collectionItem.product.date.start.split('T')[0]}</small>
                         <small className="date"> ~ </small>
-                        <small className="date">
-                          {collectionItem.product.date.end.split("T")[0]}
-                        </small>
+                        <small className="date">{collectionItem.product.date.end.split('T')[0]}</small>
                         <p>{collectionItem.product.title}</p>
                       </th>
                       <td>{collectionItem.product.location}</td>
@@ -132,12 +118,7 @@ const ProfileCollection = () => {
                           target="_blank" // 另開分頁
                           role="button"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <g id="eye_2_fill" fill="none">
                               <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                               <path
@@ -152,33 +133,25 @@ const ProfileCollection = () => {
                         <button
                           type="button"
                           className="btn p-0"
-                          style={{ "--bs-btn-border-color": "none" }}
+                          style={{ '--bs-btn-border-color': 'none' }}
                           data-bs-toggle="modal"
                           data-bs-target="#tableShareModal"
-                          onClick={() =>
-                            setShareItemId(collectionItem.product.id)
-                          }
+                          onClick={() => setShareItemId(collectionItem.product.id)}
                         >
-                          <span className="material-symbols-rounded text-brand-core m-1 cursor">
-                            share
-                          </span>
+                          <span className="material-symbols-rounded text-brand-core m-1 cursor">share</span>
                         </button>
                       </td>
                       <td onClick={refreshCollection} className="cursor">
-                        <Love
-                          id={collectionItem.product.id}
-                          state={state}
-                          mymodal={mymodal}
-                        />
+                        <Love id={collectionItem.product.id} state={state} mymodal={mymodal} />
                       </td>
                     </tr>
                   ))
                 ) : (
-                  <tr style={{ height: "300px" }}>
+                  <tr style={{ height: '300px' }}>
                     <td colSpan="6" className="text-center border-bottom-0">
                       <div
                         className="d-flex flex-column justify-content-center align-items-center"
-                        style={{ height: "100%" }}
+                        style={{ height: '100%' }}
                       >
                         <p className="fs-3 mb-4">目前尚無收藏劇會</p>
                         <NavLink className="nav-link" to="/dramaList">
@@ -191,11 +164,7 @@ const ProfileCollection = () => {
                               viewBox="0 0 24 24"
                               className="ms-1"
                             >
-                              <g
-                                id="search_line"
-                                fill="none"
-                                fillRule="evenodd"
-                              >
+                              <g id="search_line" fill="none" fillRule="evenodd">
                                 <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                                 <path
                                   fill="#FFA13CFF"

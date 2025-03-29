@@ -1,5 +1,6 @@
 import { useEffect, useState, useId } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSearchState }) => {
   const searchId1 = useId();
@@ -8,9 +9,10 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
   const [isFirstRender, setIsFirstRender] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (location.pathname != '/dramaList') {
+    if (location.pathname !== '/dramaList') {
       navigate('/dramaList');
       setTimeout(find, 1500);
     } else {
@@ -21,7 +23,7 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
   const find = () => {
     const newArr = filterDramas.filter((drama) => drama.title.includes(keyword));
     setDramas(newArr);
-    if (phoneSearchState == true) {
+    if (phoneSearchState === true) {
       closeSearchOffcanvas();
     }
   };
@@ -37,56 +39,60 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
   }, [keyword, filterDramas, isFirstRender, setDramas]);
 
   return bar ? (
-    <>
-      <div className="position-relative w-100">
-        <form>
-          <label htmlFor={searchId1} className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
-            <button
-              type="submit"
-              className="btn"
-              style={{ '--bs-btn-border-color': 'none' }}
-              onClick={handleSearchSubmit}
-            >
-              <i className="bi bi-search text-brand-core d-block"></i>
-            </button>
-          </label>
-          <input
-            type="text"
-            className="form-control rounded-pill py-3 ps-6"
-            id={searchId1}
-            placeholder="搜尋劇會"
-            onChange={(e) => setKeyword(e.target.value)}
-            value={keyword}
-          />
-        </form>
-      </div>
-    </>
+    <div className="position-relative w-100">
+      <form>
+        <label htmlFor={searchId1} className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
+          <button
+            type="submit"
+            className="btn"
+            style={{ '--bs-btn-border-color': 'none' }}
+            onClick={handleSearchSubmit}
+          >
+            <i className="bi bi-search text-brand-core d-block"></i>
+          </button>
+        </label>
+        <input
+          type="text"
+          className="form-control rounded-pill py-3 ps-6"
+          id={searchId1}
+          placeholder="搜尋劇會"
+          onChange={(e) => setKeyword(e.target.value)}
+          value={keyword}
+        />
+      </form>
+    </div>
   ) : (
-    <>
-      <div className="mb-3 position-relative w-100">
-        <form>
-          <label htmlFor={searchId2} className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
-            <button
-              type="submit"
-              className="btn"
-              style={{ '--bs-btn-border-color': 'none' }}
-              onClick={handleSearchSubmit}
-            >
-              <i className="bi bi-search text-brand-core d-block"></i>
-            </button>
-          </label>
-          <input
-            type="text"
-            className="form-control rounded-pill "
-            id={searchId2}
-            placeholder="搜尋劇會"
-            onChange={(e) => setKeyword(e.target.value)}
-            value={keyword}
-          />
-        </form>
-      </div>
-    </>
+    <div className="mb-3 position-relative w-100">
+      <form>
+        <label htmlFor={searchId2} className="form-label position-absolute top-50 end-0 translate-middle-y pe-4">
+          <button
+            type="submit"
+            className="btn"
+            style={{ '--bs-btn-border-color': 'none' }}
+            onClick={handleSearchSubmit}
+          >
+            <i className="bi bi-search text-brand-core d-block"></i>
+          </button>
+        </label>
+        <input
+          type="text"
+          className="form-control rounded-pill"
+          id={searchId2}
+          placeholder="搜尋劇會"
+          onChange={(e) => setKeyword(e.target.value)}
+          value={keyword}
+        />
+      </form>
+    </div>
   );
+};
+
+SearchBar.propTypes = {
+  filterDramas: PropTypes.array.isRequired,
+  setDramas: PropTypes.func.isRequired,
+  closeSearchOffcanvas: PropTypes.func.isRequired,
+  bar: PropTypes.bool.isRequired,
+  phoneSearchState: PropTypes.bool.isRequired,
 };
 
 export default SearchBar;

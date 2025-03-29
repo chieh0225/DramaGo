@@ -53,7 +53,7 @@ const LoginModal = ({ mymodal, setState }) => {
   // 初始化模態框
   useEffect(() => {
     mymodal.current = new Modal(modalRef.current);
-  }, []);
+  }, [mymodal]);
 
   //忘記密碼Modal
   const lostModal = () => {

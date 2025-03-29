@@ -1,5 +1,6 @@
 import { useEffect, useId, useState, useCallback } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
   const [tagFilter, setTagFilter] = useState([]);
@@ -226,6 +227,12 @@ const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
       </form>
     </>
   );
+};
+
+TagsFilter.propTypes = {
+  filterDramas: PropTypes.array.isRequired,
+  setDramas: PropTypes.func.isRequired,
+  dramaState: PropTypes.object.isRequired,
 };
 
 export default TagsFilter;

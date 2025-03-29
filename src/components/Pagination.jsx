@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const Pagination = ({ pages, setPageNum }) => {
   return (
     <>
@@ -38,6 +40,16 @@ const Pagination = ({ pages, setPageNum }) => {
       </nav>
     </>
   );
+};
+
+Pagination.propTypes = {
+  pages: PropTypes.shape({
+    has_pre: PropTypes.bool.isRequired,
+    has_next: PropTypes.bool.isRequired,
+    total_pages: PropTypes.number.isRequired,
+    current_page: PropTypes.number.isRequired,
+  }).isRequired,
+  setPageNum: PropTypes.func.isRequired,
 };
 
 export default Pagination;
