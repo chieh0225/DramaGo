@@ -1,25 +1,19 @@
-import axios from "axios";
-import Cookies from "js-cookie";
-import { Navigate, NavLink, Outlet, useParams } from "react-router-dom";
-import { useRef, useEffect, useState } from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { Navigate, NavLink, Outlet, useParams } from 'react-router-dom';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import { pushMsg } from "../../redux/slice/toastSlice";
+import { useDispatch } from 'react-redux';
+import { pushMsg } from '../../redux/slice/toastSlice';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 const routes = [
   {
-    path: "profileInfo",
-    name: "個人資訊",
+    path: 'profileInfo',
+    name: '個人資訊',
     icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        className="me-2"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="me-2">
         <g id="profile_fill" fill="none">
           <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
           <path
@@ -31,16 +25,10 @@ const routes = [
     ),
   },
   {
-    path: "profileRecord",
-    name: "我的劇會記錄",
+    path: 'profileRecord',
+    name: '我的劇會記錄',
     icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        className="me-2"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="me-2">
         <g id="calendar_2_fill" fill="none" fillRule="evenodd">
           <path d="M24 0v24H0V0zM12.594 23.258l-.012.002-.071.035-.02.004-.014-.004-.071-.036c-.01-.003-.019 0-.024.006l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113-.014.002-.184.093-.01.01-.003.011.018.43.005.012.008.008.201.092c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.003-.011.018-.43-.003-.012-.01-.01z" />
           <path
@@ -52,16 +40,10 @@ const routes = [
     ),
   },
   {
-    path: "profileCollection",
-    name: "我的收藏",
+    path: 'profileCollection',
+    name: '我的收藏',
     icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        className="me-2"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="me-2">
         <g id="bookmark_fill" fill="none">
           <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
           <path
@@ -81,56 +63,50 @@ const Profile = () => {
   const { id: memberId } = params;
   const [memberInfo, setMemberInfo] = useState({});
 
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [, setAvatarUrl] = useState('');
   const [imageUpdated, setImageUpdated] = useState(false);
 
   const state = true; // 假設是登入狀態
   const mymodal = useRef(null);
 
-  const getMember = async () => {
-    const token = Cookies.get("token");
+  const getMember = useCallback(async () => {
+    const token = Cookies.get('token');
     try {
-      const res = await axios.get(
-        `${baseUrl}/api/${apiPath}/admin/article/${memberId}`,
-        {
-          headers: { Authorization: token },
-        }
-      );
+      const res = await axios.get(`${baseUrl}/api/${apiPath}/admin/article/${memberId}`, {
+        headers: { Authorization: token },
+      });
       setMemberInfo(res.data.article);
       setAvatarUrl(
         res.data.article.image ||
-          "https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop"
+          'https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop',
       );
       return res.data.article;
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [memberId]);
 
   useEffect(() => {
     getMember();
-  }, [memberId]);
+  }, [memberId, getMember]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     // 取得副檔名（不分大小寫）
-    const fileExtension = file.name.split(".").pop().toLowerCase();
+    const fileExtension = file.name.split('.').pop().toLowerCase();
 
     // 限制允許的圖片格式
-    const allowedTypes = ["image/jpeg", "image/png"];
-    const allowedExtensions = ["jpg", "jpeg", "png"]; // 允許的副檔名
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const allowedExtensions = ['jpg', 'jpeg', 'png']; // 允許的副檔名
 
-    if (
-      !allowedTypes.includes(file.type) ||
-      !allowedExtensions.includes(fileExtension)
-    ) {
+    if (!allowedTypes.includes(file.type) || !allowedExtensions.includes(fileExtension)) {
       dispatch(
         pushMsg({
-          text: "不支援的圖片格式！請上傳 jpg 或 png 檔案 ~",
-          status: "failed",
-        })
+          text: '不支援的圖片格式！請上傳 jpg 或 png 檔案 ~',
+          status: 'failed',
+        }),
       );
       return; // 終止上傳
     }
@@ -140,29 +116,25 @@ const Profile = () => {
     if (file.size > maxSize) {
       dispatch(
         pushMsg({
-          text: "圖片大小超過 2MB，請上傳小一點的圖片！",
-          status: "failed",
-        })
+          text: '圖片大小超過 2MB，請上傳小一點的圖片！',
+          status: 'failed',
+        }),
       );
       return; // 終止上傳
     }
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get('token');
 
-      const { data } = await axios.post(
-        `${baseUrl}/api/${apiPath}/admin/upload`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: token,
-          },
-        }
-      );
+      const { data } = await axios.post(`${baseUrl}/api/${apiPath}/admin/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: token,
+        },
+      });
 
       // 更新個人資料 (將新的圖片 URL 存回)
       await axios.put(
@@ -172,21 +144,21 @@ const Profile = () => {
         },
         {
           headers: { Authorization: token },
-        }
+        },
       );
 
       setAvatarUrl(data.imageUrl);
 
-      const newMemberInfo = await getMember();
+      await getMember();
 
       setImageUpdated(true);
     } catch (error) {
-      console.error("圖片上傳失敗：", error);
+      console.error('圖片上傳失敗：', error);
       dispatch(
         pushMsg({
-          text: "圖片上傳失敗，請稍後再試！",
-          status: "failed",
-        })
+          text: '圖片上傳失敗，請稍後再試！',
+          status: 'failed',
+        }),
       );
     }
   };
@@ -194,11 +166,11 @@ const Profile = () => {
   useEffect(() => {
     if (imageUpdated) {
       setTimeout(() => {
-        dispatch(pushMsg({ text: "更新個人圖片成功！", status: "success" }));
+        dispatch(pushMsg({ text: '更新個人圖片成功！', status: 'success' }));
       }, 700);
       setImageUpdated(false); // 重置狀態
     }
-  }, [imageUpdated]);
+  }, [imageUpdated, dispatch]);
 
   return (
     <>
@@ -225,12 +197,7 @@ const Profile = () => {
                       className="change-btn rounded-circle position-absolute bg-white
                       d-flex justify-content-center align-items-center cursor"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <title>點擊更換個人圖片~</title>
                         <g id="refresh_3_fill" fill="none">
                           <path d="M24 0v24H0V0zM12.594 23.258l-.012.002-.071.035-.02.004-.014-.004-.071-.036c-.01-.003-.019 0-.024.006l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113-.014.002-.184.093-.01.01-.003.011.018.43.005.012.008.008.201.092c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.003-.011.018-.43-.003-.012-.01-.01z" />
@@ -245,7 +212,7 @@ const Profile = () => {
                       type="file"
                       accept="image/*"
                       id="imageUpload"
-                      style={{ display: "none" }}
+                      style={{ display: 'none' }}
                       onChange={handleImageUpload}
                     />
                   </div>

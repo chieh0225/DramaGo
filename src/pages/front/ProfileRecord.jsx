@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import Loading from "../../components/Loading";
-
-import { useOutletContext } from "react-router-dom";
 
 const records = [
   // {
@@ -66,8 +64,8 @@ const records = [
 ];
 
 const ProfileRecord = () => {
-  const dispatch = useDispatch();
-  const [record, setRecords] = useState({ records });
+  // const dispatch = useDispatch();
+  const [record] = useState({ records });
 
   return (
     <>
@@ -77,7 +75,7 @@ const ProfileRecord = () => {
             <h2 className="fs-md-1m fs-4 mb-md-8 mb-5">我的劇會記錄</h2>
             <div className="d-flex flex-md-row flex-column justify-content-md-between gap-md-0 gap-3 mb-8 w-100">
               <div className="d-flex align-items-center">
-                <label className="fs-md-4 fs-6 me-3" for="party-status">
+                <label className="fs-md-4 fs-6 me-3" htmlFor="party-status">
                   揪團狀態
                 </label>
                 <select
@@ -94,7 +92,7 @@ const ProfileRecord = () => {
                 </select>
               </div>
               <div className="d-flex align-items-center">
-                <label className="fs-md-4 fs-6 me-3" for="party-category">
+                <label className="fs-md-4 fs-6 me-3" htmlFor="party-category">
                   劇會類別
                 </label>
                 <select
@@ -241,7 +239,7 @@ const ProfileRecord = () => {
                               <g
                                 id="search_line"
                                 fill="none"
-                                fill-rule="evenodd"
+                                fillRule="evenodd"
                               >
                                 <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                                 <path
