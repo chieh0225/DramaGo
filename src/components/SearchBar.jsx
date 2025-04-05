@@ -87,12 +87,4 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
   );
 };
 
-SearchBar.propTypes = {
-  filterDramas: PropTypes.array.isRequired,
-  setDramas: PropTypes.func.isRequired,
-  closeSearchOffcanvas: PropTypes.func.isRequired,
-  bar: PropTypes.bool.isRequired,
-  phoneSearchState: PropTypes.bool.isRequired,
-};
-
 export default SearchBar;

@@ -64,46 +64,44 @@ const NoteTagsModal = ({ noteModalRef, closeNoteModal, setIsOpenNoteModal, selec
   }, [getTags, token]);
 
   return (
-    <>
-      <div className="modal" tabIndex="-1" ref={noteModalRef}>
-        <div className="modal-dialog modal-md">
-          <div className="modal-content">
-            <div className="modal-header bg-brand-600 text-white">
-              <h5 className="modal-title">劇會標籤</h5>
-              <button type="button" className="btn-close btn-close-white" onClick={closeNoteModal}></button>
-            </div>
-            <div className="modal-body">
-              {noteTags &&
-                noteTags?.map((tag) => (
-                  <a role="button" className="my-1 mx-1" key={tag.id}>
-                    <input
-                      type="checkbox"
-                      className="btn-check"
-                      name="note"
-                      id={`noteTag-${tag.id}`}
-                      onChange={() => handleCheckbox(tag.title)}
-                      checked={selectedNoteTag.includes(tag.title)}
-                    />
+    <div className="modal" tabIndex="-1" ref={noteModalRef}>
+      <div className="modal-dialog modal-md">
+        <div className="modal-content">
+          <div className="modal-header bg-brand-600 text-white">
+            <h5 className="modal-title">劇會標籤</h5>
+            <button type="button" className="btn-close btn-close-white" onClick={closeNoteModal}></button>
+          </div>
+          <div className="modal-body">
+            {noteTags &&
+              noteTags?.map((tag) => (
+                <a role="button" className="my-1 mx-1" key={tag.id}>
+                  <input
+                    type="checkbox"
+                    className="btn-check"
+                    name="note"
+                    id={`noteTag-${tag.id}`}
+                    onChange={() => handleCheckbox(tag.title)}
+                    checked={selectedNoteTag.includes(tag.title)}
+                  />
 
-                    <label
-                      className={`brandBtn-2-sm ${selectedNoteTag.includes(tag.title) && 'active'}`}
-                      htmlFor={`noteTag-${tag.id}`}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {tag.title}
-                    </label>
-                  </a>
-                ))}
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="brandBtn-1 w-100" onClick={handleSubmit}>
-                挑好了
-              </button>
-            </div>
+                  <label
+                    className={`brandBtn-2-sm ${selectedNoteTag.includes(tag.title) && 'active'}`}
+                    htmlFor={`noteTag-${tag.id}`}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {tag.title}
+                  </label>
+                </a>
+              ))}
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="brandBtn-1 w-100" onClick={handleSubmit}>
+              挑好了
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

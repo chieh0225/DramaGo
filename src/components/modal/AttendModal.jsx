@@ -151,9 +151,4 @@ function AttendModal({ dramaId, userId }) {
   );
 }
 
-AttendModal.propTypes = {
-  dramaId: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
-};
-
 export default AttendModal;

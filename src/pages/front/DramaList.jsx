@@ -233,225 +233,219 @@ const DramaList = () => {
   };
 
   return (
-    <>
-      <main className="dramaList bg-brand-50 pt-lg-13 pt-6 pb-15">
-        <div className="container">
-          {/* 電腦版 */}
-          <Breadcrumb pageLink={pageLink} className="breadcrumb" />
-          <div className="row d-none d-lg-flex">
-            <div className="filterBoard col-3">
-              {/* 建立劇會 */}
-              <div className="addDrama-bg rounded-5 rounded-bottom-0 d-flex align-items-center">
-                <button
-                  type="button"
-                  className="btn fs-5 text-white ms-9 createDramaBtn"
-                  style={{ '--bs-btn-border-color': 'none' }}
-                  onClick={() => {
-                    if (token) {
-                      setModalMode('add');
-                      openDramaForm();
-                    } else {
-                      showAlert();
-                    }
-                  }}
-                >
-                  <i className="bi bi-plus-circle-fill"></i>
-                  <span className="ms-1">我要發起劇會</span>
-                </button>
-              </div>
-              {/* 篩選區 */}
-              <div className="d-flex flex-column align-items-start bg-white p-5">
-                {/* 搜尋bar */}
-                <SearchBar bar={false} filterDramas={filterDramas} setDramas={setDramas} />
-                {/* 標籤區 */}
-
-                <TagsFilter filterDramas={filterDramas} setDramas={setDramas} dramaState={dramaState} />
-              </div>
-            </div>
-            <div className="col-9">
-              {/* 下拉選單 */}
-              <div className="d-flex justify-content-between mb-5 sortBoard">
-                <DramaListTab
-                  tabName={[
-                    { name: '熱門', state: 'onGoing' },
-                    { name: '歷史', state: 'history' },
-                  ]}
-                  setDramaState={setDramaState}
-                />
-                <div className="d-flex">
-                  <Dropdown
-                    options={['最新>最舊', '最舊>最新']}
-                    type="time"
-                    filterDramas={filterDramas}
-                    setDramas={setDramas}
-                    getDramas={getDramas}
-                  />
-                  <Dropdown options={['全部', '我發起的', '我跟團的']} type={'personal'} />
-                </div>
-              </div>
-              {/* 卡片區 */}
-              {dramas.length === 0 ? (
-                <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
-                  <h2 className="h5">目前沒有劇會資料</h2>
-                </div>
-              ) : (
-                <div className="row row-cols-md-2 gy-4">
-                  {dramas
-                    .filter((drama) => (dramaState === 'onGoing' ? drama.isFinish === 0 : drama.isFinish === 1))
-                    .map((drama) => {
-                      const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
-                      const member = members && members[randomIndex];
-                      return (
-                        <DramaListCard
-                          key={drama.id}
-                          drama={drama}
-                          loveDramas={loveDramas}
-                          handleLoveClick={handleLoveClick}
-                          openDramaForm={openDramaForm}
-                          setModalMode={setModalMode}
-                          setUnitShareDrama={setUnitShareDrama}
-                          member={member}
-                          showAlert={showAlert}
-                        />
-                      );
-                    })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 平板/手機版 */}
-          {/* 下拉選單 */}
-          <div className="d-flex d-lg-none align-items-center justify-content-between mb-4">
-            <button
-              type="button"
-              className="btn btn-brand-400 rounded-pill fs-5 text-white"
-              onClick={() => {
-                setModalMode('add');
-                openDramaForm();
-              }}
-            >
-              <i className="bi bi-plus-circle-fill"></i>
-              <span className="ms-1 fs-6">我要發起劇會</span>
-            </button>
-            <div className="h4">
-              <span
+    <main className="dramaList bg-brand-50 pt-lg-13 pt-6 pb-15">
+      <div className="container">
+        {/* 電腦版 */}
+        <Breadcrumb pageLink={pageLink} className="breadcrumb" />
+        <div className="row d-none d-lg-flex">
+          <div className="filterBoard col-3">
+            {/* 建立劇會 */}
+            <div className="addDrama-bg rounded-5 rounded-bottom-0 d-flex align-items-center">
+              <button
                 type="button"
-                onClick={phoneSearch}
-                data-bs-toggle="offcanvas"
-                data-bs-target="#filterOffcanvas"
-                aria-controls="filterOffcanvas"
+                className="btn fs-5 text-white ms-9 createDramaBtn"
+                style={{ '--bs-btn-border-color': 'none' }}
+                onClick={() => {
+                  if (token) {
+                    setModalMode('add');
+                    openDramaForm();
+                  } else {
+                    showAlert();
+                  }
+                }}
               >
-                <i className="bi bi-funnel"></i>
-              </span>
-              <span
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#sortOffcanvas"
-                aria-controls="sortOffcanvas"
-              >
-                <i className="bi bi-sort-down ms-4"></i>
-              </span>
+                <i className="bi bi-plus-circle-fill"></i>
+                <span className="ms-1">我要發起劇會</span>
+              </button>
             </div>
-          </div>
-          {dramas.length === 0 ? (
-            <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
-              <h2 className="h5">目前沒有劇會資料</h2>
-            </div>
-          ) : (
-            <div className="row row-cols-1 d-lg-none gy-4">
-              {dramas
-                .filter((drama) => (dramaState === 'onGoing' ? drama.isFinish === 0 : drama.isFinish === 1))
-                .map((drama) => {
-                  const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
-                  const member = members && members[randomIndex];
-                  return (
-                    <DramaListCard
-                      key={drama.id}
-                      drama={drama}
-                      loveDramas={loveDramas}
-                      handleLoveClick={handleLoveClick}
-                      openDramaForm={openDramaForm}
-                      setModalMode={setModalMode}
-                      setUnitShareDrama={setUnitShareDrama}
-                      member={member}
-                      showAlert={showAlert}
-                    />
-                  );
-                })}
-            </div>
-          )}
-        </div>
-
-        {/* Modal */}
-        <DramaFormModal
-          dramaFormRef={dramaFormRef}
-          closeDramaForm={closeDramaForm}
-          modalMode={modalMode}
-          unitShareDrama={unitShareDrama}
-        />
-
-        {/* Offcanvas */}
-        {/* 篩選 */}
-        <div
-          className="offcanvas offcanvas-bottom offcanvas-filter rounded-6 rounded-bottom"
-          tabIndex="-1"
-          id="filterOffcanvas"
-          aria-labelledby="filterOffcanvasLabel"
-          ref={searchOffcanvasRef}
-        >
-          <div className="offcanvas-body">
+            {/* 篩選區 */}
             <div className="d-flex flex-column align-items-start bg-white p-5">
-              <SearchBar
-                bar={false}
-                filterDramas={filterDramas}
-                setDramas={setDramas}
-                phoneSearchState={phoneSearchState}
-                closeSearchOffcanvas={closeSearchOffcanvas}
-              />
-
+              {/* 搜尋bar */}
+              <SearchBar bar={false} filterDramas={filterDramas} setDramas={setDramas} />
               {/* 標籤區 */}
-              <TagsFilter filterDramas={filterDramas} setDramas={setDramas} />
+
+              <TagsFilter filterDramas={filterDramas} setDramas={setDramas} dramaState={dramaState} />
             </div>
           </div>
-          <button
-            className="btn btn-brand-core w-100 text-white rounded-0"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#filterOffcanvas"
-          >
-            套用
-          </button>
+          <div className="col-9">
+            {/* 下拉選單 */}
+            <div className="d-flex justify-content-between mb-5 sortBoard">
+              <DramaListTab
+                tabName={[
+                  { name: '熱門', state: 'onGoing' },
+                  { name: '歷史', state: 'history' },
+                ]}
+                setDramaState={setDramaState}
+              />
+              <div className="d-flex">
+                <Dropdown
+                  options={['最新>最舊', '最舊>最新']}
+                  type="time"
+                  filterDramas={filterDramas}
+                  setDramas={setDramas}
+                  getDramas={getDramas}
+                />
+              </div>
+            </div>
+            {/* 卡片區 */}
+            {dramas.length === 0 ? (
+              <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
+                <h2 className="h5">目前沒有劇會資料</h2>
+              </div>
+            ) : (
+              <div className="row row-cols-md-2 gy-4">
+                {dramas
+                  .filter((drama) => (dramaState === 'onGoing' ? drama.isFinish === 0 : drama.isFinish === 1))
+                  .map((drama) => {
+                    const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
+                    const member = members && members[randomIndex];
+                    return (
+                      <DramaListCard
+                        key={drama.id}
+                        drama={drama}
+                        loveDramas={loveDramas}
+                        handleLoveClick={handleLoveClick}
+                        openDramaForm={openDramaForm}
+                        setModalMode={setModalMode}
+                        setUnitShareDrama={setUnitShareDrama}
+                        member={member}
+                        showAlert={showAlert}
+                      />
+                    );
+                  })}
+              </div>
+            )}
+          </div>
         </div>
-        {/* 排序 */}
-        <div
-          className="offcanvas offcanvas-bottom offcanvas-sort rounded-6 rounded-bottom"
-          tabIndex="-1"
-          id="sortOffcanvas"
-          aria-labelledby="sortOffcanvasLabel"
-        >
-          <div className="offcanvas-body">
-            <span className="h6 d-block my-3">發起時間</span>
-            <Dropdown
-              options={['最新>最舊', '最舊>最新']}
-              type="time"
+
+        {/* 平板/手機版 */}
+        {/* 下拉選單 */}
+        <div className="d-flex d-lg-none align-items-center justify-content-between mb-4">
+          <button
+            type="button"
+            className="btn btn-brand-400 rounded-pill fs-5 text-white"
+            onClick={() => {
+              setModalMode('add');
+              openDramaForm();
+            }}
+          >
+            <i className="bi bi-plus-circle-fill"></i>
+            <span className="ms-1 fs-6">我要發起劇會</span>
+          </button>
+          <div className="h4">
+            <span
+              type="button"
+              onClick={phoneSearch}
+              data-bs-toggle="offcanvas"
+              data-bs-target="#filterOffcanvas"
+              aria-controls="filterOffcanvas"
+            >
+              <i className="bi bi-funnel"></i>
+            </span>
+            <span
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#sortOffcanvas"
+              aria-controls="sortOffcanvas"
+            >
+              <i className="bi bi-sort-down ms-4"></i>
+            </span>
+          </div>
+        </div>
+        {dramas.length === 0 ? (
+          <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
+            <h2 className="h5">目前沒有劇會資料</h2>
+          </div>
+        ) : (
+          <div className="row row-cols-1 d-lg-none gy-4">
+            {dramas
+              .filter((drama) => (dramaState === 'onGoing' ? drama.isFinish === 0 : drama.isFinish === 1))
+              .map((drama) => {
+                const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
+                const member = members && members[randomIndex];
+                return (
+                  <DramaListCard
+                    key={drama.id}
+                    drama={drama}
+                    loveDramas={loveDramas}
+                    handleLoveClick={handleLoveClick}
+                    openDramaForm={openDramaForm}
+                    setModalMode={setModalMode}
+                    setUnitShareDrama={setUnitShareDrama}
+                    member={member}
+                    showAlert={showAlert}
+                  />
+                );
+              })}
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      <DramaFormModal
+        dramaFormRef={dramaFormRef}
+        closeDramaForm={closeDramaForm}
+        modalMode={modalMode}
+        unitShareDrama={unitShareDrama}
+      />
+
+      {/* Offcanvas */}
+      {/* 篩選 */}
+      <div
+        className="offcanvas offcanvas-bottom offcanvas-filter rounded-6 rounded-bottom"
+        tabIndex="-1"
+        id="filterOffcanvas"
+        aria-labelledby="filterOffcanvasLabel"
+        ref={searchOffcanvasRef}
+      >
+        <div className="offcanvas-body">
+          <div className="d-flex flex-column align-items-start bg-white p-5">
+            <SearchBar
+              bar={false}
               filterDramas={filterDramas}
               setDramas={setDramas}
-              getDramas={getDramas}
+              phoneSearchState={phoneSearchState}
+              closeSearchOffcanvas={closeSearchOffcanvas}
             />
-            <br />
-            <span className="h6 d-block my-3">出團情況</span>
-            <Dropdown options={['全部', '我發起的', '我跟團的']} />
+
+            {/* 標籤區 */}
+            <TagsFilter filterDramas={filterDramas} setDramas={setDramas} />
           </div>
-          <button
-            className="btn btn-brand-core w-100 text-white rounded-0"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#sortOffcanvas"
-          >
-            套用
-          </button>
         </div>
-      </main>
-    </>
+        <button
+          className="btn btn-brand-core w-100 text-white rounded-0"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#filterOffcanvas"
+        >
+          套用
+        </button>
+      </div>
+      {/* 排序 */}
+      <div
+        className="offcanvas offcanvas-bottom offcanvas-sort rounded-6 rounded-bottom"
+        tabIndex="-1"
+        id="sortOffcanvas"
+        aria-labelledby="sortOffcanvasLabel"
+      >
+        <div className="offcanvas-body">
+          <span className="h6 d-block my-3">發起時間</span>
+          <Dropdown
+            options={['最新>最舊', '最舊>最新']}
+            type="time"
+            filterDramas={filterDramas}
+            setDramas={setDramas}
+            getDramas={getDramas}
+          />
+        </div>
+        <button
+          className="btn btn-brand-core w-100 text-white rounded-0"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sortOffcanvas"
+        >
+          套用
+        </button>
+      </div>
+    </main>
   );
 };
 
