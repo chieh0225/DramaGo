@@ -86,4 +86,14 @@ const Love = ({ id, state, mymodal }) => {
   );
 };
 
+Love.propTypes = {
+  id: PropTypes.string.isRequired,
+  state: PropTypes.bool.isRequired,
+  mymodal: PropTypes.shape({
+    current: PropTypes.shape({
+      show: PropTypes.func.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
 export default Love;

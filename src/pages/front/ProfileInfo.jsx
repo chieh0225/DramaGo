@@ -71,13 +71,9 @@ const ProfileInfo = () => {
 
       // 重設密碼表單不需要預設值
       resetPassword();
-    } catch {
-      dispatch(
-        pushMsg({
-          text: '取得個人資料失敗',
-          status: 'failed',
-        }),
-      );
+    } catch (error) {
+      alert('取得個人資料失敗');
+      console.error('取得個人資料失敗：', error);
     } finally {
       dispatch(changeLoadingState(false));
     }
@@ -95,7 +91,8 @@ const ProfileInfo = () => {
     const data = {
       title: info.title || '預設暱稱',
       description: info.description || '這是預設簡介',
-      image: info.image || 'https://i.pinimg.com/736x/b5/7b/69/b57b69c6fea528f2b8ea3af0f0d4f2ae.jpg',
+      image:
+        info.image || 'https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop',
       tag: ['tag1'],
       create_at: info.create_at || 1712238900,
       author: info.author || '預設姓名',
@@ -114,13 +111,9 @@ const ProfileInfo = () => {
           status: 'success',
         }),
       );
-    } catch {
-      dispatch(
-        pushMsg({
-          text: '更新個人資料失敗',
-          status: 'failed',
-        }),
-      );
+    } catch (error) {
+      alert('更新個人資料失敗');
+      console.error(error);
     }
   };
 
@@ -137,7 +130,8 @@ const ProfileInfo = () => {
           status: 'success',
         }),
       );
-    } catch {
+    } catch (error) {
+      console.error('密碼重設失敗：', error);
       dispatch(
         pushMsg({
           text: '密碼重設失敗，請稍後再試',
@@ -172,7 +166,8 @@ const ProfileInfo = () => {
           status: 'success',
         }),
       );
-    } catch {
+    } catch (error) {
+      console.error('密碼重設失敗：', error);
       dispatch(
         pushMsg({
           text: '密碼重設失敗，請稍後再試',
@@ -458,7 +453,8 @@ const ProfileInfo = () => {
                             if (value !== currentPassword) {
                               return '舊密碼不正確，請重新輸入';
                             }
-                          } catch {
+                          } catch (error) {
+                            console.error('無法驗證舊密碼：', error);
                             return '驗證密碼時出現問題，請稍後再試';
                           }
                         },

@@ -148,190 +148,192 @@ const DramaManage = () => {
   }, [pageNum, getDramas]);
 
   return (
-    <div className="container py-10 dramaManage">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1 className="h4 my-4">劇會管理</h1>
-        {dramas.length !== 0 && <Pagination pages={pages} setPageNum={setPageNum} />}
-      </div>
-      {dramas.length === 0 ? (
-        <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
-          <h2 className="h5">目前沒有劇會資料</h2>
+    <>
+      <div className="container py-10 dramaManage">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h1 className="h4 my-4">劇會管理</h1>
+          {dramas.length !== 0 && <Pagination pages={pages} setPageNum={setPageNum} />}
         </div>
-      ) : (
-        <table className="table table-hover table-brand-400 table-sm align-middle">
-          <thead>
-            <tr>
-              <th className="d-none text-center d-lg-block">主圖</th>
-              <th className="text-center ">名稱</th>
-              <th className="text-center ">發佈</th>
-              <th className="text-center ">熱門</th>
-              <th className="text-center ">狀態</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {dramas.map((drama) => (
-              <tr key={drama.id}>
-                <td className="d-none d-lg-block" style={{ width: '150px', height: '100px' }}>
-                  <img src={drama.imageUrl} alt={drama.title} className="object-fit" />
-                </td>
-                <td>{drama.title}</td>
-                <td>
-                  <select
-                    className="form-select d-none d-lg-block"
-                    name="is_enabled"
-                    value={drama.is_enabled ? '1' : '0'}
-                    onChange={(e) => editDrama(e, drama)}
-                  >
-                    <option value="1">顯示</option>
-                    <option value="0">隱藏</option>
-                  </select>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="is_enabled"
-                    value="0"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.is_enabled == 0
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    顯示
-                  </button>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="is_enabled"
-                    value="1"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.is_enabled == 1
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    隱藏
-                  </button>
-                </td>
-                <td>
-                  <select
-                    className="form-select d-none d-lg-block"
-                    name="isHot"
-                    value={drama.isHot ? '1' : '0'}
-                    onChange={(e) => editDrama(e, drama)}
-                  >
-                    <option value="1">是</option>
-                    <option value="0">否</option>
-                  </select>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="isHot"
-                    value="0"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.isHot == 0
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    是
-                  </button>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="isHot"
-                    value="1"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.isHot == 1
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    否
-                  </button>
-                </td>
-                <td>
-                  <select
-                    className="form-select d-none d-lg-block"
-                    name="isFinish"
-                    value={drama.isFinish ? '1' : '0'}
-                    onChange={(e) => editDrama(e, drama)}
-                  >
-                    <option value="1">已出團</option>
-                    <option value="0">未出團</option>
-                  </select>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="isFinish"
-                    value="0"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.isFinish == 0
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    已出團
-                  </button>
-                  <button
-                    onClick={(e) => editDrama(e, drama)}
-                    name="isFinish"
-                    value="1"
-                    style={{ whiteSpace: `nowrap` }}
-                    type="button"
-                    className={
-                      drama.isFinish == 1
-                        ? 'btn btn-brand-400 text-white d-lg-none d-none'
-                        : 'btn btn-brand-400 d-lg-none text-white'
-                    }
-                  >
-                    未出團
-                  </button>
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-brand-800 text-white mx-1 mb-2 mb-lg-0"
-                    onClick={() => {
-                      setUnitDrama(drama);
-                      setModalMode('edit');
-                      openDramaForm();
-                    }}
-                  >
-                    編輯
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-grey-600 text-grey-600 mx-1"
-                    onClick={() => {
-                      setUnitDrama(drama);
-                      setModalMode('delete');
-                      openDramaForm();
-                    }}
-                  >
-                    刪除
-                  </button>
-                </td>
+        {dramas.length === 0 ? (
+          <div className="d-flex justify-content-center align-items-center pt-10 text-grey-400 dramaWrap">
+            <h2 className="h5">目前沒有劇會資料</h2>
+          </div>
+        ) : (
+          <table className="table table-hover table-brand-400 table-sm align-middle">
+            <thead>
+              <tr>
+                <th className="d-none text-center d-lg-block">主圖</th>
+                <th className="text-center ">名稱</th>
+                <th className="text-center ">發佈</th>
+                <th className="text-center ">熱門</th>
+                <th className="text-center ">狀態</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {/* Modal */}
-      <DramaFormModal
-        dramaFormRef={dramaFormRef}
-        closeDramaForm={closeDramaForm}
-        deleteDrama={deleteDrama}
-        modalMode={modalMode}
-        unitDrama={unitDrama}
-        getDramas={getDramas}
-      />
-    </div>
+            </thead>
+            <tbody>
+              {dramas.map((drama) => (
+                <tr key={drama.id}>
+                  <td className="d-none d-lg-block" style={{ width: '150px', height: '100px' }}>
+                    <img src={drama.imageUrl} alt={drama.title} className="object-fit" />
+                  </td>
+                  <td>{drama.title}</td>
+                  <td>
+                    <select
+                      className="form-select d-none d-lg-block"
+                      name="is_enabled"
+                      value={drama.is_enabled ? '1' : '0'}
+                      onChange={(e) => editDrama(e, drama)}
+                    >
+                      <option value="1">顯示</option>
+                      <option value="0">隱藏</option>
+                    </select>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="is_enabled"
+                      value="0"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.is_enabled == 0
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      顯示
+                    </button>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="is_enabled"
+                      value="1"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.is_enabled == 1
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      隱藏
+                    </button>
+                  </td>
+                  <td>
+                    <select
+                      className="form-select d-none d-lg-block"
+                      name="isHot"
+                      value={drama.isHot ? '1' : '0'}
+                      onChange={(e) => editDrama(e, drama)}
+                    >
+                      <option value="1">是</option>
+                      <option value="0">否</option>
+                    </select>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="isHot"
+                      value="0"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.isHot == 0
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      是
+                    </button>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="isHot"
+                      value="1"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.isHot == 1
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      否
+                    </button>
+                  </td>
+                  <td>
+                    <select
+                      className="form-select d-none d-lg-block"
+                      name="isFinish"
+                      value={drama.isFinish ? '1' : '0'}
+                      onChange={(e) => editDrama(e, drama)}
+                    >
+                      <option value="1">已出團</option>
+                      <option value="0">未出團</option>
+                    </select>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="isFinish"
+                      value="0"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.isFinish == 0
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      已出團
+                    </button>
+                    <button
+                      onClick={(e) => editDrama(e, drama)}
+                      name="isFinish"
+                      value="1"
+                      style={{ whiteSpace: `nowrap` }}
+                      type="button"
+                      className={
+                        drama.isFinish == 1
+                          ? 'btn btn-brand-400 text-white d-lg-none d-none'
+                          : 'btn btn-brand-400 d-lg-none text-white'
+                      }
+                    >
+                      未出團
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-brand-800 text-white mx-1 mb-2 mb-lg-0"
+                      onClick={() => {
+                        setUnitDrama(drama);
+                        setModalMode('edit');
+                        openDramaForm();
+                      }}
+                    >
+                      編輯
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-grey-600 text-grey-600 mx-1"
+                      onClick={() => {
+                        setUnitDrama(drama);
+                        setModalMode('delete');
+                        openDramaForm();
+                      }}
+                    >
+                      刪除
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {/* Modal */}
+        <DramaFormModal
+          dramaFormRef={dramaFormRef}
+          closeDramaForm={closeDramaForm}
+          deleteDrama={deleteDrama}
+          modalMode={modalMode}
+          unitDrama={unitDrama}
+          getDramas={getDramas}
+        />
+      </div>
+    </>
   );
 };
 

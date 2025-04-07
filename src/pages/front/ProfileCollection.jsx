@@ -13,7 +13,6 @@ const apiPath = import.meta.env.VITE_APP_API_PATH;
 import { useDispatch } from 'react-redux';
 import { changeLoadingState } from '../../redux/slice/loadingSlice';
 import Loading from '../../components/Loading';
-import { pushMsg } from '../../redux/slice/toastSlice';
 
 const ProfileCollection = () => {
   const dispatch = useDispatch();
@@ -29,12 +28,7 @@ const ProfileCollection = () => {
       const sortedData = sortCollection(res.data.data.carts, sortOrder);
       setCollection(sortedData);
     } catch {
-      dispatch(
-        pushMsg({
-          text: '取得收藏列表失敗',
-          status: 'failed',
-        }),
-      );
+      alert('取得收藏列表失敗');
     } finally {
       dispatch(changeLoadingState(false));
     }

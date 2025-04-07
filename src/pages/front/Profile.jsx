@@ -76,17 +76,15 @@ const Profile = () => {
         headers: { Authorization: token },
       });
       setMemberInfo(res.data.article);
-      setAvatarUrl(res.data.article.image || 'https://i.pinimg.com/736x/b5/7b/69/b57b69c6fea528f2b8ea3af0f0d4f2ae.jpg');
-      return res.data.article;
-    } catch {
-      dispatch(
-        pushMsg({
-          text: '取得個人資料失敗',
-          status: 'failed',
-        }),
+      setAvatarUrl(
+        res.data.article.image ||
+          'https://images.unsplash.com/photo-1520780662578-a2e93221bbd5?q=80&w=2070&auto=format&fit=crop',
       );
+      return res.data.article;
+    } catch (err) {
+      console.log(err);
     }
-  }, [memberId, dispatch]);
+  }, [memberId]);
 
   useEffect(() => {
     getMember();
@@ -154,7 +152,8 @@ const Profile = () => {
       await getMember();
 
       setImageUpdated(true);
-    } catch {
+    } catch (error) {
+      console.error('圖片上傳失敗：', error);
       dispatch(
         pushMsg({
           text: '圖片上傳失敗，請稍後再試！',
@@ -185,9 +184,7 @@ const Profile = () => {
                   <div className="profile-pic-container position-relative d-inline-block">
                     <div className="flex-shrink-0">
                       <img
-                        src={
-                          memberInfo.image || 'https://i.pinimg.com/736x/b5/7b/69/b57b69c6fea528f2b8ea3af0f0d4f2ae.jpg'
-                        }
+                        src={memberInfo.image}
                         alt="個人圖片"
                         width="200"
                         height="200"

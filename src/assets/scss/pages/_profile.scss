@@ -53,11 +53,11 @@
     border-radius: 20px;
     border: 1px solid $brand-400;
   }
-  input[type='text'],
-  input[type='email'],
-  input[type='password'],
-  input[type='date'],
-  input[type='tel'] {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="tel"] {
     min-width: 250px;
   }
   .invalid-feedback {
@@ -86,7 +86,7 @@
     border-radius: 20px;
     border: 1px solid $brand-400;
   }
-  input[type='password'] {
+  input[type="password"] {
     max-width: 250px !important;
   }
   @include rwd-md-max {
@@ -101,7 +101,7 @@
     border-radius: 20px;
     border: 1px solid $brand-400;
   }
-  input[type='password'] {
+  input[type="password"] {
     min-width: 250px;
   }
   @include rwd-md-max {
