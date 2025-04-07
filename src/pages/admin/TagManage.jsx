@@ -130,46 +130,44 @@ const TagManage = () => {
   }, [getTags]);
 
   return (
-    <>
-      <div className="container py-10 pt-lg-0">
-        <h1 className="h4 my-5 my-lg-6">劇會標籤庫</h1>
+    <div className="container py-10 pt-lg-0">
+      <h1 className="h4 my-5 my-lg-6">劇會標籤庫</h1>
 
-        <form className="mb-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="input-group mb-3">
-            <div className="form-floating">
-              <input
-                {...register(`name`, {
-                  required: '請填寫標籤',
-                })}
-                type="text"
-                className="form-control"
-                id="tagAdd"
-                placeholder="標籤名稱"
-              />
-              <label htmlFor="tagAdd" className="text-grey-400">
-                輸入標籤名稱
-              </label>
-            </div>
-            <button className="btn btn-brand-core text-white">新增</button>
+      <form className="mb-6" onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group mb-3">
+          <div className="form-floating">
+            <input
+              {...register(`name`, {
+                required: '請填寫標籤',
+              })}
+              type="text"
+              className="form-control"
+              id="tagAdd"
+              placeholder="標籤名稱"
+            />
+            <label htmlFor="tagAdd" className="text-grey-400">
+              輸入標籤名稱
+            </label>
           </div>
-          {errors.name && <span className="text-danger">{errors.name.message}</span>}
-        </form>
-
-        <div className="mb-10">
-          {noteTags?.map((tag) => (
-            <a
-              role="button"
-              className="my-1 mx-1 brandBtn-2-lg px-4 px-lg-5"
-              key={tag.id}
-              onClick={() => deleteTags(tag.id)}
-            >
-              {tag.title}
-              <i className="bi bi-x-circle-fill ms-2" style={{ cursor: 'pointer' }}></i>
-            </a>
-          ))}
+          <button className="btn btn-brand-core text-white">新增</button>
         </div>
+        {errors.name && <span className="text-danger">{errors.name.message}</span>}
+      </form>
+
+      <div className="mb-10">
+        {noteTags?.map((tag) => (
+          <a
+            role="button"
+            className="my-1 mx-1 brandBtn-2-lg px-4 px-lg-5"
+            key={tag.id}
+            onClick={() => deleteTags(tag.id)}
+          >
+            {tag.title}
+            <i className="bi bi-x-circle-fill ms-2" style={{ cursor: 'pointer' }}></i>
+          </a>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

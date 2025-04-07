@@ -66,19 +66,19 @@ const SwiperModalType = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper1} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper1} alt="自己開團" />
           <p className="fw-semibold fs-5 text-center">當主揪自己開團</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper2} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper2} alt="參加電影" />
           <p className="fw-semibold fs-5 text-center">參加電影劇會</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper3} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper3} alt="參加劇本殺" />
           <p className="fw-semibold fs-5 text-center">參加劇本殺</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper4} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper4} alt="逛劇展" />
           <p className="fw-semibold fs-5 text-center">參加逛劇展</p>
         </SwiperSlide>
       </Swiper>
@@ -159,57 +159,55 @@ const Card = () => {
   }, [getMember]);
 
   return (
-    <>
-      <div className="container">
-        <div className="row mb-lg-23x mb-24x justify-content-between">
-          {recommend.map((product, index) => {
-            const { date, people, title, imageUrl, id } = product;
-            const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
-            const member = members && members[randomIndex];
-            return (
-              <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
+    <div className="container">
+      <div className="row mb-lg-23x mb-24x justify-content-between">
+        {recommend.map((product, index) => {
+          const { date, people, title, imageUrl, id } = product;
+          const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
+          const member = members && members[randomIndex];
+          return (
+            <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
+              <Link to={`/dramaInfo/${id}`}>
+                <img src={imageUrl} className="object-fit imgcard card-img-top" alt="主圖" />
+              </Link>
+              <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
                 <Link to={`/dramaInfo/${id}`}>
-                  <img src={imageUrl} className="object-fit imgcard card-img-top" alt="..." />
-                </Link>
-                <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
-                  <Link to={`/dramaInfo/${id}`}>
-                    <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
-                    <div className="d-flex mb-1">
-                      <p className="text-grey-700 pe-4">出團時間</p>
-                      <p className="text-grey-700 pe-4">{date.start.substr(5)}</p>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <p className="text-grey-700 pe-4">參加人數</p>
-                      <p className="text-grey-700 pe-4">{people}</p>
-                    </div>
-                  </Link>
-
-                  <div className="border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                      <Link to={`/profile/${member && member.id}`} role="button" className="d-flex align-items-center">
-                        <div className="avatar me-2">
-                          <img
-                            style={{ height: `40px`, width: `40px` }}
-                            src={member && member.image}
-                            alt="頭像"
-                            className="object-fit rounded-circle"
-                          />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="h6">{member && member.author}</span>
-                          <span className="text-grey-400 fs-c">揪團主</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <Love id={id} state={state} mymodal={mymodal} />
+                  <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
+                  <div className="d-flex mb-1">
+                    <p className="text-grey-700 pe-4">出團時間</p>
+                    <p className="text-grey-700 pe-4">{date.start.substr(5)}</p>
                   </div>
+                  <div className="d-flex mb-3">
+                    <p className="text-grey-700 pe-4">參加人數</p>
+                    <p className="text-grey-700 pe-4">{people}</p>
+                  </div>
+                </Link>
+
+                <div className="border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center">
+                    <Link to={`/profile/${member && member.id}`} role="button" className="d-flex align-items-center">
+                      <div className="avatar me-2">
+                        <img
+                          style={{ height: `40px`, width: `40px` }}
+                          src={member && member.image}
+                          alt="頭像"
+                          className="object-fit rounded-circle"
+                        />
+                      </div>
+                      <div className="d-flex flex-column">
+                        <span className="h6">{member && member.author}</span>
+                        <span className="text-grey-400 fs-c">揪團主</span>
+                      </div>
+                    </Link>
+                  </div>
+                  <Love id={id} state={state} mymodal={mymodal} />
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -246,19 +244,19 @@ const SwiperModalimg = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg1} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg1} alt="輪播1" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg2} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg2} alt="輪播2" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg3} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg3} alt="輪播3" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg4} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg4} alt="輪播4" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg5} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg5} alt="輪播5" />
         </SwiperSlide>
       </Swiper>
       <div className="d-flex mt-10 mt-lg-8 mb-6 mb-lg-0">
@@ -363,19 +361,19 @@ const FrontHome = () => {
               <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
               <div className="row mb-lg-17 ">
                 <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component1} alt="" />
+                  <img className="mb-6" src={component1} alt="加入劇團" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
                   <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
                 </div>
                 <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component2} alt="" />
+                  <img className="mb-6" src={component2} alt="自己揪團" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
                   <p className="text-center">
                     沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會
                   </p>
                 </div>
                 <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component3} alt="" />
+                  <img className="mb-6" src={component3} alt="參加線下聚會" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
                   <p className="text-center">
                     除了線上劇會，也可以選擇參加線下的劇會，
@@ -386,10 +384,10 @@ const FrontHome = () => {
               </div>
             </section>
             <div style={{ marginTop: '118px' }} className="position-absolute top-0 start-0 d-none d-lg-block side-img">
-              <img src={img1} alt="" />
+              <img src={img1} alt="圖片1" />
             </div>
             <div style={{ marginTop: '49px' }} className="position-absolute top-0 end-0 d-none d-lg-block side-img">
-              <img src={img2} alt="" />
+              <img src={img2} alt="圖片2" />
             </div>
           </div>
         </div>

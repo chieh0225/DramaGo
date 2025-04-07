@@ -1,12 +1,10 @@
-.header{
+.header {
+  .navLink {
+    border-bottom: 2px solid transparent;
+    transition: border 0.8s;
 
-    .navLink{
-        border-bottom: 2px solid transparent;
-        transition: border .8s;
-
-        &:hover{
-            border-bottom: 2px solid $brand-core;
-        }
+    &:hover {
+      border-bottom: 2px solid $brand-core;
     }
-
+  }
 }
