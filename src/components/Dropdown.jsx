@@ -56,4 +56,10 @@ const Dropdown = ({ options, filterDramas, setDramas }) => {
   );
 };
 
+Dropdown.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  filterDramas: PropTypes.array.isRequired,
+  setDramas: PropTypes.func.isRequired,
+};
+
 export default Dropdown;

@@ -1,7 +1,7 @@
 body {
   ::selection {
-    color: white;
-    background-color: $brand-400;
+    color: white; 
+    background-color: $brand-400; 
   }
 }
 
@@ -15,6 +15,7 @@ img {
 }
 
 a {
+  // text-decoration: none; //已設定 $link-decoration: none
   color: inherit;
   display: inline-block;
 }
@@ -40,13 +41,14 @@ input:focus {
   caret-color: $brand-500;
 }
 .form-control:focus {
-  border-color: $brand-200 !important;
-  box-shadow: 0 0 8px $brand-200 !important;
+  border-color: $brand-200 !important; 
+  box-shadow: 0 0 8px $brand-200 !important; 
 }
 
 .form-check-input:checked {
   background-color: $brand-core;
   border-color: $brand-core;
+
 }
 
 .breadcrumb-item {

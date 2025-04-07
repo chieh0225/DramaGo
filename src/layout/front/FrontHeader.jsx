@@ -59,7 +59,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
       <div className="w-100 d-lg-none">
         <nav className="navbar">
           <Link className="ms-3 navbar-brand" to="/">
-            <img style={{ width: '140px' }} src={logo} alt="logo" />
+            <img style={{ width: '140px' }} src={logo} alt="" />
           </Link>
           <button
             className="navbar-toggler border-0 me-3"
@@ -69,7 +69,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img className="nav-icon-1" src={menber} alt="member" />
+            <img className="nav-icon-1" src={menber} alt="" />
           </button>
           <div className=" dropdown-menu w-100 py-0" aria-labelledby="navbarDropdown">
             <div
@@ -103,7 +103,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
         <nav className="navbar">
           <div className="d-flex align-items-center">
             <Link className="ms-3 me-13" to="/">
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="" />
             </Link>
             <div style={{ width: '400px' }} className="">
               <SearchBar bar={true} filterDramas={filterDramas} setDramas={setDramas} />
@@ -131,7 +131,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
                   onClick={LoginOpenMadal}
                 >
                   <div className="d-flex justify-content-center align-iteams-center">
-                    <img className="icon me-2" src={ueser} alt="user" />
+                    <img className="icon me-2" src={ueser} alt="" />
                     <span className="text-white">登入/註冊</span>
                   </div>
                 </button>
@@ -141,7 +141,7 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
               <>
                 <button type="button" className="btn brandBtn-1-lg fs-6 mt-auto py-3 px-5" onClick={logoutUser}>
                   <div className="d-flex justify-content-center align-iteams-center">
-                    <img className="icon me-2" src={logout} alt="logout" />
+                    <img className="icon me-2" src={logout} alt="" />
                     <span className="text-white">登出</span>
                   </div>
                 </button>
@@ -154,6 +154,17 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
       <LoginModal mymodal={mymodal} setState={setState} />
     </header>
   );
+};
+
+FrontHeader.propTypes = {
+  state: PropTypes.bool.isRequired,
+  setState: PropTypes.func.isRequired,
+  mymodal: PropTypes.shape({
+    current: PropTypes.shape({
+      show: PropTypes.func.isRequired,
+    }).isRequired,
+  }).isRequired,
+  setDramas: PropTypes.func.isRequired,
 };
 
 export default FrontHeader;

@@ -1,13 +1,70 @@
 // TODO: 收藏日期排序功能、狀態跟類別排版
 
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-import Loading from '../../components/Loading';
+// import { useDispatch } from "react-redux";
+import Loading from "../../components/Loading";
 
-const records = [];
+const records = [
+  // {
+  //   category: "甜甜圈",
+  //   content: "尺寸：14x14cm",
+  //   description:
+  //     "濃郁的草莓風味，中心填入滑順不膩口的卡士達內餡，帶來滿滿幸福感！",
+  //   id: "-L9tH8jxVb2Ka_DYPwng",
+  //   is_enabled: 1,
+  //   origin_price: 150,
+  //   price: 99,
+  //   title: "草莓莓果夾心圈",
+  //   unit: "元",
+  //   num: 10,
+  //   imageUrl: "https://images.unsplash.com/photo-1583182332473-b31ba08929c8",
+  //   imagesUrl: [
+  //     "https://images.unsplash.com/photo-1626094309830-abbb0c99da4a",
+  //     "https://images.unsplash.com/photo-1559656914-a30970c1affd",
+  //   ],
+  // },
+  // {
+  //   category: "蛋糕",
+  //   content: "尺寸：6寸",
+  //   description:
+  //     "蜜蜂蜜蛋糕，夾層夾上酸酸甜甜的檸檬餡，清爽可口的滋味讓人口水直流！",
+  //   id: "-McJ-VvcwfN1_Ye_NtVA",
+  //   is_enabled: 1,
+  //   origin_price: 1000,
+  //   price: 900,
+  //   title: "蜂蜜檸檬蛋糕",
+  //   unit: "個",
+  //   num: 1,
+  //   imageUrl:
+  //     "https://images.unsplash.com/photo-1627834377411-8da5f4f09de8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1001&q=80",
+  //   imagesUrl: [
+  //     "https://images.unsplash.com/photo-1618888007540-2bdead974bbb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=987&q=80",
+  //   ],
+  // },
+  // {
+  //   category: "蛋糕",
+  //   content: "尺寸：6寸",
+  //   description: "法式煎薄餅加上濃郁可可醬，呈現經典的美味及口感。",
+  //   id: "-McJ-VyqaFlLzUMmpPpm",
+  //   is_enabled: 1,
+  //   origin_price: 700,
+  //   price: 600,
+  //   title: "暗黑千層",
+  //   unit: "個",
+  //   num: 15,
+  //   imageUrl:
+  //     "https://images.unsplash.com/photo-1505253149613-112d21d9f6a9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDZ8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
+  //   imagesUrl: [
+  //     "https://images.unsplash.com/flagged/photo-1557234985-425e10c9d7f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTA5fHxjYWtlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
+  //     "https://images.unsplash.com/photo-1540337706094-da10342c93d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
+  //   ],
+  // },
+];
 
 const ProfileRecord = () => {
+  // const dispatch = useDispatch();
   const [record] = useState({ records });
 
   return (
@@ -21,7 +78,11 @@ const ProfileRecord = () => {
                 <label className="fs-md-4 fs-6 me-3" htmlFor="party-status">
                   揪團狀態
                 </label>
-                <select className="form-select" aria-label="Default select example" id="party-status">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="party-status"
+                >
                   <option value="1">全部</option>
                   <option value="2" selected>
                     未出團
@@ -34,7 +95,11 @@ const ProfileRecord = () => {
                 <label className="fs-md-4 fs-6 me-3" htmlFor="party-category">
                   劇會類別
                 </label>
-                <select className="form-select" aria-label="Default select example" id="party-category">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="party-category"
+                >
                   <option value="1" selected>
                     全部
                   </option>
@@ -52,7 +117,13 @@ const ProfileRecord = () => {
                 className="btn d-flex align-items-center fs-b2 text-grey-400 px-md-3 px-0 mb-md-0 mb-3"
               >
                 劇會日期：最新到最舊
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="ms-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  className="ms-2"
+                >
                   <g id="sort_descending_line" fill="none">
                     <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                     <path
@@ -66,7 +137,11 @@ const ProfileRecord = () => {
           </div>
 
           <div className="table-responsive">
-            <table className={`table align-middle ${record.records?.length > 0 ? 'table-hover' : ''}`}>
+            <table
+              className={`table align-middle ${
+                record.records?.length > 0 ? "table-hover" : ""
+              }`}
+            >
               <thead>
                 <tr>
                   <th>劇會日期 / 名稱</th>
@@ -86,10 +161,15 @@ const ProfileRecord = () => {
                         <p>{product.title}</p>
                       </th>
                       <td>{product.price}</td>
-                      <td>{product.is_enabled ? '啟用' : '未啟用'}</td>
+                      <td>{product.is_enabled ? "啟用" : "未啟用"}</td>
                       <td>
                         <a href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
                             <g id="eye_2_fill" fill="none">
                               <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                               <path
@@ -102,7 +182,12 @@ const ProfileRecord = () => {
                       </td>
                       <td>
                         <a href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
                             <g id="share_forward_fill" fill="none">
                               <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                               <path
@@ -115,7 +200,12 @@ const ProfileRecord = () => {
                       </td>
                       <td>
                         <a href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
                             <g id="bookmark_fill" fill="none">
                               <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                               <path
@@ -129,11 +219,11 @@ const ProfileRecord = () => {
                     </tr>
                   ))
                 ) : (
-                  <tr style={{ height: '300px' }}>
+                  <tr style={{ height: "300px" }}>
                     <td colSpan="6" className="text-center border-bottom-0">
                       <div
                         className="d-flex flex-column justify-content-center align-items-center"
-                        style={{ height: '100%' }}
+                        style={{ height: "100%" }}
                       >
                         <p className="fs-3 mb-4">目前尚無參加過的劇會</p>
                         <NavLink className="nav-link" to="/dramaList">
@@ -146,7 +236,11 @@ const ProfileRecord = () => {
                               viewBox="0 0 24 24"
                               className="ms-1"
                             >
-                              <g id="search_line" fill="none" fillRule="evenodd">
+                              <g
+                                id="search_line"
+                                fill="none"
+                                fillRule="evenodd"
+                              >
                                 <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093c.012.004.023 0 .029-.008l.004-.014-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014-.034.614c0 .012.007.02.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
                                 <path
                                   fill="#FFA13CFF"

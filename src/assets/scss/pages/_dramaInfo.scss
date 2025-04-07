@@ -1,7 +1,7 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
-@import '../custom-colors';
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "../custom-colors";
 @each $color, $value in $custom-colors {
   .text-#{$color} {
     color: $value !important;
@@ -21,7 +21,7 @@
 }
 
 .poppins-font {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .tag {
@@ -75,7 +75,7 @@
     background-color: $brand-300;
     border-radius: 8px;
     color: white;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 14px;
     font-weight: 600;
   }
@@ -88,7 +88,7 @@
   .card-text {
     text-align: center;
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
   }
 }
 
@@ -182,7 +182,7 @@
 }
 
 .time a {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;

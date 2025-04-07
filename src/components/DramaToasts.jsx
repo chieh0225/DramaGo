@@ -23,29 +23,31 @@ const DramaToasts = () => {
   }, [messages, dispatch]);
 
   return (
-    <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: '15000' }}>
-      {messages.map((message) => (
-        <div
-          className="toast"
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
-          ref={(el) => (toastRefs.current[message.id] = el)}
-          key={message.id}
-        >
-          <div className={`toast-header ${message.status === 'success' ? 'bg-success' : 'bg-danger'}`}>
-            <strong className="me-auto text-white">{message.status === 'success' ? '成功' : '失敗'}</strong>
-            <button
-              type="button"
-              className="btn-close btn-close-white"
-              data-bs-dismiss="toast"
-              aria-label="Close"
-            ></button>
+    <>
+      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: '15000' }}>
+        {messages.map((message) => (
+          <div
+            className="toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            ref={(el) => (toastRefs.current[message.id] = el)}
+            key={message.id}
+          >
+            <div className={`toast-header ${message.status === 'success' ? 'bg-success' : 'bg-danger'}`}>
+              <strong className="me-auto text-white">{message.status === 'success' ? '成功' : '失敗'}</strong>
+              <button
+                type="button"
+                className="btn-close btn-close-white"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body">{message.text}</div>
           </div>
-          <div className="toast-body">{message.text}</div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 };
 
