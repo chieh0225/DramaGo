@@ -159,57 +159,55 @@ const Card = () => {
   }, [getMember]);
 
   return (
-    <>
-      <div className="container">
-        <div className="row mb-lg-23x mb-24x justify-content-between">
-          {recommend.map((product, index) => {
-            const { date, people, title, imageUrl, id } = product;
-            const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
-            const member = members && members[randomIndex];
-            return (
-              <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
+    <div className="container">
+      <div className="row mb-lg-23x mb-24x justify-content-between">
+        {recommend.map((product, index) => {
+          const { date, people, title, imageUrl, id } = product;
+          const randomIndex = Array.isArray(members) && Math.floor(Math.random() * members.length);
+          const member = members && members[randomIndex];
+          return (
+            <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
+              <Link to={`/dramaInfo/${id}`}>
+                <img src={imageUrl} className="object-fit imgcard card-img-top" alt="主圖" />
+              </Link>
+              <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
                 <Link to={`/dramaInfo/${id}`}>
-                  <img src={imageUrl} className="object-fit imgcard card-img-top" alt="主圖" />
-                </Link>
-                <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
-                  <Link to={`/dramaInfo/${id}`}>
-                    <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
-                    <div className="d-flex mb-1">
-                      <p className="text-grey-700 pe-4">出團時間</p>
-                      <p className="text-grey-700 pe-4">{date.start.substr(5)}</p>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <p className="text-grey-700 pe-4">參加人數</p>
-                      <p className="text-grey-700 pe-4">{people}</p>
-                    </div>
-                  </Link>
-
-                  <div className="border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                      <Link to={`/profile/${member && member.id}`} role="button" className="d-flex align-items-center">
-                        <div className="avatar me-2">
-                          <img
-                            style={{ height: `40px`, width: `40px` }}
-                            src={member && member.image}
-                            alt="頭像"
-                            className="object-fit rounded-circle"
-                          />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="h6">{member && member.author}</span>
-                          <span className="text-grey-400 fs-c">揪團主</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <Love id={id} state={state} mymodal={mymodal} />
+                  <p className="text-gerey-950 fs-b1 fw-semibold mb-3">{title}</p>
+                  <div className="d-flex mb-1">
+                    <p className="text-grey-700 pe-4">出團時間</p>
+                    <p className="text-grey-700 pe-4">{date.start.substr(5)}</p>
                   </div>
+                  <div className="d-flex mb-3">
+                    <p className="text-grey-700 pe-4">參加人數</p>
+                    <p className="text-grey-700 pe-4">{people}</p>
+                  </div>
+                </Link>
+
+                <div className="border-top pt-3 border-brand-100 d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center">
+                    <Link to={`/profile/${member && member.id}`} role="button" className="d-flex align-items-center">
+                      <div className="avatar me-2">
+                        <img
+                          style={{ height: `40px`, width: `40px` }}
+                          src={member && member.image}
+                          alt="頭像"
+                          className="object-fit rounded-circle"
+                        />
+                      </div>
+                      <div className="d-flex flex-column">
+                        <span className="h6">{member && member.author}</span>
+                        <span className="text-grey-400 fs-c">揪團主</span>
+                      </div>
+                    </Link>
+                  </div>
+                  <Love id={id} state={state} mymodal={mymodal} />
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 };
 
