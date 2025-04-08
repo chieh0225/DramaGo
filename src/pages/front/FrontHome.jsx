@@ -66,19 +66,19 @@ const SwiperModalType = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper1} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper1} alt="自己開團" />
           <p className="fw-semibold fs-5 text-center">當主揪自己開團</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper2} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper2} alt="參加電影劇會" />
           <p className="fw-semibold fs-5 text-center">參加電影劇會</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper3} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper3} alt="參加劇本殺" />
           <p className="fw-semibold fs-5 text-center">參加劇本殺</p>
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper4} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="mb-4" src={swiper4} alt="參加逛劇展" />
           <p className="fw-semibold fs-5 text-center">參加逛劇展</p>
         </SwiperSlide>
       </Swiper>
@@ -169,7 +169,7 @@ const Card = () => {
             return (
               <div key={index} className="card flex-lg-row  rounded-5 shadow border-0 col-lg-6-12 p-4 mb-3 mb-lg-6">
                 <Link to={`/dramaInfo/${id}`}>
-                  <img src={imageUrl} className="object-fit imgcard card-img-top" alt="..." />
+                  <img src={imageUrl} className="object-fit imgcard card-img-top" alt="圖片" />
                 </Link>
                 <div className="card-body py-0 d-lg-flex flex-column justify-content-between">
                   <Link to={`/dramaInfo/${id}`}>
@@ -246,19 +246,19 @@ const SwiperModalimg = () => {
         style={{ width: '100%', height: '100%' }}
       >
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg1} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg1} alt="輪播1" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg2} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg2} alt="輪播2" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg3} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg3} alt="輪播3" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg4} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pt-lg-4" src={SwiperModalimg4} alt="輪播4" />
         </SwiperSlide>
         <SwiperSlide>
-          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg5} alt="" />
+          <img style={{ width: '100%', height: '100%' }} className="pb-lg-4" src={SwiperModalimg5} alt="輪播5" />
         </SwiperSlide>
       </Swiper>
       <div className="d-flex mt-10 mt-lg-8 mb-6 mb-lg-0">
@@ -363,19 +363,19 @@ const FrontHome = () => {
               <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
               <div className="row mb-lg-17 ">
                 <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component1} alt="" />
+                  <img className="mb-6" src={component1} alt="加入劇團" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
                   <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
                 </div>
                 <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component2} alt="" />
+                  <img className="mb-6" src={component2} alt="自己開團" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
                   <p className="text-center">
                     沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會
                   </p>
                 </div>
                 <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component3} alt="" />
+                  <img className="mb-6" src={component3} alt="參加線下劇會" />
                   <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
                   <p className="text-center">
                     除了線上劇會，也可以選擇參加線下的劇會，
@@ -386,10 +386,10 @@ const FrontHome = () => {
               </div>
             </section>
             <div style={{ marginTop: '118px' }} className="position-absolute top-0 start-0 d-none d-lg-block side-img">
-              <img src={img1} alt="" />
+              <img src={img1} alt="圖1" />
             </div>
             <div style={{ marginTop: '49px' }} className="position-absolute top-0 end-0 d-none d-lg-block side-img">
-              <img src={img2} alt="" />
+              <img src={img2} alt="圖2" />
             </div>
           </div>
         </div>

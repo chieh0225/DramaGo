@@ -65,29 +65,6 @@ const DramaInfo = () => {
     },
   ];
 
-  // 自動登入
-  // const autoLogin = async () => {
-  //   try {
-  //     const response = await axios.post(`${BASE_URL}/admin/signin`, {
-  //       username: "dramaGo@gmail.com",
-  //       password: "dramago",
-  //     });
-
-  //     if (response.data.token) {
-  //       const { token, expired } = response.data;
-  //       document.cookie = `token=${token}; expires=${new Date(expired)}`;
-  //       axios.defaults.headers.common["Authorization"] = token;
-  //       console.log("登入成功，token 已儲存");
-  //     }
-  //   } catch (error) {
-  //     console.error("登入失敗：", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   autoLogin();
-  // }, [condition]);
-
   const generateMapUrl = (location) => {
     const encodedLocation = encodeURIComponent(location);
     return `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
@@ -436,7 +413,7 @@ const DramaInfo = () => {
               </p>
             </div>
           </div>
-          <div className="col-md-8 col-12 order-md-1 order-2 ">
+          <div className="col-md-8 order-md-1 order-2 ">
             <img
               src={dramaData.imageUrl}
               alt="主圖"
@@ -691,7 +668,7 @@ const DramaInfo = () => {
             </div>
           </div>
 
-          <div className="col-md-4 col-12 order-md-2 order-1 mb-6">
+          <div className="col-md-4 order-md-2 order-1 mb-6">
             <div className="event-info d-flex flex-column gap-4">
               <div className="d-flex gap-4">
                 <i className="bi bi-clock text-brand-core fs-4"></i>
