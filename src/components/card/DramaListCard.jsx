@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import PropTypes from 'prop-types';
 
 const DramaListCard = ({
   drama,
@@ -138,39 +137,6 @@ const DramaListCard = ({
       </div>
     </div>
   );
-};
-
-DramaListCard.propTypes = {
-  drama: PropTypes.shape({
-    date: PropTypes.shape({
-      start: PropTypes.string.isRequired,
-      end: PropTypes.string.isRequired,
-    }).isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    cost: PropTypes.string.isRequired,
-    term: PropTypes.shape({
-      gender: PropTypes.string.isRequired,
-      age: PropTypes.shape({
-        condition: PropTypes.string.isRequired,
-      }).isRequired,
-      area: PropTypes.shape({
-        condition: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-    location: PropTypes.string.isRequired,
-    people: PropTypes.number.isRequired,
-  }).isRequired,
-  loveDramas: PropTypes.array.isRequired,
-  handleLoveClick: PropTypes.func.isRequired,
-  openDramaForm: PropTypes.func.isRequired,
-  setModalMode: PropTypes.func.isRequired,
-  setUnitShareDrama: PropTypes.func.isRequired,
-  member: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  showAlert: PropTypes.func.isRequired,
 };
 
 export default DramaListCard;

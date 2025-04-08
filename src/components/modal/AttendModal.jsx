@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const API_URL = import.meta.env.VITE_APP_API_PATH;
@@ -150,10 +149,5 @@ function AttendModal({ dramaId, userId }) {
     </div>
   );
 }
-
-AttendModal.propTypes = {
-  dramaId: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
-};
 
 export default AttendModal;

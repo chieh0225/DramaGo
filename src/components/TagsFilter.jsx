@@ -1,6 +1,5 @@
 import { useEffect, useId, useState, useCallback } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import PropTypes from 'prop-types';
 
 const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
   const [tagFilter, setTagFilter] = useState([]);
@@ -75,25 +74,49 @@ const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
   }, [tagFilter, dramaFilter]);
 
   return (
-    <>
-      <form>
-        <div className="mt-8 mb-4">
-          <span className="h5 mb-4">劇會類型</span>
+    <form>
+      <div className="mt-8 mb-4">
+        <span className="h5 mb-4">劇會類型</span>
+        <br />
+        {categoryTags.map((tag, index) => (
+          <a role="button" className="my-1 mx-1" key={index}>
+            <input
+              {...register('category')}
+              type="radio"
+              name="category"
+              className="btn-check"
+              value={tag}
+              id={`${uniqueId}-dramaCategoryTag-${tag}`}
+              checked={categoryTag === tag}
+            />
+            <label
+              className={`brandBtn-3 ${categoryTag === tag && 'active'}`}
+              htmlFor={`${uniqueId}-dramaCategoryTag-${tag}`}
+              style={{ cursor: 'pointer' }}
+            >
+              {tag}
+            </label>
+          </a>
+        ))}
+      </div>
+      {dramaState === 'onGoing' && (
+        <div className="my-4">
+          <span className="h5 mb-4 ">劇會時間</span>
           <br />
-          {categoryTags.map((tag, index) => (
+          {dayTags.map((tag, index) => (
             <a role="button" className="my-1 mx-1" key={index}>
               <input
-                {...register('category')}
+                {...register('day')}
                 type="radio"
-                name="category"
+                name="day"
                 className="btn-check"
                 value={tag}
-                id={`${uniqueId}-dramaCategoryTag-${tag}`}
-                checked={categoryTag === tag}
+                id={`${uniqueId}-dramaDayTag-${tag}`}
+                checked={dayTag === tag}
               />
               <label
-                className={`brandBtn-3 ${categoryTag === tag && 'active'}`}
-                htmlFor={`${uniqueId}-dramaCategoryTag-${tag}`}
+                className={`brandBtn-3 ${dayTag === tag && 'active'}`}
+                htmlFor={`${uniqueId}-dramaDayTag-${tag}`}
                 style={{ cursor: 'pointer' }}
               >
                 {tag}
@@ -101,49 +124,50 @@ const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
             </a>
           ))}
         </div>
-        {dramaState === 'onGoing' && (
-          <div className="my-4">
-            <span className="h5 mb-4 ">劇會時間</span>
-            <br />
-            {dayTags.map((tag, index) => (
-              <a role="button" className="my-1 mx-1" key={index}>
-                <input
-                  {...register('day')}
-                  type="radio"
-                  name="day"
-                  className="btn-check"
-                  value={tag}
-                  id={`${uniqueId}-dramaDayTag-${tag}`}
-                  checked={dayTag === tag}
-                />
-                <label
-                  className={`brandBtn-3 ${dayTag === tag && 'active'}`}
-                  htmlFor={`${uniqueId}-dramaDayTag-${tag}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {tag}
-                </label>
-              </a>
-            ))}
-          </div>
-        )}
-        <div className="my-4">
-          <span className="h5 mb-4">劇會費用</span>
-          <br />
-          {costTags.map((tag, index) => (
+      )}
+      <div className="my-4">
+        <span className="h5 mb-4">劇會費用</span>
+        <br />
+        {costTags.map((tag, index) => (
+          <a role="button" className="my-1 mx-1" key={index}>
+            <input
+              {...register('cost')}
+              type="radio"
+              name="cost"
+              className="btn-check"
+              value={tag}
+              id={`${uniqueId}-dramaCostTag-${tag}`}
+              checked={costTag === tag}
+            />
+            <label
+              className={`brandBtn-3 ${costTag === tag && 'active'}`}
+              htmlFor={`${uniqueId}-dramaCostTag-${tag}`}
+              style={{ cursor: 'pointer' }}
+            >
+              {tag}
+            </label>
+          </a>
+        ))}
+      </div>
+      <div className="my-4">
+        <span className="h5 mb-4">劇會條件</span>
+        <br />
+        <div className="my-3">
+          <span className="mb-1 d-block">性別</span>
+          {genderTags.map((tag, index) => (
             <a role="button" className="my-1 mx-1" key={index}>
               <input
-                {...register('cost')}
+                {...register('genderTerm')}
                 type="radio"
-                name="cost"
+                name="genderTerm"
                 className="btn-check"
                 value={tag}
-                id={`${uniqueId}-dramaCostTag-${tag}`}
-                checked={costTag === tag}
+                id={`${uniqueId}-dramaGenderTag-${tag}`}
+                checked={genderTag === tag}
               />
               <label
-                className={`brandBtn-3 ${costTag === tag && 'active'}`}
-                htmlFor={`${uniqueId}-dramaCostTag-${tag}`}
+                className={`brandBtn-3 ${genderTag === tag && 'active'}`}
+                htmlFor={`${uniqueId}-dramaGenderTag-${tag}`}
                 style={{ cursor: 'pointer' }}
               >
                 {tag}
@@ -151,88 +175,55 @@ const TagsFilter = ({ filterDramas, setDramas, dramaState }) => {
             </a>
           ))}
         </div>
-        <div className="my-4">
-          <span className="h5 mb-4">劇會條件</span>
-          <br />
-          <div className="my-3">
-            <span className="mb-1 d-block">性別</span>
-            {genderTags.map((tag, index) => (
-              <a role="button" className="my-1 mx-1" key={index}>
-                <input
-                  {...register('genderTerm')}
-                  type="radio"
-                  name="genderTerm"
-                  className="btn-check"
-                  value={tag}
-                  id={`${uniqueId}-dramaGenderTag-${tag}`}
-                  checked={genderTag === tag}
-                />
-                <label
-                  className={`brandBtn-3 ${genderTag === tag && 'active'}`}
-                  htmlFor={`${uniqueId}-dramaGenderTag-${tag}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {tag}
-                </label>
-              </a>
-            ))}
-          </div>
-          <div className="my-3">
-            <span className="mb-1 d-block">年齡</span>
-            {ageTags.map((tag, index) => (
-              <a role="button" className="my-1 mx-1" key={index}>
-                <input
-                  {...register('ageTerm')}
-                  type="radio"
-                  name="ageTerm"
-                  className="btn-check"
-                  value={tag}
-                  id={`${uniqueId}-dramaAgeTag-${tag}`}
-                  checked={ageTag === tag}
-                />
-                <label
-                  className={`brandBtn-3 ${ageTag === tag && 'active'}`}
-                  htmlFor={`${uniqueId}-dramaAgeTag-${tag}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {tag}
-                </label>
-              </a>
-            ))}
-          </div>
-          <div className="my-3">
-            <span className="mb-1 d-block">居住</span>
-            {areaTags.map((tag, index) => (
-              <a role="button" className="my-1 mx-1" key={index}>
-                <input
-                  {...register('areaTerm')}
-                  type="radio"
-                  name="areaTerm"
-                  className="btn-check"
-                  value={tag}
-                  id={`${uniqueId}-dramaAreaTag-${tag}`}
-                  checked={areaTag === tag}
-                />
-                <label
-                  className={`brandBtn-3 ${areaTag === tag && 'active'}`}
-                  htmlFor={`${uniqueId}-dramaAreaTag-${tag}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {tag}
-                </label>
-              </a>
-            ))}
-          </div>
+        <div className="my-3">
+          <span className="mb-1 d-block">年齡</span>
+          {ageTags.map((tag, index) => (
+            <a role="button" className="my-1 mx-1" key={index}>
+              <input
+                {...register('ageTerm')}
+                type="radio"
+                name="ageTerm"
+                className="btn-check"
+                value={tag}
+                id={`${uniqueId}-dramaAgeTag-${tag}`}
+                checked={ageTag === tag}
+              />
+              <label
+                className={`brandBtn-3 ${ageTag === tag && 'active'}`}
+                htmlFor={`${uniqueId}-dramaAgeTag-${tag}`}
+                style={{ cursor: 'pointer' }}
+              >
+                {tag}
+              </label>
+            </a>
+          ))}
         </div>
-      </form>
-    </>
+        <div className="my-3">
+          <span className="mb-1 d-block">居住</span>
+          {areaTags.map((tag, index) => (
+            <a role="button" className="my-1 mx-1" key={index}>
+              <input
+                {...register('areaTerm')}
+                type="radio"
+                name="areaTerm"
+                className="btn-check"
+                value={tag}
+                id={`${uniqueId}-dramaAreaTag-${tag}`}
+                checked={areaTag === tag}
+              />
+              <label
+                className={`brandBtn-3 ${areaTag === tag && 'active'}`}
+                htmlFor={`${uniqueId}-dramaAreaTag-${tag}`}
+                style={{ cursor: 'pointer' }}
+              >
+                {tag}
+              </label>
+            </a>
+          ))}
+        </div>
+      </div>
+    </form>
   );
-};
-
-TagsFilter.propTypes = {
-  filterDramas: PropTypes.array.isRequired,
-  setDramas: PropTypes.func.isRequired,
-  dramaState: PropTypes.object.isRequired,
 };
 
 export default TagsFilter;
