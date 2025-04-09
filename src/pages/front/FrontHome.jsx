@@ -83,7 +83,7 @@ const SwiperModalType = () => {
         </SwiperSlide>
       </Swiper>
       <div className="d-flex d-lg-none mt-6 mb-15">
-        <button onClick={prev} className="border border-brand-300 rounded-circle me-4">
+        <button onClick={prev} className="btn btn-white border border-brand-300 rounded-circle me-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M9.56054 12.1002L14.2417 6.83932C14.2749 6.80544 14.3066 6.79756 14.3275 6.79786C14.3493 6.79818 14.3829 6.80765 14.4172 6.84622C14.4534 6.88682 14.4823 6.95284 14.4832 7.0324C14.4841 7.11014 14.4581 7.17634 14.4237 7.21887L10.2057 11.9594L9.90996 12.2918L10.2057 12.6242L14.429 17.3708C14.4658 17.4122 14.4947 17.4791 14.4946 17.5598C14.4946 17.6405 14.4654 17.7081 14.4287 17.7494C14.3934 17.789 14.3593 17.7979 14.3382 17.7979C14.3169 17.7978 14.2826 17.7888 14.2474 17.7492L14.2473 17.749L9.56054 12.4819C9.56038 12.4817 9.56021 12.4815 9.56005 12.4813C9.52333 12.4394 9.49463 12.372 9.49463 12.2913C9.49463 12.2103 9.52356 12.1424 9.56008 12.1008C9.56023 12.1006 9.56039 12.1004 9.56054 12.1002Z"
@@ -92,7 +92,7 @@ const SwiperModalType = () => {
             />
           </svg>
         </button>
-        <button onClick={next} className="border border-brand-300 rounded-circle">
+        <button onClick={next} className="btn btn-white border border-brand-300 rounded-circle">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M14.82 13.0555L15.1125 12.7244L14.82 12.3934L10.6062 7.62443C10.4985 7.50252 10.4985 7.37179 10.6062 7.24988C10.6516 7.19853 10.6808 7.18765 10.6895 7.18567C10.6982 7.18765 10.7275 7.19853 10.7728 7.24988L15.4446 12.5371C15.5523 12.6591 15.5523 12.7898 15.4446 12.9117L10.8144 18.1519C10.7379 18.1951 10.6506 18.1967 10.5733 18.1566C10.4999 18.0471 10.5108 17.9323 10.6062 17.8244L14.82 13.0555ZM10.6922 7.1853C10.6922 7.18537 10.6915 7.18551 10.6901 7.18554L10.6922 7.1853ZM10.6889 7.18554C10.6875 7.18551 10.6868 7.18537 10.6868 7.1853L10.6889 7.18554Z"
@@ -287,11 +287,14 @@ const SwiperModalimg = () => {
 
 const Marquee = () => {
   return (
-    <div className="d-lg-none mb-15" style={{ overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
+    <div
+      className="d-lg-none mb-15"
+      style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', height: '160px' }}
+    >
       <motion.img
         src={decorate}
         alt="跑馬燈圖片"
-        style={{ display: 'inline-block', height: `96px` }}
+        style={{ height: '96px', width: 'auto', maxWidth: 'none' }}
         animate={{ x: ['100%', '-100%'] }}
         transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
       />
@@ -301,11 +304,14 @@ const Marquee = () => {
 
 const Marquee992 = () => {
   return (
-    <div className="d-none d-lg-block mb-17" style={{ overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
+    <div
+      className="d-none d-lg-flex align-items-center mb-17"
+      style={{ overflow: 'hidden', whiteSpace: 'nowrap', height: '240px' }}
+    >
       <motion.img
         src={decorate992}
         alt="跑馬燈圖片"
-        style={{ display: 'inline-block', height: `201px` }}
+        style={{ height: `160px`, width: 'auto', maxWidth: 'none' }}
         animate={{ x: ['100%', '-100%'] }}
         transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
       />
@@ -385,10 +391,16 @@ const FrontHome = () => {
                 </div>
               </div>
             </section>
-            <div style={{ marginTop: '118px' }} className="position-absolute top-0 start-0 d-none d-lg-block side-img">
+            <div
+              style={{ marginTop: '118px', zIndex: -1 }}
+              className="position-absolute top-0 start-0 d-none d-lg-block side-img"
+            >
               <img src={img1} alt="圖1" />
             </div>
-            <div style={{ marginTop: '49px' }} className="position-absolute top-0 end-0 d-none d-lg-block side-img">
+            <div
+              style={{ marginTop: '49px', zIndex: -1 }}
+              className="position-absolute top-0 end-0 d-none d-lg-block side-img"
+            >
               <img src={img2} alt="圖2" />
             </div>
           </div>
@@ -414,7 +426,7 @@ const FrontHome = () => {
           <div className="bg-center1 position-absolute top-0" style={{ marginTop: '306px' }}></div>
         </div>
 
-        <div className="container pt-lg-18">
+        <div className="container py-lg-18">
           {/* 劇會照片 */}
           <section className="d-flex flex-column align-items-center justify-content-center">
             <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">
