@@ -81,7 +81,7 @@ const LostPasswordModal = ({ mylostMadal, mymodal }) => {
           <div className="modal-content bg-brand-50">
             <div className="row">
               <div className="col-lg-6 d-none d-lg-flex align-items-center justify-content-center">
-                <img src={Forgot} alt="" />
+                <img src={Forgot} alt="忘記密碼" />
               </div>
               <div className="col-lg-6 py-8 px-6 ps-lg-3">
                 <div className="d-flex justify-content-between">

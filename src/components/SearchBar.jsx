@@ -1,6 +1,5 @@
 import { useEffect, useState, useId } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSearchState }) => {
   const searchId1 = useId();
@@ -85,14 +84,6 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
       </form>
     </div>
   );
-};
-
-SearchBar.propTypes = {
-  filterDramas: PropTypes.array.isRequired,
-  setDramas: PropTypes.func.isRequired,
-  closeSearchOffcanvas: PropTypes.func.isRequired,
-  bar: PropTypes.bool.isRequired,
-  phoneSearchState: PropTypes.bool.isRequired,
 };
 
 export default SearchBar;

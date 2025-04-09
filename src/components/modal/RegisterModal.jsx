@@ -57,16 +57,15 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
   };
 
   return (
-    <>
-      {/* <!-- Modal --> */}
-      <div className="modal fade" ref={registerModal} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content bg-brand-50">
-            <div className="row">
-              <div className="col-lg-6 d-none d-lg-flex align-items-center">
-                <img src={sing} alt="" />
-              </div>
-              <div className="col-lg-6 py-8 px-6 ps-lg-3">
+    <div className="modal fade" ref={registerModal} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
+      <div className="modal-dialog modal-lg">
+        <div className="modal-content">
+          <div className="row">
+            <div className="col-lg-6 d-none d-lg-flex align-items-center bg-brand-50">
+              <img src={sing} alt="註冊" />
+            </div>
+            <div className="col-lg-6">
+              <div className="py-8 px-6">
                 <div className="d-flex justify-content-between">
                   <div>
                     <h5 className="modal-title fs-1 mb-3">註冊</h5>
@@ -190,7 +189,7 @@ const RegisterModal = ({ myRegisterModal, mymodal, setState }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

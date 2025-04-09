@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -54,12 +53,6 @@ const Dropdown = ({ options, filterDramas, setDramas }) => {
       </ul>
     </div>
   );
-};
-
-Dropdown.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  filterDramas: PropTypes.array.isRequired,
-  setDramas: PropTypes.func.isRequired,
 };
 
 export default Dropdown;

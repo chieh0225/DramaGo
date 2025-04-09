@@ -21,21 +21,19 @@ const NotFound = () => {
   }, [navigate]);
 
   return (
-    <>
-      <main className="notFound">
-        <div className="container d-flex justify-content-center align-items-center">
-          <div className="wrap d-flex justify-content-center align-items-center">
-            <div>
-              <h2 className="mb-3 fs-1">Oops!!</h2>
-              <h2 className="mb-3">此頁面不存在~我送你回家~</h2>
-              <div className="text-center">
-                <span className="count text-brand-500">{count}</span>
-              </div>
+    <main className="notFound">
+      <div className="container d-flex justify-content-center align-items-center">
+        <div className="wrap d-flex justify-content-center align-items-center">
+          <div>
+            <h2 className="mb-3 fs-1">Oops!!</h2>
+            <h2 className="mb-3">此頁面不存在~我送你回家~</h2>
+            <div className="text-center">
+              <span className="count text-brand-500">{count}</span>
             </div>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 };
 

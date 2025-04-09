@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
@@ -84,16 +83,6 @@ const Love = ({ id, state, mymodal }) => {
       />
     </svg>
   );
-};
-
-Love.propTypes = {
-  id: PropTypes.string.isRequired,
-  state: PropTypes.bool.isRequired,
-  mymodal: PropTypes.shape({
-    current: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
 };
 
 export default Love;
