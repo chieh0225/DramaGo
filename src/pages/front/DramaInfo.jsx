@@ -536,23 +536,27 @@ const DramaInfo = () => {
                   >
                     <div className="message d-flex flex-column flex-md-row">
                       <div className="message-header">
-                        <img
-                          src={commentImages[comment.user] || avatarImage}
-                          alt="留言人"
-                          width="40"
-                          height="40"
-                          style={{ borderRadius: '1000px' }}
-                        />
+                        <div className="message-pic">
+                          <img
+                            src={commentImages[comment.user] || avatarImage}
+                            alt="留言人"
+                            width="40"
+                            height="40"
+                            className="rounded-circle"
+                          />
+                        </div>
+
                         <p>{comment.userName}</p>
                       </div>
-                      <div className="message-content-wrapper d-flex flex-column flex-md-row justify-content-between">
+                      <div className="message-content-wrapper d-flex flex-column flex-md-row">
                         <div className="message-content" style={{ fontSize: '14px' }}>
                           {comment.content}
                         </div>
-                        <div className="time d-flex align-items-center gap-6 mt-2">
+                        <div className="time d-flex align-items-center gap-6 mt-2 mt-md-0 ms-md-auto">
                           <p>{comment.time}</p>
                           <a
                             href="#"
+                            className="text-nowrap"
                             onClick={(e) => {
                               e.preventDefault();
                               handleReply(comment.commentId);
@@ -563,6 +567,7 @@ const DramaInfo = () => {
                           {comment.user === userId && (
                             <a
                               href="#"
+                              className="text-nowrap"
                               onClick={(e) => {
                                 e.preventDefault();
                                 handleDeleteComment(comment.commentId);
@@ -581,13 +586,15 @@ const DramaInfo = () => {
                         {comment.replies.map((reply) => (
                           <div key={reply.replyId} className="message d-flex flex-column flex-md-row">
                             <div className="message-header">
-                              <img
-                                src={commentImages[reply.user] || avatarImage}
-                                alt="留言人"
-                                width="40"
-                                height="40"
-                                style={{ borderRadius: '1000px' }}
-                              />
+                              <div className="message-pic">
+                                <img
+                                  src={commentImages[reply.user] || avatarImage}
+                                  alt="留言人"
+                                  width="40"
+                                  height="40"
+                                  className="rounded-circle"
+                                />
+                              </div>
                               <p>{reply.userName}</p>
                             </div>
                             <div className="d-flex flex-column flex-md-row justify-content-between w-100">
@@ -596,7 +603,9 @@ const DramaInfo = () => {
                               </div>
                               <div className="time d-flex align-items-center gap-6 mt-2">
                                 <p>{reply.time}</p>
-                                <a href="#">回覆</a>
+                                <a href="#" className="text-nowrap">
+                                  回覆
+                                </a>
                                 {reply.user === userId && (
                                   <a
                                     href="#"
@@ -704,10 +713,20 @@ const DramaInfo = () => {
                   style={{ cursor: 'pointer' }}
                   onClick={handleBookmark}
                 ></i>
-                <button type="button" className="share-btn ms-auto" data-bs-toggle="modal" data-bs-target="#shareModal">
+                <button
+                  type="button"
+                  className="share-btn ms-auto text-nowrap"
+                  data-bs-toggle="modal"
+                  data-bs-target="#shareModal"
+                >
                   分享
                 </button>
-                <button type="button" className="attend-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button
+                  type="button"
+                  className="attend-btn text-nowrap"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
                   參加
                 </button>
               </div>
