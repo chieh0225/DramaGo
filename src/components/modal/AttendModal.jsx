@@ -103,7 +103,7 @@ function AttendModal({ dramaId, userId }) {
                 >
                   -
                 </button>
-                <input type="text" className="form-control text-center" value={peopleCount} readOnly />
+                <input type="text" className="form-control text-center border-secondary" value={peopleCount} readOnly />
                 <button
                   className="btn btn-outline-secondary"
                   type="button"
@@ -125,7 +125,7 @@ function AttendModal({ dramaId, userId }) {
                 >
                   -
                 </button>
-                <input type="text" className="form-control text-center" value={ticketCount} readOnly />
+                <input type="text" className="form-control text-center border-secondary" value={ticketCount} readOnly />
                 <button
                   className="btn btn-outline-secondary"
                   type="button"

@@ -6,14 +6,17 @@
   border-color: #ffca88 !important ;
 }
 
-.border-brand-100{
-  border-color:  #ffe6c6 !important;
+.border-brand-100 {
+  border-color: #ffe6c6 !important;
 }
 
 .border-footer {
-  border-radius: 0 200px 0 0;
+  border-radius: 0;
+  @media (min-width: 769px) {
+    border-radius: 0 200px 0 0;
+  }
 }
 
 .border-white-40 {
-    border-color: rgb(255, 255, 255, 0.6) !important;
+  border-color: rgb(255, 255, 255, 0.6) !important;
 }

@@ -99,45 +99,28 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
       </div>
       {/* PC版nav */}
       <div className="container d-none d-lg-block">
-        <nav className="navbar">
-          <div className="d-flex align-items-center">
-            <Link className="ms-3 me-13" to="/">
+        <nav className="d-flex align-items-center justify-content-between w-100 gap-10 py-4">
+          <div className="d-flex align-items-center justify-content-between w-100">
+            <Link className="me-13" to="/">
               <img src={logo} alt="logo" />
             </Link>
             <div style={{ width: '400px' }} className="">
               <SearchBar bar={true} filterDramas={filterDramas} setDramas={setDramas} />
             </div>
           </div>
-          <div className="d-flex align-items-center ">
-            {state && (
+          <div className="d-flex align-items-center justify-content-between w-100">
+            {state ? (
+              // 登入後
               <>
-                <Link className="text-grey-950 fs-b1 me-19x navLink" to="/profile/-OKxd94Su2SMB1GKkzqL/profileInfo">
+                <Link className="text-grey-950 fs-b1 navLink" to="/profile/-OKxd94Su2SMB1GKkzqL/profileInfo">
                   個人管理
                 </Link>
-                <Link className="text-grey-950 fs-b1 me-19x navLink" to="/adminSystem">
+                <Link className="text-grey-950 fs-b1 navLink" to="/adminSystem">
                   後台管理
                 </Link>
-              </>
-            )}
-            <Link className="text-grey-950 fs-b1 me-19x navLink" to="/dramaList">
-              劇會總覽
-            </Link>
-            {!state && (
-              <>
-                <button
-                  type="button"
-                  className="btn rounded-pill btn-brand-400 mt-auto py-3 px-5"
-                  onClick={LoginOpenMadal}
-                >
-                  <div className="d-flex justify-content-center align-iteams-center">
-                    <img className="icon me-2" src={ueser} alt="user" />
-                    <span className="text-white">登入/註冊</span>
-                  </div>
-                </button>
-              </>
-            )}
-            {state && (
-              <>
+                <Link className="text-grey-950 fs-b1 navLink" to="/dramaList">
+                  劇會總覽
+                </Link>
                 <button type="button" className="btn brandBtn-1-lg fs-6 mt-auto py-3 px-5" onClick={logoutUser}>
                   <div className="d-flex justify-content-center align-iteams-center">
                     <img className="icon me-2" src={logout} alt="logout" />
@@ -145,6 +128,19 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
                   </div>
                 </button>
               </>
+            ) : (
+              // 未登入
+              <div className="d-flex align-items-center ms-auto">
+                <Link className="text-grey-950 fs-b1 me-10" to="/dramaList">
+                  劇會總覽
+                </Link>
+                <button type="button" className="btn rounded-pill btn-brand-400 py-3 px-5" onClick={LoginOpenMadal}>
+                  <div className="d-flex justify-content-center align-iteams-center">
+                    <img className="icon me-2" src={ueser} alt="user" />
+                    <span className="text-white">登入/註冊</span>
+                  </div>
+                </button>
+              </div>
             )}
           </div>
         </nav>

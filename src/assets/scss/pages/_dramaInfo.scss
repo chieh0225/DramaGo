@@ -151,8 +151,16 @@
   color: $brand-950;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  gap: 12px;
+}
+
+.message-pic {
+  flex-shrink: 0 !important;
+  img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center center;
+  }
 }
 
 .message-content {
@@ -161,7 +169,8 @@
   background-color: $brand-50;
   color: $black;
   width: fit-content;
-  @media (max-width: 768px) {
+  margin-left: 16px;
+  @media (max-width: 767px) {
     margin-left: 48px;
   }
 }
@@ -170,7 +179,7 @@
   font-size: 14px;
 
   color: $brand-300;
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-left: 48px;
   }
 }
@@ -259,6 +268,7 @@
   border: none;
   color: white;
   font-weight: 600;
+  display: flex;
   align-items: center;
 
   i {
