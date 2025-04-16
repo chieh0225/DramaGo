@@ -62,6 +62,10 @@ const SwiperModalType = () => {
             slidesPerView: 4,
             spaceBetween: 24,
           },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 16,
+          },
         }}
         style={{ width: '100%', height: '100%' }}
       >
@@ -83,7 +87,7 @@ const SwiperModalType = () => {
         </SwiperSlide>
       </Swiper>
       <div className="d-flex d-lg-none mt-6 mb-15">
-        <button onClick={prev} className="btn btn-white border border-brand-300 rounded-circle me-4">
+        <button onClick={prev} className="btn btn-white border border-brand-300 rounded-circle me-4 swiperBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M9.56054 12.1002L14.2417 6.83932C14.2749 6.80544 14.3066 6.79756 14.3275 6.79786C14.3493 6.79818 14.3829 6.80765 14.4172 6.84622C14.4534 6.88682 14.4823 6.95284 14.4832 7.0324C14.4841 7.11014 14.4581 7.17634 14.4237 7.21887L10.2057 11.9594L9.90996 12.2918L10.2057 12.6242L14.429 17.3708C14.4658 17.4122 14.4947 17.4791 14.4946 17.5598C14.4946 17.6405 14.4654 17.7081 14.4287 17.7494C14.3934 17.789 14.3593 17.7979 14.3382 17.7979C14.3169 17.7978 14.2826 17.7888 14.2474 17.7492L14.2473 17.749L9.56054 12.4819C9.56038 12.4817 9.56021 12.4815 9.56005 12.4813C9.52333 12.4394 9.49463 12.372 9.49463 12.2913C9.49463 12.2103 9.52356 12.1424 9.56008 12.1008C9.56023 12.1006 9.56039 12.1004 9.56054 12.1002Z"
@@ -92,7 +96,7 @@ const SwiperModalType = () => {
             />
           </svg>
         </button>
-        <button onClick={next} className="btn btn-white border border-brand-300 rounded-circle">
+        <button onClick={next} className="btn btn-white border border-brand-300 rounded-circle swiperBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M14.82 13.0555L15.1125 12.7244L14.82 12.3934L10.6062 7.62443C10.4985 7.50252 10.4985 7.37179 10.6062 7.24988C10.6516 7.19853 10.6808 7.18765 10.6895 7.18567C10.6982 7.18765 10.7275 7.19853 10.7728 7.24988L15.4446 12.5371C15.5523 12.6591 15.5523 12.7898 15.4446 12.9117L10.8144 18.1519C10.7379 18.1951 10.6506 18.1967 10.5733 18.1566C10.4999 18.0471 10.5108 17.9323 10.6062 17.8244L14.82 13.0555ZM10.6922 7.1853C10.6922 7.18537 10.6915 7.18551 10.6901 7.18554L10.6922 7.1853ZM10.6889 7.18554C10.6875 7.18551 10.6868 7.18537 10.6868 7.1853L10.6889 7.18554Z"
@@ -262,7 +266,7 @@ const SwiperModalimg = () => {
         </SwiperSlide>
       </Swiper>
       <div className="d-flex mt-10 mt-lg-8 mb-6 mb-lg-0">
-        <button onClick={prev} className="btn btn-white border border-brand-300 rounded-circle me-4">
+        <button onClick={prev} className="btn btn-white border border-brand-300 rounded-circle me-4 swiperBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M9.56054 12.1002L14.2417 6.83932C14.2749 6.80544 14.3066 6.79756 14.3275 6.79786C14.3493 6.79818 14.3829 6.80765 14.4172 6.84622C14.4534 6.88682 14.4823 6.95284 14.4832 7.0324C14.4841 7.11014 14.4581 7.17634 14.4237 7.21887L10.2057 11.9594L9.90996 12.2918L10.2057 12.6242L14.429 17.3708C14.4658 17.4122 14.4947 17.4791 14.4946 17.5598C14.4946 17.6405 14.4654 17.7081 14.4287 17.7494C14.3934 17.789 14.3593 17.7979 14.3382 17.7979C14.3169 17.7978 14.2826 17.7888 14.2474 17.7492L14.2473 17.749L9.56054 12.4819C9.56038 12.4817 9.56021 12.4815 9.56005 12.4813C9.52333 12.4394 9.49463 12.372 9.49463 12.2913C9.49463 12.2103 9.52356 12.1424 9.56008 12.1008C9.56023 12.1006 9.56039 12.1004 9.56054 12.1002Z"
@@ -271,7 +275,7 @@ const SwiperModalimg = () => {
             />
           </svg>
         </button>
-        <button onClick={next} className="btn btn-white border border-brand-300 rounded-circle">
+        <button onClick={next} className="btn btn-white border border-brand-300 rounded-circle swiperBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="#ffa13c">
             <path
               d="M14.82 13.0555L15.1125 12.7244L14.82 12.3934L10.6062 7.62443C10.4985 7.50252 10.4985 7.37179 10.6062 7.24988C10.6516 7.19853 10.6808 7.18765 10.6895 7.18567C10.6982 7.18765 10.7275 7.19853 10.7728 7.24988L15.4446 12.5371C15.5523 12.6591 15.5523 12.7898 15.4446 12.9117L10.8144 18.1519C10.7379 18.1951 10.6506 18.1967 10.5733 18.1566C10.4999 18.0471 10.5108 17.9323 10.6062 17.8244L14.82 13.0555ZM10.6922 7.1853C10.6922 7.18537 10.6915 7.18551 10.6901 7.18554L10.6922 7.1853ZM10.6889 7.18554C10.6875 7.18551 10.6868 7.18537 10.6868 7.1853L10.6889 7.18554Z"
@@ -325,34 +329,34 @@ const FrontHome = () => {
       <main>
         <div
           style={{ backgroundImage: `url(${banner})` }}
-          className="bg-banner-img d-flex mx-auto d-lg-none align-items-center justify-content-center justify-content-lg-start "
+          className="bg-banner-img d-flex mx-auto d-md-none align-items-center justify-content-center justify-content-md-start "
         >
-          <div className="d-flex flex-column align-items-center ms-lg-25x">
+          <div className="d-flex flex-column align-items-center ms-md-25x">
             <h2 className=" fw-semibold text-center fs-1m text-brand-950 mb-3">
               相約美好
-              <br className="d-lg-none" />
+              <br className="d-md-none" />
               聚會時光
             </h2>
             <p className="fw-semibold fs-4 text-brand-200 mb-10 text-center">
               Let&apos;s have
-              <br className="d-lg-none" /> a great time together.
+              <br className="d-md-none" /> a great time together.
             </p>
           </div>
         </div>
 
         <div
           style={{ backgroundImage: `url(${banner992})` }}
-          className="bg-banner-img-992 d-lg-flex mx-auto d-none align-items-center justify-content-center justify-content-lg-start "
+          className="bg-banner-img-992 d-md-flex mx-auto d-none align-items-center justify-content-center justify-content-md-start "
         >
-          <div className="d-flex flex-column align-items-center ms-lg-25x">
+          <div className="d-flex flex-column align-items-center ms-md-12">
             <h2 className=" fw-semibold text-center fs-1m text-brand-950 mb-3">
               相約美好
-              <br className="d-lg-none" />
+              <br className="d-md-none" />
               聚會時光
             </h2>
             <p className="fw-semibold fs-4 text-brand-200 mb-10 text-center">
               Let&apos;s have
-              <br className="d-lg-none" /> a great time together.
+              <br className="d-md-none" /> a great time together.
             </p>
           </div>
         </div>
@@ -369,19 +373,19 @@ const FrontHome = () => {
               <p className="fw-semibold fs-5 text-grey-200 mb-6">What can you do</p>
               <div className="row mb-lg-17 ">
                 <div className="mb-10 mb-lg-0 col-lg-4 d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component1} alt="加入劇團" />
+                  <img className="mb-6" src={component1} alt="加入劇團" style={{ height: '260px' }} />
                   <h3 className="fw-semibold text-center fs-5 mb-3">加入劇團</h3>
                   <p className="text-center">參加其他人發起的劇會，你可以看到正在進行的劇會，並選擇感興趣的加入</p>
                 </div>
                 <div className="mb-10 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component2} alt="自己開團" />
+                  <img className="mb-6" src={component2} alt="自己開團" style={{ height: '260px' }} />
                   <h3 className="fw-semibold text-center fs-5 mb-3">當主揪自己開團</h3>
                   <p className="text-center">
                     沒有想參加的劇會? 你可以自己開團!自己選擇主題、地點、餐與人數與餐與條件，然後發起自己的劇會
                   </p>
                 </div>
                 <div className="mb-15 mb-lg-0 col-lg-4  d-flex flex-column justify-content-center">
-                  <img className="mb-6" src={component3} alt="參加線下劇會" />
+                  <img className="mb-6" src={component3} alt="參加線下劇會" style={{ height: '260px' }} />
                   <h3 className="fw-semibold text-center fs-5 mb-3">參加線下劇會</h3>
                   <p className="text-center">
                     除了線上劇會，也可以選擇參加線下的劇會，

@@ -1,8 +1,8 @@
 const FrontFooter = () => {
   return (
     <footer className="bg-footer">
-      <article className="container">
-        <div className="pb-13 pb-lg-21x bg-brand-700 border-footer mx-n3 mx-lg-0">
+      <article>
+        <div className="pb-13 pb-lg-21x bg-brand-700 border-footer px-3">
           <div className="mx-3 mx-lg-0">
             <div className="d-lg-flex align-items-end pt-lg-14 pb-lg-21x">
               <div className="mb-14 mb-lg-8 pt-20x pt-lg-0 col-lg-3">
@@ -96,7 +96,7 @@ const FrontFooter = () => {
                   />
                 </svg>
               </div>
-              <div className="row mb-16 mb-lg-0  col-lg-4">
+              <div className="row mb-16 mb-lg-0 col-lg-4">
                 <ul className="col-6">
                   <li className="fs-5 text-white fw-semibold mb-6">關於我們</li>
                   <li className="mb-2 text-white fw-normal">最新消息</li>
@@ -188,7 +188,7 @@ const FrontFooter = () => {
                 </svg>
               </div>
             </div>
-            <div className="py-4 pb-lg-0 border-top border-white-40 col-lg-10 ">
+            <div className="py-4 pb-lg-0 border-top border-white-40 col-lg-10">
               <h3 style={{ color: 'rgb(255, 255, 255 , 0.6)' }} className="fs-b3 fw-normal">
                 © 2025 together Technologies Inc.
               </h3>

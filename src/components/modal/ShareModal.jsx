@@ -90,7 +90,7 @@ const ShareModal = () => {
               ))}
             </div>
             <div className="input-group mb-3">
-              <input type="text" className="form-control" defaultValue={pageUrl} readOnly />
+              <input type="text" className="form-control border-secondary" defaultValue={pageUrl} readOnly />
               <button className="btn btn-outline-secondary" type="button" onClick={copyWebsite}>
                 複製
               </button>
