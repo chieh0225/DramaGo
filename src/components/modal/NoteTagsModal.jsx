@@ -48,7 +48,6 @@ const NoteTagsModal = ({ noteModalRef, closeNoteModal, setIsOpenNoteModal, selec
           }),
         );
       }
-      console.log(err);
     }
   }, [config, dispatch]);
 

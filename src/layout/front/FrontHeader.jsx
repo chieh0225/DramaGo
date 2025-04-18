@@ -24,8 +24,8 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
       try {
         const res = await axios.get(`${baseUrl}/api/${apiPath}/products`);
         setFilterDramas(res.data.products);
-      } catch (err) {
-        console.log(err);
+      } catch {
+        alert('載入劇會列表時發生錯誤，請稍後再試！');
       }
     })();
   }, []);
@@ -37,7 +37,6 @@ const FrontHeader = ({ state, setState, mymodal, setDramas }) => {
 
   //登出
   const logoutUser = () => {
-    console.log('執行登出');
     Cookies.remove('token', { path: '/', domain: domainUrl });
     setState(false);
     navigate('/');

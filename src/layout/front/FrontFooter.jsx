@@ -1,8 +1,8 @@
 const FrontFooter = () => {
   return (
     <footer className="bg-footer">
-      <article>
-        <div className="pb-13 pb-lg-21x bg-brand-700 border-footer px-3">
+      <article className="container">
+        <div className="pb-13 pb-lg-21x bg-brand-700 border-footer">
           <div className="mx-3 mx-lg-0">
             <div className="d-lg-flex align-items-end pt-lg-14 pb-lg-21x">
               <div className="mb-14 mb-lg-8 pt-20x pt-lg-0 col-lg-3">

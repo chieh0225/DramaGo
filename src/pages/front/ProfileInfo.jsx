@@ -187,9 +187,10 @@ const ProfileInfo = () => {
   return (
     <>
       <div className="col-lg-8">
+        <div className=" my-section-bg"></div>
         <div className="my-info">
           <h2 className="fs-md-1m fs-4 mb-8">個人資訊</h2>
-          <section className="my-info-section">
+          <section className="my-info-section my-section-bg">
             <div className="d-md-flex flex-md-row flex-column align-items-baseline gap-5 mb-md-0 mb-5">
               <h3 className="fs-md-2 fs-5 mb-md-5 mb-2">會員資訊</h3>
               <p className="text-danger">
@@ -381,10 +382,10 @@ const ProfileInfo = () => {
                   個人簡介
                 </label>
 
-                <div className="d-md-flex d-flex-column align-items-md-end gap-md-5">
+                <div className="d-flex-column align-items-start">
                   <textarea
                     id="description"
-                    className="form-control mb-md-0 mb-8"
+                    className="form-control mb-4"
                     cols="5"
                     rows="5"
                     maxLength="100"
@@ -392,10 +393,10 @@ const ProfileInfo = () => {
                     style={{ resize: 'none' }}
                     {...register('description')}
                   ></textarea>
-                  <div className="text-end" title={!isDirty ? '表單未被修改時不能按唷~' : ''}>
+                  <div title={!isDirty ? '表單未被修改時不能按唷~' : ''}>
                     <button
                       type="submit"
-                      className="btn btn-brand text-white w-100 text-nowrap"
+                      className="btn btn-brand text-white text-nowrap"
                       disabled={!isDirty} // 當表單未被修改時禁用按鈕
                     >
                       確認修改
@@ -409,7 +410,7 @@ const ProfileInfo = () => {
 
         <div className="login-method">
           <h2 className="fs-md-1m fs-4 mb-8">登入方式</h2>
-          <section className="login-method-section">
+          <section className="login-method-section my-section-bg">
             {loginMethod.map((method, index) => (
               <div key={index} className="row justify-content-between align-items-center py-3">
                 <p className="col-sm-4 col-8 fs-md-5 fs-6 text-nowrap">{method} 登入</p>
@@ -428,7 +429,7 @@ const ProfileInfo = () => {
         <form onSubmit={onSubmitPassword}>
           <div className="reset-password">
             <h2 className="fs-md-1m fs-4 mb-8">重設密碼</h2>
-            <section className="reset-password-section d-md-flex flex-md-row flex-column align-items-end">
+            <section className="reset-password-section d-flex-column align-items-start my-section-bg">
               <div className="w-100">
                 <div className="mb-3 row">
                   <label htmlFor="password" className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6">
@@ -506,7 +507,7 @@ const ProfileInfo = () => {
                   </div>
                 </div>
 
-                <div className="mb-md-0 mb-8 row">
+                <div className="mb-4 row">
                   <label htmlFor="newPasswordCheck" className="col-md-3 col-form-label text-nowrap fs-md-5 fs-6">
                     確認新密碼
                   </label>
@@ -537,7 +538,7 @@ const ProfileInfo = () => {
               <div>
                 <button
                   type="submit"
-                  className="btn btn-brand text-white w-100 text-nowrap"
+                  className="btn btn-brand text-white text-nowrap"
                   disabled={
                     !password || // 檢查舊密碼是否已填寫
                     !newPassword || // 檢查新密碼是否已填寫

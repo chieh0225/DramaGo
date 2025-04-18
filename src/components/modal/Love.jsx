@@ -57,8 +57,8 @@ const Love = ({ id, state, mymodal }) => {
           } else {
             setloveState(true);
           }
-        } catch (error) {
-          console.log(error);
+        } catch {
+          alert('載入最愛的清單時發生錯誤，請稍後再試！');
         }
       })();
     } else {

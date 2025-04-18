@@ -12,12 +12,9 @@
 }
 
 .bg-footer {
-  margin: 0;
+  background-color: #b72706;
   @media (min-width: 992px) {
     background: linear-gradient(to right, #b72706 50%, #ffffff 50%);
-  }
-  @media (min-width: 768px) {
-    margin-right: 100px;
   }
 }
 

@@ -85,8 +85,8 @@ const DramaInfo = () => {
 
       setUserImage(userRes.data.article.image);
       setUserName(userRes.data.article.author);
-    } catch (error) {
-      console.log(error);
+    } catch {
+      alert('載入人員列表時發生錯誤，請稍後再試！');
     }
   };
 
@@ -123,8 +123,8 @@ const DramaInfo = () => {
         ...prev,
         [userId]: res.data.article.image,
       }));
-    } catch (error) {
-      console.log(error);
+    } catch {
+      alert('載入留言者頭像時發生錯誤，請稍後再試！');
     }
   };
 
@@ -161,8 +161,7 @@ const DramaInfo = () => {
           }
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       alert('此聚會不存在');
       setTimeout(() => {
         navigate('/');
@@ -629,13 +628,15 @@ const DramaInfo = () => {
                 <div className="comment-textarea py-md-8 py-4">
                   <div className="input-area">
                     <div className="message-header">
-                      <img
-                        src={userImage || avatarImage}
-                        alt="留言人"
-                        width="40"
-                        height="40"
-                        style={{ borderRadius: '1000px' }}
-                      />
+                      <div className="message-pic">
+                        <img
+                          src={userImage || avatarImage}
+                          alt="留言人"
+                          width="40"
+                          height="40"
+                          style={{ borderRadius: '1000px' }}
+                        />
+                      </div>
                     </div>
                     <div className="form-floating">
                       <textarea
