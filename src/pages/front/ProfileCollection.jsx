@@ -65,7 +65,7 @@ const ProfileCollection = () => {
   return (
     <>
       <div className="col-lg-8">
-        <div className="my-collections">
+        <div className="my-collections my-section-bg">
           <div className="d-flex flex-md-row flex-column align-items-baseline justify-content-between">
             <h2 className="fs-md-1m fs-4 mb-md-8 mb-3">我的收藏</h2>
             <button

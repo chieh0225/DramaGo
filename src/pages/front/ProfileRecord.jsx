@@ -13,7 +13,7 @@ const ProfileRecord = () => {
   return (
     <>
       <div className="col-lg-8">
-        <div className="my-records">
+        <div className="my-records my-section-bg">
           <div className="d-flex flex-column align-items-baseline">
             <h2 className="fs-md-1m fs-4 mb-md-8 mb-5">我的劇會記錄</h2>
             <div className="d-flex flex-md-row flex-column justify-content-md-between gap-md-0 gap-3 mb-8 w-100">
@@ -21,11 +21,9 @@ const ProfileRecord = () => {
                 <label className="fs-md-4 fs-6 me-3" htmlFor="party-status">
                   揪團狀態
                 </label>
-                <select className="form-select" aria-label="Default select example" id="party-status">
+                <select className="form-select" aria-label="Default select example" id="party-status" defaultValue="2">
                   <option value="1">全部</option>
-                  <option value="2" selected>
-                    未出團
-                  </option>
+                  <option value="2">未出團</option>
                   <option value="3">已出團</option>
                   <option value="4">取消出團</option>
                 </select>
@@ -34,10 +32,13 @@ const ProfileRecord = () => {
                 <label className="fs-md-4 fs-6 me-3" htmlFor="party-category">
                   劇會類別
                 </label>
-                <select className="form-select" aria-label="Default select example" id="party-category">
-                  <option value="1" selected>
-                    全部
-                  </option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="party-category"
+                  defaultValue="1"
+                >
+                  <option value="1">全部</option>
                   <option value="2">未出團</option>
                   <option value="3">已出團</option>
                   <option value="4">取消出團</option>

@@ -180,7 +180,7 @@ const Profile = () => {
         <div className="container pt-13 pb-18">
           <div className="row">
             <div className="col-lg-4 mb-lg-0 mb-6">
-              <div className="profile">
+              <div className="profile my-section-bg">
                 <div className="profile-info">
                   <div className="profile-pic-container position-relative d-inline-block">
                     <div className="flex-shrink-0">
