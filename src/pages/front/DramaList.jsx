@@ -69,7 +69,7 @@ const DramaList = () => {
       },
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer');
+        alert('倒數結束，將跳轉至登入頁面！');
       }
     });
   };

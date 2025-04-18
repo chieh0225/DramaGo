@@ -68,10 +68,8 @@ const TableShareModal = ({ unitShareDrama }) => {
     },
   ];
 
-  const handleShare = (platform) => {
+  const handleShare = () => {
     // 這裡可以實作實際的分享功能
-    console.log(`分享到 ${platform}`);
-    console.log(unitShareDrama.id);
   };
 
   return (

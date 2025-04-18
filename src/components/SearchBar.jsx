@@ -13,13 +13,13 @@ const SearchBar = ({ filterDramas, setDramas, closeSearchOffcanvas, bar, phoneSe
     e.preventDefault();
     if (location.pathname !== '/dramaList') {
       navigate('/dramaList');
-      setTimeout(find, 1500);
+      setTimeout(performSearch, 1500);
     } else {
-      find();
+      performSearch();
     }
   };
 
-  const find = () => {
+  const performSearch = () => {
     const newArr = filterDramas.filter((drama) => drama.title.includes(keyword));
     setDramas(newArr);
     if (phoneSearchState === true) {

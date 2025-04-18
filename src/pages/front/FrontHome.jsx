@@ -38,7 +38,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const apiPath = import.meta.env.VITE_APP_API_PATH;
 
-const SwiperModalType = () => {
+const DramaTypeCarousel = () => {
   const swiperRef = useRef(null);
 
   const next = () => {
@@ -109,7 +109,7 @@ const SwiperModalType = () => {
     </>
   );
 };
-const Card = () => {
+const DailyRecommendations = () => {
   const [recommend, setRecommend] = useState([]);
   const { state, mymodal, members, setMembers } = useOutletContext();
   const dispatch = useDispatch();
@@ -120,7 +120,6 @@ const Card = () => {
       const res = await axios.get(`${baseUrl}/api/${apiPath}/articles`);
       setMembers(res.data.articles);
     } catch (err) {
-      console.log(err);
       let message = err.response?.data;
       message = Array.isArray(message) ? message : [message];
       dispatch(
@@ -154,8 +153,8 @@ const Card = () => {
         }
 
         setRecommend(product);
-      } catch (error) {
-        console.log(error);
+      } catch {
+        alert('載入每日推薦時發生錯誤，請稍後再試！');
       }
     };
     fetchData();
@@ -217,7 +216,7 @@ const Card = () => {
   );
 };
 
-const SwiperModalimg = () => {
+const DramaPhotosCarousel = () => {
   const swiperRef = useRef(null);
 
   const next = () => {
@@ -418,13 +417,13 @@ const FrontHome = () => {
                 熱門<span className="text-brand-300">劇</span>會類型
               </h2>
               <p className="fw-semibold fs-5 text-grey-200 mb-6">HOT</p>
-              <SwiperModalType />
+              <DramaTypeCarousel />
             </section>
             {/* 每日推薦 */}
             <section className="d-flex flex-column align-items-center justify-content-center pt-15">
               <h2 className=" fw-semibold text-center fs-2 text-brand-950 mb-3">每日推薦</h2>
               <p className="fw-semibold fs-5 text-brand-200 mb-10">Daily recommendations</p>
-              <Card />
+              <DailyRecommendations />
             </section>
           </div>
           <div className="bg-center1 position-absolute top-0" style={{ marginTop: '306px' }}></div>
@@ -437,7 +436,7 @@ const FrontHome = () => {
               <span className="text-brand-300">劇</span>會照片
             </h2>
             <p className="fw-semibold fs-5 text-grey-200 mb-6">Memoirs</p>
-            <SwiperModalimg />
+            <DramaPhotosCarousel />
           </section>
         </div>
       </main>
