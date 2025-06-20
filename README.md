@@ -1,4 +1,4 @@
-# 🍿 當我們劇在一起 — 影迷劇迷聚會交友平台
+# 🍿 當我們劇在一起 - 影迷劇迷聚會交友平台
 
 六角學院 2024 框架專題
 
@@ -7,6 +7,10 @@
 <br />
 
 ## 網站介紹
+<p align="center">
+  <img src="https://firebasestorage.googleapis.com/v0/b/chieh-assets.firebasestorage.app/o/DramaGo-what-can-you-do-screenshot(1).png?alt=media&token=da945694-1a90-49bb-bea8-0140dc09a48f" alt="DramaGo What can you do" />
+</p>
+
 提供一個揪團看電影、揪團追影星、揪團買影視周邊商品的影劇揪團預約型功能網站！
 👉 [展示頁面 Display Page](https://chieh0225.github.io/DramaGo/)
 
